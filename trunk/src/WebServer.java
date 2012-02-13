@@ -5,6 +5,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 class WebServer implements HttpConstants {
 
     /* static class data/methods */
@@ -97,7 +98,7 @@ class WebServer implements HttpConstants {
     }
 
     public static void main(String[] a) throws Exception {
-        int port = 8080;
+        int port = 8081;
         if (a.length > 0) {
             port = Integer.parseInt(a[0]);
         }
@@ -109,25 +110,29 @@ class WebServer implements HttpConstants {
             (new Thread(w, "worker #"+i)).start();
             threads.addElement(w);
         }
+        try {
+        	ServerSocket ss = new ServerSocket(port);
+            while (true) {
+                Socket s = ss.accept();
 
-        ServerSocket ss = new ServerSocket(port);
-        while (true) {
-
-            Socket s = ss.accept();
-
-            Worker w = null;
-            synchronized (threads) {
-                if (threads.isEmpty()) {
-                    Worker ws = new Worker();
-                    ws.setSocket(s);
-                    (new Thread(ws, "additional worker")).start();
-                } else {
-                    w = (Worker) threads.elementAt(0);
-                    threads.removeElementAt(0);
-                    w.setSocket(s);
+                Worker w = null;
+                synchronized (threads) {
+                    if (threads.isEmpty()) {
+                        Worker ws = new Worker();
+                        ws.setSocket(s);
+                        (new Thread(ws, "additional worker")).start();
+                    } else {
+                        w = (Worker) threads.elementAt(0);
+                        threads.removeElementAt(0);
+                        w.setSocket(s);
+                    }
                 }
             }
-        }
+		} catch (IOException e) {
+			log("Port occupied");
+		}
+        
+
     }
 }
 
@@ -184,7 +189,8 @@ class Worker extends WebServer implements HttpConstants, Runnable {
         }
     }
 
-    void handleClient() throws IOException {
+    @SuppressWarnings("deprecation")
+	void handleClient() throws IOException {
         InputStream is = new BufferedInputStream(s.getInputStream());
         PrintStream ps = new PrintStream(s.getOutputStream());
         /* we will only block in read for this many milliseconds
