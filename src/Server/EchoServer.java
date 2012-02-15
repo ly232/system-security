@@ -1,14 +1,15 @@
+package Server;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package echoserver;
+
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 //database stuff:
-import com.mysql.jdbc.Driver;
+import java.sql.*;
 import java.sql.*;
 
 /**
