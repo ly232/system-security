@@ -1,8 +1,8 @@
+package Server;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package echoserver;
 
 import java.io.*;
 import java.net.*;
