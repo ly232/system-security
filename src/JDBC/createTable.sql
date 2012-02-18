@@ -7,6 +7,7 @@ CREATE TABLE Users(
 	username VARCHAR(20),
 	password VARCHAR(20),
 	roleID INT, 
+	did INT,
 	name VARCHAR(20),
 	phone VARCHAR(10),
 	location VARCHAR(20), 
@@ -17,9 +18,8 @@ CREATE TABLE Department(
 	did INT, 
 	dname VARCHAR(20), 
 	dhead VARCHAR(20), 
-	dheadname VARCHAR(20),
 	PRIMARY KEY (did),
-	FOREIGN KEY (dname) REFERENCES Users(username)
+	FOREIGN KEY (dhead) REFERENCES Users(username)
 );
 CREATE TABLE WorksFor(
 	worker VARCHAR(20),
@@ -28,12 +28,12 @@ CREATE TABLE WorksFor(
 	PRIMARY KEY(worker, master),
 	FOREIGN KEY (worker) REFERENCES Users(username),
 	FOREIGN KEY (master) REFERENCES Users(username),
-	FOREIGN KEY (worker) REFERENCES Department(did)
+	FOREIGN KEY (did) REFERENCES Department(did)
 );
 CREATE TABLE Friends( 
 	friend1 VARCHAR(20),
 	friend2 VARCHAR(20),
-	PRIMARY KEY(worker, master),
+	PRIMARY KEY(friend1, friend2),
 	FOREIGN KEY (friend1) REFERENCES Users(username),
 	FOREIGN KEY (friend2) REFERENCES Users(username)
 );
@@ -42,13 +42,10 @@ CREATE TABLE DeptDiscBoard(
 	msgID INT,
 	msgContent VARCHAR(500),
 	PRIMARY KEY (deptID, msgID), 
-	FOREIGN KEY (deptID) REFERENCES Department(did),
+	FOREIGN KEY (deptID) REFERENCES Department(did)
 );
 CREATE TABLE CompanyMsgBoard(
 	msgID INT,
 	msgContent VARCHAR(500),
 	PRIMARY KEY (msgID)
 );
-
-
-
