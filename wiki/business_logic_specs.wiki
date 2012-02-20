@@ -1,0 +1,11 @@
+=login page=
+*userVerify(username,password)
+*userRegist(registInfo)
+=self-board=
+*switchBoard(target_username); //go to another user's board
+*updateRegionInfo(RegionNumber, msg_content);
+=other person's board=
+*getRegionInfo(RegionNumberArr, target_username, msg_content);
+*postToRegion(RegionNumber, ta);
+
+*ALL OUTPUTS ARE XML*
