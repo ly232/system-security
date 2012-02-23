@@ -98,7 +98,7 @@ public class EntNetClient {
             //e.printStackTrace();
         }
     }
-    private static void clientRegist(BufferedReader stdIn, PrintWriter out){ 
+    public static void clientRegist(BufferedReader stdIn, PrintWriter out){ 
         HashMap<String,String> RegistCredential = new HashMap<String,String>();
         try{
             System.out.println("enter your verification code:"); //for now, verification code is hard-coded at the server to be "cornell". ver code is NOT stored in db@server.
@@ -119,7 +119,7 @@ public class EntNetClient {
         String retXML = registRequest.generateXMLforRequest();
         out.println(retXML);
     }
-    private static void clientLogin(BufferedReader stdIn, PrintWriter out){
+    public static void clientLogin(BufferedReader stdIn, PrintWriter out){
         String tmp_uid = "";
         String tmp_pwd = "";
         try{

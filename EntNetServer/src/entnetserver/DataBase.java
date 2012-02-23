@@ -18,8 +18,7 @@ public class DataBase {
         String password;
         Connection connection;
         public ResultSet lastRs;
-        
-        
+
          public DataBase(String url,String username, String password){
                  this.url = url;
                  this.username = username;
@@ -61,7 +60,7 @@ public class DataBase {
          
         public int DoUpdateQuery(String query){
             try{
-                //@Tao: Do we add connection.isClosed() test here?
+                //TODO: @Tao: Do we add connection.isClosed() test here? what is that for?
                 Statement stmt = connection.createStatement();
                 int updateStatus = stmt.executeUpdate(query);
                 return updateStatus;
@@ -71,7 +70,7 @@ public class DataBase {
                     System.out.println("VendorError: " + ex.getErrorCode());
                     return -1;
             }
-        } 
+        }
          
          
          public void finish(){
