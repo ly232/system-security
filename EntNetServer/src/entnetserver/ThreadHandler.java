@@ -101,14 +101,19 @@ import org.xml.sax.InputSource;
         //for register:
         private boolean processRegist(Scanner in, PrintWriter out, XML_parser_API login_regist_xml){
             HashMap<String,String> registCred = login_regist_xml.XML2Table();
-            String myQuery = "INSERT INTO user values (" + registCred.get("user_id") 
-                    + ", " + registCred.get("password") 
-                    + ", " + registCred.get("person_name")
-                    + ", " + registCred.get("contact_info")
-                    + ", " + registCred.get("role_id") + ")";
+            String myQuery = "INSERT INTO user VALUES ('" + registCred.get("user_id") 
+                    + "', '" + registCred.get("password") 
+                    + "', '" + registCred.get("person_name")
+                    + "', '" + registCred.get("contact_info")
+                    + "', '" + registCred.get("role_id") + "')";
             try{
-                sysDB.DoQuery(myQuery);
-                return true;
+                //System.out.println("update query = "+myQuery);
+                
+                int retStat = sysDB.DoUpdateQuery(myQuery);
+                if (retStat==1)
+                    return true;
+                else
+                    return false;
             }
             catch(Exception e){
                 System.out.println("Database error occured during ThreadHandler::processRegist(). Most likely an insertion failure.");
