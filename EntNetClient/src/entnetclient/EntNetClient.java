@@ -107,8 +107,7 @@ public class EntNetClient {
         HashMap<String,String> RegistCredential = new HashMap<String,String>();
         try{
             System.out.println("enter your verification code:"); //for now, verification code is hard-coded at the server to be "cornell". ver code is NOT stored in db@server.
-            //RegistCredential.add(stdIn.readLine());              
-            RegistCredential.put("ver_code", stdIn.readLine());
+            RegistCredential.put("ver_code",stdIn.readLine());
             System.out.println("sign-up user id:");
             RegistCredential.put("user_id",stdIn.readLine());
             System.out.println("enter your password:");
@@ -118,12 +117,12 @@ public class EntNetClient {
             System.out.println("enter your contact info:");
             RegistCredential.put("contact_info",stdIn.readLine());
             System.out.println("enter your role: 1 for boss, 2 for department head, 3 for regular employee"); //TODO: Chen--add error checking here when you do GUI
-            RegistCredential.put("rold_id",stdIn.readLine());
+            RegistCredential.put("role_id",stdIn.readLine());
         }catch(Exception e){};
         
         clientRequest registRequest = new clientRequest(Constants.REGIST_REQUEST_ID, RegistCredential);
         String retXML = registRequest.generateXMLforRequest();
-        System.out.println(retXML);
+        out.println(retXML);
     }
     private static void clientLogin(BufferedReader stdIn, PrintWriter out){
         String tmp_uid = "";
