@@ -11,7 +11,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -28,86 +27,84 @@ import org.xml.sax.InputSource;
         }
         
         public void run(){
-            try{
                 try{
                     InputStream inStream = incoming.getInputStream();
                     OutputStream outStream = incoming.getOutputStream();
                     Scanner in = new Scanner(inStream);
                     PrintWriter out = new PrintWriter(outStream, true); //true means autoflush
                     
-                    //for user registration:
-
+                    out.println("===WELCOME TO THE LOGIN/REGISTRATION PAGE===");
+                    out.println("please enter 'login' or 'register'");
                     
-                    //for login:
-                    if (!processLogin(in, out)){ //incorrect login for MAX_LOGIN_TRAIL trails
-                        out.println("TOO MANY FAILED LOGIN TRAILS. SERVER CLOSES CONNECTION.");
-                        out.println("SERVER EXIT.");
+                    String xmlStr = in.nextLine();
+                    XML_parser_API login_regist_xml = new XML_parser_API(xmlStr);
+                    if (login_regist_xml.getRootTagName().equals("client_login_request")){
+                        if (!processLogin(in, out, login_regist_xml)){ //incorrect login for MAX_LOGIN_TRAIL trails
+                            out.println("FORCE CLIENT SHUTDOWN");
+                            incoming.close();
+                        }
+                    }
+                    else if (login_regist_xml.getRootTagName().equals("client_regist_request")){
+                        //System.out.println("REGISTRATION REQ RECEIVED");
+                        boolean b = processRegist(in, out, login_regist_xml);
                     }
                     else{
-                        //now user has been authenticated...
-                        
+                        System.out.println("ERROR: cannot pass the login/regist page...something went wrong");
+                    }
+                         
+       
+
                         out.println("welcome, "+user_id+". please enter your message to be echoed. enter \"exit\" to exit.");
                         while(in.hasNextLine()){
                             String line = in.nextLine();
                             if (line.trim().toLowerCase().equals("exit")){
                                 //done = true;
                                 out.println("BYE"); //signal the client to exit
+                                incoming.close();
                                 break;
                             }
                             out.println("Echo: "+line);
                         }
-                    }
-                }
-                finally{
-                    incoming.close();
-                }
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
+
+                }catch(Exception e){};
         }
         
-        private ArrayList<String> fetchClientLoginCredential(Scanner in){
-            ArrayList<String> loginCred = new ArrayList<String>();
-            String uid = "";
-            String pwd = "";
-            try{
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(new InputSource(new StringReader(in.nextLine())));
-                doc.getDocumentElement().normalize();
-                uid = getTagValue("user_id", doc.getDocumentElement());
-                pwd = getTagValue("password", doc.getDocumentElement());
-                //System.out.println("uid="+user_id);
-                //System.out.println("pwd="+password);
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
-            loginCred.add(uid);
-            loginCred.add(pwd);
-            return loginCred;
+        
+        //for register:
+        private boolean processRegist(Scanner in, PrintWriter out, XML_parser_API login_regist_xml){
+            HashMap<String,String> registCred = login_regist_xml.XML2Table();
+            return true;
         }
         
-        private boolean processLogin(Scanner in, PrintWriter out){
-            
+
+        
+        
+        //for login:
+        private boolean processLogin(Scanner in, PrintWriter out, XML_parser_API login_regist_xml){
             int numTrailFailed = 0;
+            
             while (true){
                 if (numTrailFailed==MAX_LOGIN_TRAIL)
                     return false; //failed login--too many trails
-                out.println("_LOGIN_REQUEST"); //notify the client to supply uid and pwd
-                ArrayList<String> loginCred = fetchClientLoginCredential(in);
-                this.user_id = loginCred.get(0);
-                String password = loginCred.get(1);
-                if (!validateUser(user_id,password))
+                HashMap<String,String> loginCred = login_regist_xml.XML2Table();
+                this.user_id = loginCred.get("user_id");
+                String password = loginCred.get("password");
+  
+                
+                if (!validateUser( user_id,password)){
                     numTrailFailed++;
-                else
+                    out.println("invalid login credentials. you have "+(MAX_LOGIN_TRAIL-numTrailFailed)+" more attempts.");
+                    XML_parser_API tmp_xml_parser = new XML_parser_API(in.nextLine());
+                    login_regist_xml = tmp_xml_parser;
+                }
+                else{
+                    out.println("LOGIN_ACCEPTED");
                     return true;
+                }
             }
-            
-
         }
-        
+  
+        //for login:
         private boolean validateUser(String username, String password){
             String myQuery = "SELECT * FROM user WHERE user_id='"+username+"' AND user_pwd='"+password+"'";
             //System.out.println(myQuery);
@@ -124,12 +121,9 @@ import org.xml.sax.InputSource;
             }
         }
         
-        private static String getTagValue(String sTag, Element eElement) {
-            NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
-            Node nValue = (Node) nlList.item(0);
-            return nValue.getNodeValue();
-        }
         
+        
+        //ThreadHandler private variables:
         private Socket incoming;
         private DataBase sysDB;
         private final int MAX_LOGIN_TRAIL = 5;
