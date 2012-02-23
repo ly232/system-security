@@ -1,10 +1,10 @@
 =login page=
 ===================================
 The flow of login process is:
-1. server up running
-2. client making a socket connection to server
-3. client waits for user to chose from {login, register}
-4. if (user chose login), then
+   server up running
+   client making a socket connection to server
+   client waits for user to chose from {login, register}
+   if (user chose login), then
      client-->server: loginCred=XML(username, password)
      server: checks loginCred against backend DB
              if (loginCred is valid),then
