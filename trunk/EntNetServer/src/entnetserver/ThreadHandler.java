@@ -54,7 +54,7 @@ import org.xml.sax.InputSource;
                     else if (login_regist_xml.getRootTagName().equals("client_regist_request")){
                         //System.out.println("REGISTRATION REQ RECEIVED");
                         
-                        /*
+                        
                         if (login_regist_xml.getTagValue("ver_code").equals(VERIFICATION_CODE)){ //TODO: verification code is hardcoded now...modify this later (maybe phase 3?)
                             
                             if (processRegist(in, out, login_regist_xml)){
@@ -68,7 +68,7 @@ import org.xml.sax.InputSource;
                         }
                         else{
                             out.println("incorrect verification code. please register with a correct verification code.");
-                        }*/
+                        }
                         
                         
                         

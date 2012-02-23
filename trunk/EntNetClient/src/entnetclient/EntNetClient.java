@@ -123,7 +123,7 @@ public class EntNetClient {
         
         clientRequest registRequest = new clientRequest(Constants.REGIST_REQUEST_ID, RegistCredential);
         String retXML = registRequest.generateXMLforRequest();
-        out.println(retXML);
+        System.out.println(retXML);
     }
     private static void clientLogin(BufferedReader stdIn, PrintWriter out){
         String tmp_uid = "";
