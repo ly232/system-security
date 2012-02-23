@@ -47,10 +47,17 @@ public class EntNetClient {
             while (true){
                 try{
                     fromUser = stdIn.readLine();
-                    if (fromUser.equals("register")){
-                        
-                        
+                    if (fromUser.equals("register")){     
                         clientRegist(stdIn,out); 
+                        while (true){
+                            fromServer = in.readLine();
+                            if (fromServer.equals("REGISTRATION_ACCEPTED"))
+                                break; //TODO: bring user to his homepage board
+                            else{
+                                System.out.println(fromServer);
+                                clientRegist(stdIn,out); 
+                            }
+                        }
                         
                         break;
                     }
@@ -61,7 +68,7 @@ public class EntNetClient {
                         while (true){
                             fromServer = in.readLine();
                             if (fromServer.equals("LOGIN_ACCEPTED"))
-                                break;
+                                break; //TODO: bring user to his homepage board
                             else if (fromServer.equals("FORCE CLIENT SHUTDOWN")){
                                 System.out.println("Too many failed login attempts. Client is forced to shut down by the server.");
                                 System.exit(1);
@@ -106,6 +113,8 @@ public class EntNetClient {
             RegistCredential.put("user_id",stdIn.readLine());
             System.out.println("enter your password:");
             RegistCredential.put("password",stdIn.readLine());
+            System.out.println("enter your name:");
+            RegistCredential.put("person_name",stdIn.readLine());
             System.out.println("enter your contact info:");
             RegistCredential.put("contact_info",stdIn.readLine());
             System.out.println("enter your role: 1 for boss, 2 for department head, 3 for regular employee"); //TODO: Chen--add error checking here when you do GUI

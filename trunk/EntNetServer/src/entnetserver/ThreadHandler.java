@@ -21,6 +21,14 @@ import org.xml.sax.InputSource;
  * @author Lin
  */
     class ThreadedHandler implements Runnable{
+        
+        //ThreadHandler private variables:
+        private Socket incoming;
+        private DataBase sysDB;
+        private final int MAX_LOGIN_TRAIL = 5;
+        private String user_id = ""; //each thread serves a single user only. we need to keep track of who the thread is serving
+        private String VERIFICATION_CODE = "cornell"; //used for user registration
+        
         public ThreadedHandler(Socket i, DataBase db){
             incoming = i;
             sysDB = db;
@@ -36,8 +44,7 @@ import org.xml.sax.InputSource;
                     out.println("===WELCOME TO THE LOGIN/REGISTRATION PAGE===");
                     out.println("please enter 'login' or 'register'");
                     
-                    String xmlStr = in.nextLine();
-                    XML_parser_API login_regist_xml = new XML_parser_API(xmlStr);
+                    XML_parser_API login_regist_xml = new XML_parser_API(in.nextLine());
                     if (login_regist_xml.getRootTagName().equals("client_login_request")){
                         if (!processLogin(in, out, login_regist_xml)){ //incorrect login for MAX_LOGIN_TRAIL trails
                             out.println("FORCE CLIENT SHUTDOWN");
@@ -46,14 +53,30 @@ import org.xml.sax.InputSource;
                     }
                     else if (login_regist_xml.getRootTagName().equals("client_regist_request")){
                         //System.out.println("REGISTRATION REQ RECEIVED");
-                        boolean b = processRegist(in, out, login_regist_xml);
+                        
+                        /*
+                        if (login_regist_xml.getTagValue("ver_code").equals(VERIFICATION_CODE)){ //TODO: verification code is hardcoded now...modify this later (maybe phase 3?)
+                            
+                            if (processRegist(in, out, login_regist_xml)){
+                               out.println("REGISTRATION_ACCEPTED"); 
+                            }
+                            else{
+                               out.println("username is already used. please use another username."); 
+                               
+                            }
+                        
+                        }
+                        else{
+                            out.println("incorrect verification code. please register with a correct verification code.");
+                        }*/
+                        
+                        
+                        
                     }
                     else{
                         System.out.println("ERROR: cannot pass the login/regist page...something went wrong");
                     }
                          
-       
-
                         out.println("welcome, "+user_id+". please enter your message to be echoed. enter \"exit\" to exit.");
                         while(in.hasNextLine()){
                             String line = in.nextLine();
@@ -73,11 +96,21 @@ import org.xml.sax.InputSource;
         //for register:
         private boolean processRegist(Scanner in, PrintWriter out, XML_parser_API login_regist_xml){
             HashMap<String,String> registCred = login_regist_xml.XML2Table();
-            return true;
+            String myQuery = "INSERT INTO user values (" + registCred.get("user_id") 
+                    + ", " + registCred.get("password") 
+                    + ", " + registCred.get("person_name")
+                    + ", " + registCred.get("contact_info")
+                    + ", " + registCred.get("role_id") + ")";
+            try{
+                sysDB.DoQuery(myQuery);
+                return true;
+            }
+            catch(Exception e){
+                System.out.println("Database error occured during ThreadHandler::processRegist(). Most likely an insertion failure.");
+                return false;
+            }
+            
         }
-        
-
-        
         
         //for login:
         private boolean processLogin(Scanner in, PrintWriter out, XML_parser_API login_regist_xml){
@@ -103,7 +136,6 @@ import org.xml.sax.InputSource;
                 }
             }
         }
-  
         //for login:
         private boolean validateUser(String username, String password){
             String myQuery = "SELECT * FROM user WHERE user_id='"+username+"' AND user_pwd='"+password+"'";
@@ -120,12 +152,5 @@ import org.xml.sax.InputSource;
                 return validUser;
             }
         }
-        
-        
-        
-        //ThreadHandler private variables:
-        private Socket incoming;
-        private DataBase sysDB;
-        private final int MAX_LOGIN_TRAIL = 5;
-        private String user_id = ""; //each thread serves a single user only. we need to keep track of who the thread is serving
+
     }
