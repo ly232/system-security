@@ -7,6 +7,9 @@ package entnetserver;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import JDBC.DataBase;
+
 import com.mysql.jdbc.Driver;
 import java.sql.*;
 
@@ -22,7 +25,7 @@ public class EntNetServer {
     public static void main(String[] args) {
         try{
             
-            DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb",
+            DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v2",
                                             "root",
                                             "mysql");
             sysDB.initialize();
@@ -46,10 +49,8 @@ public class EntNetServer {
             
             
             
-            //get IP address for localhost
-            InetAddress localHostAddress = InetAddress.getLocalHost();
-            //System.out.println("server: local host IP = " + localHostAddress);
-            System.out.println("Server Started...");
+            System.out.println("SERVER STARTED. SERVER'S LOCALHOST IP = " + InetAddress.getLocalHost());
+            
             int i=1;
             ServerSocket s = new ServerSocket(8189);
             while(true){
@@ -59,12 +60,8 @@ public class EntNetServer {
                 Thread t = new Thread(r);
                 t.start();
                 i++;
-            }
-                
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+            }  
+        }catch(Exception e){}
     }
 
 }
