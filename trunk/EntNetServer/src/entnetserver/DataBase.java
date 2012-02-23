@@ -44,11 +44,11 @@ public class DataBase {
                                         System.out.println("initial first");
                                         return null;
                                 }
-                        ResultSet rs;
-                        Statement stmt;
-                stmt = connection.createStatement();
-                //rs = stmt.executeQuery("select * from user;");
-                rs = stmt.executeQuery(query);
+                        Statement stmt = connection.createStatement();
+
+                    ResultSet rs = stmt.executeQuery(query);
+                
+                
                 lastRs = rs;
                 return rs;
                 } catch (SQLException ex) {
@@ -58,6 +58,21 @@ public class DataBase {
                     return null;
                 }
         }
+         
+        public int DoUpdateQuery(String query){
+            try{
+                //@Tao: Do we add connection.isClosed() test here?
+                Statement stmt = connection.createStatement();
+                int updateStatus = stmt.executeUpdate(query);
+                return updateStatus;
+            }catch (SQLException ex) {
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                    return -1;
+            }
+        } 
+         
          
          public void finish(){
                  try {
