@@ -35,6 +35,9 @@ import org.xml.sax.InputSource;
                     Scanner in = new Scanner(inStream);
                     PrintWriter out = new PrintWriter(outStream, true); //true means autoflush
                     
+                    //for user registration:
+
+                    
                     //for login:
                     if (!processLogin(in, out)){ //incorrect login for MAX_LOGIN_TRAIL trails
                         out.println("TOO MANY FAILED LOGIN TRAILS. SERVER CLOSES CONNECTION.");
@@ -42,6 +45,7 @@ import org.xml.sax.InputSource;
                     }
                     else{
                         //now user has been authenticated...
+                        
                         out.println("welcome, "+user_id+". please enter your message to be echoed. enter \"exit\" to exit.");
                         while(in.hasNextLine()){
                             String line = in.nextLine();
@@ -108,7 +112,6 @@ import org.xml.sax.InputSource;
             String myQuery = "SELECT * FROM user WHERE user_id='"+username+"' AND user_pwd='"+password+"'";
             //System.out.println(myQuery);
             ResultSet rs = sysDB.DoQuery(myQuery);
-            
             boolean validUser = false;
             try{
                 validUser = rs.first();
