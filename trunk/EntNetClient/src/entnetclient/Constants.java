@@ -11,5 +11,5 @@ package entnetclient;
 public class Constants {
     public static final int LOGIN_REQUEST_ID = 1;
     public static final int REGIST_REQUEST_ID = 2;
-    public static final int REGIST_INFO_ID = 3;
+    //public static final int REGIST_INFO_ID = 3;
 }

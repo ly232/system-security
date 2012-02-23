@@ -33,43 +33,52 @@ public class EntNetClient {
             out = new PrintWriter(s.getOutputStream(), true); //true means autoflush
             in = new BufferedReader(new InputStreamReader(s.getInputStream()));
         }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        catch(Exception e){};
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         String fromServer = "";
-        String fromUser = ""; 
-        System.out.println("enter '_REGIST_REQUEST' if request for registration; otherwise press ENTER");
-        try{
-            fromUser = stdIn.readLine();
-            if (fromUser.equals("_REGIST_REQUEST")){
-                //send a request to server for registraiont information
-            }
-        }catch(Exception e){};
+        String fromUser = "";
                 
         try{
-            //client-initiated actions: (only request for registration)
-            //this corresponds to clicking "regist" button on login page GUI
-            if (fromUser.equals("_REGIST_REQUEST")){
-                
+            //TODO: put these in GUI login/regist page.
+            String serverWelcomePrompt = in.readLine();
+            String serverLoginRegistPagePrompt = in.readLine();
+            System.out.println(serverWelcomePrompt); 
+            System.out.println(serverLoginRegistPagePrompt);
+            while (true){
+                try{
+                    fromUser = stdIn.readLine();
+                    if (fromUser.equals("register")){
+                        
+                        
+                        clientRegist(stdIn,out); 
+                        
+                        break;
+                    }
+                    else if (fromUser.equals("login")){
+                        
+                        clientLogin(stdIn,out); 
+                        
+                        while (true){
+                            fromServer = in.readLine();
+                            if (fromServer.equals("LOGIN_ACCEPTED"))
+                                break;
+                            else if (fromServer.equals("FORCE CLIENT SHUTDOWN")){
+                                System.out.println("Too many failed login attempts. Client is forced to shut down by the server.");
+                                System.exit(1);
+                            }
+                            System.out.println(fromServer);
+                            clientLogin(stdIn,out); 
+                        }
+                        break;
+                    }
+                    else{
+                        System.out.println("invalid login/regist page request. please enter 'login' or 'register'.");
+                    }
+                }catch(Exception e){};
             }
-            //END OF CLIENT REGISTRATION REQUEST
-            ///////////////
-            
             //server-initiated actions:
             while ((fromServer = in.readLine()) != null) {
-                if (fromServer.equals("_LOGIN_REQUEST")){
-                    System.out.println("enter user id:");
-                    String tmp_uid = stdIn.readLine();
-                    System.out.println("enter password:");
-                    String tmp_pwd = stdIn.readLine();
-                    clientLogin(tmp_uid,tmp_pwd,out); 
-                    continue;
-                }
-                else if (fromServer.equals("_REGIST_INFO_REQUEST")){
-                    
-                }
-
+      
                 //echo server's response...this is just for testing...remove this before submission!!
                 System.out.println("SERVER MESSAGE: " + fromServer);
                 if (fromServer.equals("SERVER EXIT"))
@@ -86,12 +95,40 @@ public class EntNetClient {
             //e.printStackTrace();
         }
     }
-    
-    private static void clientLogin(String uid, String pwd, PrintWriter out){
+    private static void clientRegist(BufferedReader stdIn, PrintWriter out){ 
+        //ArrayList<String> RegistCredential = new ArrayList<String>();
+        HashMap<String,String> RegistCredential = new HashMap<String,String>();
+        try{
+            System.out.println("enter your verification code:"); //for now, verification code is hard-coded at the server to be "cornell". ver code is NOT stored in db@server.
+            //RegistCredential.add(stdIn.readLine());              
+            RegistCredential.put("ver_code", stdIn.readLine());
+            System.out.println("sign-up user id:");
+            RegistCredential.put("user_id",stdIn.readLine());
+            System.out.println("enter your password:");
+            RegistCredential.put("password",stdIn.readLine());
+            System.out.println("enter your contact info:");
+            RegistCredential.put("contact_info",stdIn.readLine());
+            System.out.println("enter your role: 1 for boss, 2 for department head, 3 for regular employee"); //TODO: Chen--add error checking here when you do GUI
+            RegistCredential.put("rold_id",stdIn.readLine());
+        }catch(Exception e){};
+        
+        clientRequest registRequest = new clientRequest(Constants.REGIST_REQUEST_ID, RegistCredential);
+        String retXML = registRequest.generateXMLforRequest();
+        out.println(retXML);
+    }
+    private static void clientLogin(BufferedReader stdIn, PrintWriter out){
+        String tmp_uid = "";
+        String tmp_pwd = "";
+        try{
+            System.out.println("enter user id:");
+            tmp_uid = stdIn.readLine();
+            System.out.println("enter password:");
+            tmp_pwd = stdIn.readLine();
+        }catch(Exception e){};
         //initial login credential: (TODO: this should correspond to GUI event in login page)
-        ArrayList<String> loginCredential = new ArrayList<String>();
-        loginCredential.add(uid); //username...TODO: implement in GUI
-        loginCredential.add(pwd); //password...TODO: implement in GUI
+        HashMap<String,String> loginCredential = new HashMap<String,String>();
+        loginCredential.put("user_id",tmp_uid); //username...TODO: implement in GUI
+        loginCredential.put("password",tmp_pwd); //password...TODO: implement in GUI
         clientRequest loginRequest = new clientRequest(Constants.LOGIN_REQUEST_ID, loginCredential);
         String retXML = loginRequest.generateXMLforRequest(); 
         out.println(retXML);
