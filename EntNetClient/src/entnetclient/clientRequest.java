@@ -39,7 +39,7 @@ public class clientRequest {
                     xmlapi.createChild("password", "client_regist_request");
                     xmlapi.createText(this.requestMsg.get("password"), "password");
                     xmlapi.createChild("person_name", "client_regist_request");
-                    xmlapi.createText(this.requestMsg.get("person_name"), "contact_info");
+                    xmlapi.createText(this.requestMsg.get("person_name"), "person_name");
                     xmlapi.createChild("contact_info", "client_regist_request");
                     xmlapi.createText(this.requestMsg.get("contact_info"), "contact_info");
                     xmlapi.createChild("role_id", "client_regist_request");
