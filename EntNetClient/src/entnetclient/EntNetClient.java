@@ -42,6 +42,9 @@ public class EntNetClient {
         System.out.println("enter '_REGIST_REQUEST' if request for registration; otherwise press ENTER");
         try{
             fromUser = stdIn.readLine();
+            if (fromUser.equals("_REGIST_REQUEST")){
+                //send a request to server for registraiont information
+            }
         }catch(Exception e){};
                 
         try{
