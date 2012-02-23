@@ -46,10 +46,8 @@ public class EntNetServer {
             
             
             
-            //get IP address for localhost
-            InetAddress localHostAddress = InetAddress.getLocalHost();
-            //System.out.println("server: local host IP = " + localHostAddress);
-            System.out.println("Server Started...");
+            System.out.println("SERVER STARTED. SERVER'S LOCALHOST IP = " + InetAddress.getLocalHost());
+            
             int i=1;
             ServerSocket s = new ServerSocket(8189);
             while(true){
@@ -59,12 +57,8 @@ public class EntNetServer {
                 Thread t = new Thread(r);
                 t.start();
                 i++;
-            }
-                
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+            }  
+        }catch(Exception e){}
     }
 
 }
