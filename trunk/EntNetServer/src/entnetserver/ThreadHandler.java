@@ -141,10 +141,30 @@ import org.xml.sax.InputSource;
                     login_regist_xml = tmp_xml_parser;
                 }
                 else{
-                    out.println("LOGIN_ACCEPTED");
+                    //out.println("LOGIN_ACCEPTED");
+                    //TODO: instead of sending client "LOGIN_ACCEPTED", send client the xml to display his homepage
+                    
+                    String userHomeBoardXMLstring = getUserHomeBoardXMLstring();
+                    
+                    
+                    
                     return true;
                 }
             }
+        }
+        //for login:
+        private String getUserHomeBoardXMLstring(){
+            String userHomeBoardXMLstring = "";
+            
+            XML_creator_API userHomeBoardXML = new XML_creator_API();
+            userHomeBoardXML.createRoot("user_home_board");
+            userHomeBoardXML.createChild("user_list", "user_home_board");
+            userHomeBoardXML.createChild("user_post_board", "user_home_board");
+            
+            //probe 
+            
+            return userHomeBoardXMLstring;
+            
         }
         //for login:
         private boolean validateUser(String username, String password){
