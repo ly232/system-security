@@ -48,24 +48,21 @@ public class EntNetClient {
                 try{
                     fromUser = stdIn.readLine();
                     if (fromUser.equals("register")){     
-                        clientRegist(stdIn,out); 
                         while (true){
+                            clientRegist(stdIn,out); 
                             fromServer = in.readLine();
                             if (fromServer.equals("REGISTRATION_ACCEPTED"))
                                 break; //TODO: bring user to his homepage board
                             else{
-                                System.out.println(fromServer);
-                                clientRegist(stdIn,out); 
+                                System.out.println(fromServer); 
                             }
                         }
-                        
                         break;
                     }
                     else if (fromUser.equals("login")){
                         
-                        clientLogin(stdIn,out); 
-                        
                         while (true){
+                            clientLogin(stdIn,out); 
                             fromServer = in.readLine();
                             if (fromServer.equals("LOGIN_ACCEPTED"))
                                 break; //TODO: bring user to his homepage board
@@ -74,7 +71,6 @@ public class EntNetClient {
                                 System.exit(1);
                             }
                             System.out.println(fromServer);
-                            clientLogin(stdIn,out); 
                         }
                         break;
                     }
@@ -103,7 +99,6 @@ public class EntNetClient {
         }
     }
     private static void clientRegist(BufferedReader stdIn, PrintWriter out){ 
-        //ArrayList<String> RegistCredential = new ArrayList<String>();
         HashMap<String,String> RegistCredential = new HashMap<String,String>();
         try{
             System.out.println("enter your verification code:"); //for now, verification code is hard-coded at the server to be "cornell". ver code is NOT stored in db@server.

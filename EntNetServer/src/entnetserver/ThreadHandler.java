@@ -55,22 +55,27 @@ import org.xml.sax.InputSource;
                         //System.out.println("REGISTRATION REQ RECEIVED");
                         
                         
-                        if (login_regist_xml.getTagValue("ver_code").equals(VERIFICATION_CODE)){ //TODO: verification code is hardcoded now...modify this later (maybe phase 3?)
-                            
-                            if (processRegist(in, out, login_regist_xml)){
-                               out.println("REGISTRATION_ACCEPTED"); 
+                        while(true){
+                            if (login_regist_xml.getTagValue("ver_code").equals(VERIFICATION_CODE)){ //TODO: verification code is hardcoded now...modify this later (maybe phase 3?)
+                                while(true){
+                                    if (processRegist(in, out, login_regist_xml)){
+                                       out.println("REGISTRATION_ACCEPTED"); 
+                                       break;
+                                    }
+                                    else{
+                                       out.println("username is already used. please use another username."); 
+                                       XML_parser_API tmp_xml_parser = new XML_parser_API(in.nextLine());
+                                       login_regist_xml = tmp_xml_parser;
+                                    }
+                                }
+                                break;
                             }
                             else{
-                               out.println("username is already used. please use another username."); 
-                               
+                                out.println("incorrect verification code. please register with a correct verification code.");
+                                XML_parser_API tmp_xml_parser = new XML_parser_API(in.nextLine());
+                                login_regist_xml = tmp_xml_parser;
                             }
-                        
                         }
-                        else{
-                            out.println("incorrect verification code. please register with a correct verification code.");
-                        }
-                        
-                        
                         
                     }
                     else{
