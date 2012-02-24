@@ -1,0 +1,14 @@
+= How to detach and attach database =
+
+== detach database: ==
+   *command format:
+        *mysqldump -uUSERNAME -p DATABASENAME > DATABASENAME.sql：
+   *example: 
+        *mysqldump -uroot -p entnetdb_v2 > /Users/crazymooner/Documents/workspace/System          Security/src/JDBC/createTable.sql
+
+== attach database: ==
+   *command format:
+      *1.open a schema named DATABASENAME(entnetdb_v2)
+      *2.mysql -uUSERNAME -p DATABASENAME < DATABASENAME.sql
+    *example:
+       *mysql -uroot -p entnetdb_v2 < /Users/crazymooner/Documents/workspace/System Security/src/JDBC/createTable.sql
