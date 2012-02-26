@@ -11,7 +11,7 @@ import java.util.*;
 import java.sql.*;
 
 import org.omg.CORBA.INITIALIZE;
-
+import Constants.*;
 import XML.*;
 
 import Constants.Constants;
@@ -99,9 +99,16 @@ import JDBC.DataBase;
                 	while (true) {
                 		System.out.println("ready to serve");
 						String xml = read.nextLine();
+                                                
+                                                System.out.println(xml+"...hi4huial");
+                                                
 						XMLRequest request = new XMLRequest(xml);
+                                                
+                                                System.out.println(request.getRequestID()+"...hi4huial");
+                                                
 						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
-							user_id = request.getUserID();
+							System.out.println("server sees login request!!!");
+                                                    user_id = request.getUserID();
 						}
 						if (request.getActionID() == Constants.SELECT) {
 							ReadServlet rServelet = new ReadServlet(request, this);
