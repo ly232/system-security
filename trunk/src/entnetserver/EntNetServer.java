@@ -30,6 +30,8 @@ public class EntNetServer {
                                             "");
             sysDB.initialize();
             
+            
+            
             /*--------------------
             //DB test:
             ResultSet rs = sysDB.DoQuery("SELECT * FROM Users");

@@ -8,6 +8,55 @@ public class XMLRequest {
 		String requestDetail;
 		String actionID;
 		
+		
+		public String getRequestID() {
+			return requestID;
+		}
+
+		public void setRequestID(String requestID) {
+			this.requestID = requestID;
+		}
+
+		public String getUserID() {
+			return userID;
+		}
+
+		public void setUserID(String userID) {
+			this.userID = userID;
+		}
+
+		public String getRegionID() {
+			return regionID;
+		}
+
+		public void setRegionID(String regionID) {
+			this.regionID = regionID;
+		}
+
+		public String getSessionID() {
+			return sessionID;
+		}
+
+		public void setSessionID(String sessionID) {
+			this.sessionID = sessionID;
+		}
+
+		public String getRequestDetail() {
+			return requestDetail;
+		}
+
+		public void setRequestDetail(String requestDetail) {
+			this.requestDetail = requestDetail;
+		}
+
+		public String getActionID() {
+			return actionID;
+		}
+
+		public void setActionID(String actionID) {
+			this.actionID = actionID;
+		}
+		
 		/**
 		 * @param requestID string in Constants
 		 * @param userID string
@@ -24,6 +73,14 @@ public class XMLRequest {
 			this.sessionID = sessionID;//for the later use
 			this.requestDetail = requestDetail;
 			this.actionID = ActionID;
+		}
+		
+	   /**
+	    * initialize using a xml file
+	 * @param xmlString
+	 */
+	public XMLRequest(String xmlString) {
+		   this.ParseXML(xmlString);
 		}
 		
 		/**

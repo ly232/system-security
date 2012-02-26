@@ -19,5 +19,14 @@ public abstract class Constants {
     public static final String SELECT = "SELECT";
     public static final String UPDATE = "SELECT";
     
+    //REGION REFERENCE
+    public static final String REGION1 = "REGION1";
+    public static final String REGION2 = "REGION2";
+    public static final String REGION3 = "REGION3";
+    public static final String REGION4 = "REGION4";
+    public static final String REGION5 = "REGION5";
+    public static final String REGION6 = "REGION6";
+    public static final String REGION0 = "ALLREGION";
+    
     //public static final int REGIST_INFO_ID = 3;
 }
