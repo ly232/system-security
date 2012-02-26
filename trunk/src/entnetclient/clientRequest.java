@@ -55,8 +55,8 @@ public class clientRequest {
         XMLRequest xmlapi = new XMLRequest(
                 Constants.LOGIN_REQUEST_ID,
                 this.userID,
-                "", //region id
-                "", //session id...not for 
+                Constants.INVALID, //region id
+                Constants.INVALID, //session id...not for 
                 myQuery, //request detail...SQL statement to be excuted by server
                 "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
                 );
@@ -80,8 +80,8 @@ public class clientRequest {
         XMLRequest xmlapi = new XMLRequest(
                 Constants.REGIST_REQUEST_ID,
                 this.userID,
-                "", //region id
-                "", //session id...not for 
+                Constants.INVALID, //region id
+                Constants.INVALID, //session id...not for 
                 myQuery, //request detail...SQL statement to be excuted by server
                 "UPDATE" //action id...can either be SELECT or UPDATE...see Constants package
                 );
