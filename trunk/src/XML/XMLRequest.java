@@ -102,7 +102,7 @@ public class XMLRequest {
 			xmlnew.createText(regionID, "regionID");
 			xmlnew.createChild("requestDetail", requestID);
 			xmlnew.createText(requestDetail, "requestDetail");
-			xmlnew.createChild("actionID", actionID);
+			xmlnew.createChild("actionID", requestID);
 			xmlnew.createText(actionID, "actionID");
 			xmlString = xmlnew.getXMLstring();
 			return xmlString;
