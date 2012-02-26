@@ -61,6 +61,8 @@ public class clientRequest {
                 "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
                 );
                 
+        
+        
                return xmlapi.generateXMLRequest();
      
     }
