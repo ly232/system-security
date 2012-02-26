@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 public class DataBaseTest extends TestCase {
 	String url = "jdbc:mysql://localhost:3306/security";
 	String username = "root";
-	String password = "";
+	String password = "mysql";
 	protected void setUp() throws Exception {
 		super.setUp();
 	}

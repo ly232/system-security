@@ -65,16 +65,23 @@ public class XML_creator_API {
     }
     
     public String getXMLstring(){
-        String retXML = "";
+        String retXML = null;
         try{
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            OutputStream baos = new ByteArrayOutputStream();
+            
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            //Writer wtr = new OutputStreamWriter(baos,"UTF-8");
             StreamResult result = new StreamResult(baos);
             transformer.transform(source, result);
-            retXML = baos.toString();
-        }catch(Exception e){}
+            
+            retXML = new String(baos.toByteArray());//baos.toString();
+            
+        }catch(TransformerException e){
+            System.err.println("Transformer Error Message: " + e.getMessage());
+        }
         finally{
             return retXML;
         }

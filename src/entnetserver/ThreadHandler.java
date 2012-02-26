@@ -83,12 +83,13 @@ import JDBC.DataBase;
          * @throws IOException 
          */
         public void callBackResult(XMLRequest rq) throws IOException {
+
 				synchronized (write) {
 	        		write.print(rq.generateXMLRequest());
 					write.flush();
 					write.println(Constants.END_STRING);
 				}
-				
+
 		}
         
         public void run(){
@@ -102,7 +103,12 @@ import JDBC.DataBase;
                 		System.out.println("ready to serve");
 						String xml = read.nextLine();                                
 						XMLRequest request = new XMLRequest(xml);
- 						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
+                       
+                                                System.out.println(request.getRequestID()+"...<<<<<");
+                                                
+						if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
+
+
                                                     user_id = request.getUserID();
                                                     loginServlet lServlet = new loginServlet(request, this);
                                                     Thread t = new Thread(lServlet);
@@ -110,13 +116,14 @@ import JDBC.DataBase;
                                                     threadCount++;
 							
 						}
-						
+
 						if (request.getActionID().equals(Constants.SELECT)) {
+
 							ReadServlet rServelet = new ReadServlet(request, this);
 							Thread t = new Thread(rServelet);
 							t.start();
 							threadCount++;
-						}else if (request.getActionID() == Constants.UPDATE) {
+						}else if (request.getActionID().equals(Constants.UPDATE)) {
 							UpdateServlet uServlet = new UpdateServlet(request, this);
 							Thread t = new Thread(uServlet);
 							t.start();

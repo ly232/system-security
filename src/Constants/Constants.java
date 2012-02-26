@@ -28,11 +28,14 @@ public abstract class Constants {
     public static final String REGION6 = "REGION6";
     public static final String REGION0 = "ALLREGION";
     
+    
+    public static final String INVALID = "INVALID";
     //public static final int REGIST_INFO_ID = 3;
+
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     
     //end of the transaction
     public static final String END_STRING = "END_STRING";
-    
+
 }
