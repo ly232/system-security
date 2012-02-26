@@ -32,5 +32,7 @@ public abstract class Constants {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     
+    //end of the transaction
+    public static final String END_STRING = "END_STRING";
     
 }
