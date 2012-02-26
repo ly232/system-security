@@ -86,7 +86,6 @@ import JDBC.DataBase;
          */
         public void callBackResult(XMLRequest rq) throws IOException {
 				write.print(rq.generateXMLRequest());
-				System.out.println(rq.generateXMLRequest());
 		}
         
         public void run(){
@@ -109,8 +108,10 @@ import JDBC.DataBase;
 						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
 							System.out.println("server sees login request!!!");
                                                     user_id = request.getUserID();
+							
 						}
-						if (request.getActionID() == Constants.SELECT) {
+						
+						if (request.getActionID().equals(Constants.SELECT)) {
 							ReadServlet rServelet = new ReadServlet(request, this);
 							Thread t = new Thread(rServelet);
 							t.start();
