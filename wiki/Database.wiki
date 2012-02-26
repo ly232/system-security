@@ -11,4 +11,5 @@
       *1.open a schema named DATABASENAME(entnetdb_v2)
       *2.mysql -uUSERNAME -p DATABASENAME < DATABASENAME.sql
     *example:
-       *mysql -uroot -p entnetdb_v2 < /Users/crazymooner/Documents/workspace/System Security/src/JDBC/createTable.sql
+       *(LINUX) mysql -uroot -p entnetdb_v2 < /Users/crazymooner/Documents/workspace/System Security/src/JDBC/createTable.sql
+       *(WINDOWS) C:\Users\Lin>"C:\Program Files\MySQL\MySQL Server 5.5\bin\mysql.exe" --host=localhost --user=root --password=mysql entnetdb_v2 < "C:\Users\Lin\Desktop\CS5430Security\Project\src\JDBC\createTable.sql"
