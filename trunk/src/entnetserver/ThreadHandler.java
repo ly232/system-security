@@ -96,16 +96,16 @@ import JDBC.DataBase;
                     write.println("please enter 'login' or 'register'");
                     
                     XML_parser_API login_regist_xml = new XML_parser_API(read.nextLine());
-                    if (login_regist_xml.getRootTagName().equals("client_login_request")){
+                    if (login_regist_xml.getRootTagName().equals(String.format("%d"
+                            ,Constants.LOGIN_REQUEST_ID))){
                         if (!processLogin(read, write, login_regist_xml)){ //incorrect login for MAX_LOGIN_TRAIL trails
                             write.println("FORCE CLIENT SHUTDOWN");
                             incoming.close();
                         }
                     }
-                    else if (login_regist_xml.getRootTagName().equals("client_regist_request")){
+                    else if (login_regist_xml.getRootTagName().equals(String.format("%d"
+                            ,Constants.REGIST_REQUEST_ID))){
                         //System.out.println("REGISTRATION REQ RECEIVED");
-                        
-                        
                         while(true){
                             if (login_regist_xml.getTagValue("ver_code").equals(VERIFICATION_CODE)){ //TODO: verification code is hardcoded now...modify this later (maybe phase 3?)
                                 while(true){
@@ -192,10 +192,10 @@ import JDBC.DataBase;
                     login_regist_xml = tmp_xml_parser;
                 }
                 else{
-                    //out.println("LOGIN_ACCEPTED");
+                    out.println("LOGIN_ACCEPTED");
                     //TODO: instead of sending client "LOGIN_ACCEPTED", send client the xml to display his homepage
                     
-                    String userHomeBoardXMLstring = getUserHomeBoardXMLstring();
+                    //String userHomeBoardXMLstring = getUserHomeBoardXMLstring();
                     
                     
                     

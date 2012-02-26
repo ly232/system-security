@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 
 import java.util.*;
 import java.io.*;
+import javax.xml.soap.Node;
 import org.w3c.dom.NodeList;
 /**
  *
@@ -77,6 +78,29 @@ public class XML_creator_API {
         finally{
             return retXML;
         }
+    }
+    
+    public String getXMLsubtree(String subtreeRootName){
+        String retXMLsubtreeString = "";
+        
+        NodeList nodelist= doc.getElementsByTagName(subtreeRootName);        
+        
+        Node subtreeRoot = (Node) nodelist.item(0);
+        try{
+            DocumentBuilderFactory myDocFac = DocumentBuilderFactory.newInstance();
+            DocumentBuilder myDocBuilder = docFactory.newDocumentBuilder();
+            Document myDoc = docBuilder.newDocument();
+        }catch(Exception e){}
+        
+        doc.appendChild(subtreeRoot);
+        
+        
+        
+        //TODO: complete 
+        
+        
+        
+        return retXMLsubtreeString;
     }
     
 }
