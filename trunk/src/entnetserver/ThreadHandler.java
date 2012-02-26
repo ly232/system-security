@@ -10,8 +10,6 @@ import java.net.*;
 import java.util.*;
 import java.sql.*;
 
-import org.omg.CORBA.INITIALIZE;
-import Constants.*;
 import XML.*;
 
 import Constants.Constants;
@@ -85,7 +83,12 @@ import JDBC.DataBase;
          * @throws IOException 
          */
         public void callBackResult(XMLRequest rq) throws IOException {
-				write.print(rq.generateXMLRequest());
+				synchronized (write) {
+	        		write.print(rq.generateXMLRequest());
+					write.flush();
+					write.println(Constants.END_STRING);
+				}
+				
 		}
         
         public void run(){
@@ -97,17 +100,14 @@ import JDBC.DataBase;
                     
                 	while (true) {
                 		System.out.println("ready to serve");
-						String xml = read.nextLine();
-                                                
-                                                System.out.println(xml+"...<<<<<");
-                                                
+						String xml = read.nextLine();                                
 						XMLRequest request = new XMLRequest(xml);
-                                                
-                                                System.out.println(request.getRequestID()+"...<<<<<");
-                                                
-						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
-							System.out.println("server sees login request!!!");
+ 						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
                                                     user_id = request.getUserID();
+                                                    loginServlet lServlet = new loginServlet(request, this);
+                                                    Thread t = new Thread(lServlet);
+                                                    t.start();
+                                                    threadCount++;
 							
 						}
 						

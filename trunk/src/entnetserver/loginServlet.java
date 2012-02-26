@@ -6,6 +6,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import sun.nio.cs.ext.DBCS_IBM_EBCDIC_Decoder;
+import Constants.Constants;
 import JDBC.DataBase;
 import XML.XMLRequest;
 
@@ -24,9 +25,9 @@ public class loginServlet extends Servelet implements Runnable{
 		ResultSet rSet = dB.DoQuery(sqlQuery);
 		try {
 			if (rSet.first()) {
-				xmlRequest.setRequestDetail("true");
+				xmlRequest.setRequestDetail(Constants.TRUE);
 			}else {
-				xmlRequest.setRequestDetail("false");
+				xmlRequest.setRequestDetail(Constants.FALSE);
 			}
 			handle.callBackResult(xmlRequest);
 		} catch (SQLException e) {
