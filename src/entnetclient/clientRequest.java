@@ -36,7 +36,7 @@ public class clientRequest {
                     break;
                 case Constants.REGIST_REQUEST_ID:
                     xmlapi.createRoot("client_regist_request");
-                    xmlapi.createChild("ver_code", "client_regist_request");
+                    xmlapi.createChild("ver_code", "5");
                     xmlapi.createText(this.requestMsg.get("ver_code"), "ver_code");
                     xmlapi.createChild("user_id", "client_regist_request");
                     xmlapi.createText(this.requestMsg.get("user_id"), "user_id");
