@@ -5,6 +5,8 @@
 package entnetclient;
 
 import java.util.*;
+
+import Constants.Constants;
 import XML.*;
 
 /**

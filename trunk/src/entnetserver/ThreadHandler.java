@@ -10,6 +10,8 @@ import java.net.*;
 import java.util.*;
 import java.sql.*;
 
+import org.omg.CORBA.INITIALIZE;
+
 import XML.*;
 
 import JDBC.DataBase;
@@ -19,32 +21,84 @@ import JDBC.DataBase;
  */
     class ThreadedHandler implements Runnable{
         
-        //ThreadHandler private variables:
-        private Socket incoming;
-        private DataBase sysDB;
-        private final int MAX_LOGIN_TRAIL = 5;
-        private String user_id = ""; //each thread serves a single user only. we need to keep track of who the thread is serving
-        private String VERIFICATION_CODE = "cornell"; //used for user registration
-        
+    	
+        /**
+         * @param i Socket with client
+         * @param db the mysql database
+         */
         public ThreadedHandler(Socket i, DataBase db){
             incoming = i;
             sysDB = db;
         }
+    	
+    	
+        //ThreadHandler private variables:
+        private Socket incoming;
+        private final int MAX_LOGIN_TRAIL = 5;
+        private String user_id = ""; //each thread serves a single user only. we need to keep track of who the thread is serving
+        private String VERIFICATION_CODE = "cornell"; //used for user registration
+        private Scanner read;
+        private PrintWriter write;
+        private InputStream inStream;
+        private OutputStream outStream;
+
+        public OutputStream getOutStream() {
+			return outStream;
+		}
+
+		public void setOutStream(OutputStream outStream) {
+			this.outStream = outStream;
+		}
+
+        public DataBase getSysDB() {
+			return sysDB;
+		}
+
+		public void setSysDB(DataBase sysDB) {
+			this.sysDB = sysDB;
+		}
+		private DataBase sysDB;
+
+		
+		
+		/**
+         * @param no
+         * @return void
+         * @throws IOException from getInputStream();
+         */
+        private void initializeServer() throws IOException{
+        	
+        		inStream = incoming.getInputStream();
+        	    outStream = incoming.getOutputStream();
+        		read = new Scanner(inStream);
+        		write = new PrintWriter(outStream, true); //true means autoflush
+        		write.println("===Connect with the server===");
+        }
+        
+
+                
+        /**
+         * @param result threads callback the result
+         * @return the output of the SQLQuery, the String will forget afterwards.
+         * @throws IOException 
+         */
+        public void callBackResult(String result) throws IOException {
+			
+			//TODO:XML response
+        	
+		}
         
         public void run(){
                 try{
-                    InputStream inStream = incoming.getInputStream();
-                    OutputStream outStream = incoming.getOutputStream();
-                    Scanner in = new Scanner(inStream);
-                    PrintWriter out = new PrintWriter(outStream, true); //true means autoflush
+                	
+                	initializeServer();
+                	
+                    write.println("please enter 'login' or 'register'");
                     
-                    out.println("===WELCOME TO THE LOGIN/REGISTRATION PAGE===");
-                    out.println("please enter 'login' or 'register'");
-                    
-                    XML_parser_API login_regist_xml = new XML_parser_API(in.nextLine());
+                    XML_parser_API login_regist_xml = new XML_parser_API(read.nextLine());
                     if (login_regist_xml.getRootTagName().equals("client_login_request")){
-                        if (!processLogin(in, out, login_regist_xml)){ //incorrect login for MAX_LOGIN_TRAIL trails
-                            out.println("FORCE CLIENT SHUTDOWN");
+                        if (!processLogin(read, write, login_regist_xml)){ //incorrect login for MAX_LOGIN_TRAIL trails
+                            write.println("FORCE CLIENT SHUTDOWN");
                             incoming.close();
                         }
                     }
@@ -55,21 +109,21 @@ import JDBC.DataBase;
                         while(true){
                             if (login_regist_xml.getTagValue("ver_code").equals(VERIFICATION_CODE)){ //TODO: verification code is hardcoded now...modify this later (maybe phase 3?)
                                 while(true){
-                                    if (processRegist(in, out, login_regist_xml)){
-                                       out.println("REGISTRATION_ACCEPTED"); 
+                                    if (processRegist(read, write, login_regist_xml)){
+                                       write.println("REGISTRATION_ACCEPTED"); 
                                        break;
                                     }
                                     else{
-                                       out.println("username is already used. please use another username."); 
-                                       XML_parser_API tmp_xml_parser = new XML_parser_API(in.nextLine());
+                                       write.println("username is already used. please use another username."); 
+                                       XML_parser_API tmp_xml_parser = new XML_parser_API(read.nextLine());
                                        login_regist_xml = tmp_xml_parser;
                                     }
                                 }
                                 break;
                             }
                             else{
-                                out.println("incorrect verification code. please register with a correct verification code.");
-                                XML_parser_API tmp_xml_parser = new XML_parser_API(in.nextLine());
+                                write.println("incorrect verification code. please register with a correct verification code.");
+                                XML_parser_API tmp_xml_parser = new XML_parser_API(read.nextLine());
                                 login_regist_xml = tmp_xml_parser;
                             }
                         }
@@ -79,16 +133,16 @@ import JDBC.DataBase;
                         System.out.println("ERROR: cannot pass the login/regist page...something went wrong");
                     }
                          
-                        out.println("welcome, "+user_id+". please enter your message to be echoed. enter \"exit\" to exit.");
-                        while(in.hasNextLine()){
-                            String line = in.nextLine();
+                        write.println("welcome, "+user_id+". please enter your message to be echoed. enter \"exit\" to exit.");
+                        while(read.hasNextLine()){
+                            String line = read.nextLine();
                             if (line.trim().toLowerCase().equals("exit")){
                                 //done = true;
-                                out.println("BYE"); //signal the client to exit
+                                write.println("BYE"); //signal the client to exit
                                 incoming.close();
                                 break;
                             }
-                            out.println("Echo: "+line);
+                            write.println("Echo: "+line);
                         }
 
                 }catch(Exception e){};
