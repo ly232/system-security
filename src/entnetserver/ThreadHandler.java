@@ -14,6 +14,7 @@ import org.omg.CORBA.INITIALIZE;
 
 import XML.*;
 
+import Constants.Constants;
 import JDBC.DataBase;
 /**
  *
@@ -41,6 +42,7 @@ import JDBC.DataBase;
         private PrintWriter write;
         private InputStream inStream;
         private OutputStream outStream;
+        private int threadCount = 0;
 
         public OutputStream getOutStream() {
 			return outStream;
@@ -82,10 +84,8 @@ import JDBC.DataBase;
          * @return the output of the SQLQuery, the String will forget afterwards.
          * @throws IOException 
          */
-        public void callBackResult(String result) throws IOException {
-			
-			//TODO:XML response
-        	
+        public void callBackResult(XMLRequest rq) throws IOException {
+				write.print(rq.generateXMLRequest());
 		}
         
         public void run(){
@@ -93,8 +93,29 @@ import JDBC.DataBase;
                 	
                 	initializeServer();
                 	
-                    write.println("please enter 'login' or 'register'");
+                    //write.println("please enter 'login' or 'register'");
                     
+                	while (true) {
+                		System.out.println("ready to serve");
+						String xml = read.nextLine();
+						XMLRequest request = new XMLRequest(xml);
+						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
+							user_id = request.getUserID();
+						}
+						if (request.getActionID() == Constants.SELECT) {
+							ReadServlet rServelet = new ReadServlet(request, this);
+							Thread t = new Thread(rServelet);
+							t.start();
+							threadCount++;
+						}else if (request.getActionID() == Constants.UPDATE) {
+							UpdateServlet uServlet = new UpdateServlet(request, this);
+							Thread t = new Thread(uServlet);
+							t.start();
+							threadCount++;
+						}
+						
+					}
+                /*
                     XML_parser_API login_regist_xml = new XML_parser_API(read.nextLine());
                     if (login_regist_xml.getRootTagName().equals(String.format("%d"
                             ,Constants.LOGIN_REQUEST_ID))){
@@ -144,7 +165,7 @@ import JDBC.DataBase;
                             }
                             write.println("Echo: "+line);
                         }
-
+*/
                 }catch(Exception e){};
         }
         
