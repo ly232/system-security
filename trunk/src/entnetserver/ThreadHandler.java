@@ -86,6 +86,7 @@ import JDBC.DataBase;
          */
         public void callBackResult(XMLRequest rq) throws IOException {
 				write.print(rq.generateXMLRequest());
+				System.out.println(rq.generateXMLRequest());
 		}
         
         public void run(){
