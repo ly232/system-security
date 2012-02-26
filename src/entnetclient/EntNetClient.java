@@ -4,15 +4,18 @@
  */
 package entnetclient;
 
+import XML.Constants;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import Constants.Constants;
+import Constants.*;
 import view.LoginUI;
 /**
  * 
  * @author Lin
  */
+
+
 public class EntNetClient {
 
 	/**
@@ -52,18 +55,7 @@ public class EntNetClient {
 	public static void clientRegist(BufferedReader stdIn, PrintWriter out) {
 		HashMap<String, String> RegistCredential = new HashMap<String, String>();
 		try {
-			System.out.println("enter your verification code:"); // for now,
-																	// verification
-																	// code is
-																	// hard-coded
-																	// at the
-																	// server to
-																	// be
-																	// "cornell".
-																	// ver code
-																	// is NOT
-																	// stored in
-																	// db@server.
+			System.out.println("enter your verification code:"); //verification code is "cornell"
 			RegistCredential.put("ver_code", stdIn.readLine());
 			System.out.println("sign-up user id:");
 			RegistCredential.put("user_id", stdIn.readLine());
@@ -73,16 +65,8 @@ public class EntNetClient {
 			RegistCredential.put("person_name", stdIn.readLine());
 			System.out.println("enter your contact info:");
 			RegistCredential.put("contact_info", stdIn.readLine());
-			System.out
-					.println("enter your role: 1 for boss, 2 for department head, 3 for regular employee"); // TODO:
-																											// Chen--add
-																											// error
-																											// checking
-																											// here
-																											// when
-																											// you
-																											// do
-																											// GUI
+			System.out.println("enter your role: 1 for boss, 2 for department head, 3 for regular employee"); // TODO:
+																				// GUI
 			RegistCredential.put("role_id", stdIn.readLine());
 		} catch (Exception e) {
 		}
@@ -121,4 +105,10 @@ public class EntNetClient {
 
 	}
 
+    public ArrayList<String> fetchUidPwdFromGUI(String uid, String pwd){
+        ArrayList<String> retArrList = new ArrayList<String>();
+        
+        return retArrList;
+    }
+    
 }
