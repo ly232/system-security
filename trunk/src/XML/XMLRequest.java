@@ -65,8 +65,13 @@ public class XMLRequest {
 		 * @param requestDetail String client is sqlQuery
 		 * @param ActionID String in Constants
 		 */
-		public XMLRequest(String requestID,	String userID,String regionID,
-										 String sessionID,String requestDetail,String ActionID) {
+		public XMLRequest(
+                        String requestID,	
+                        String userID,
+                        String regionID,			 
+                        String sessionID,
+                        String requestDetail,
+                        String ActionID) {
 			 this.requestID = requestID;
 			this.userID = userID;
 			this.regionID = regionID;

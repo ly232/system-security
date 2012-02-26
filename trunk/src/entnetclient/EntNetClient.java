@@ -4,7 +4,7 @@
  */
 package entnetclient;
 
-import XML.Constants;
+//import XML.Constants;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -46,34 +46,38 @@ public class EntNetClient {
 			out = new PrintWriter(s.getOutputStream(), true); // true means
 																// autoflush
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                        
+                        //print out server welcome msg (at commandline only. not on gui.):
+                        System.out.println(in.readLine());
+                        
 		} catch (Exception e) {
 		}
 		
 
 	}
-
-	public static void clientRegist(BufferedReader stdIn, PrintWriter out) {
+        
+	public static void clientRegist(
+                String VerificationCode, 
+                String Username,
+                String Password,
+                String RealName,
+                String ContactInfo,
+                String Role_ID 
+                        ) {
 		HashMap<String, String> RegistCredential = new HashMap<String, String>();
 		try {
-			System.out.println("enter your verification code:"); //verification code is "cornell"
-			RegistCredential.put("ver_code", stdIn.readLine());
-			System.out.println("sign-up user id:");
-			RegistCredential.put("user_id", stdIn.readLine());
-			System.out.println("enter your password:");
-			RegistCredential.put("password", stdIn.readLine());
-			System.out.println("enter your name:");
-			RegistCredential.put("person_name", stdIn.readLine());
-			System.out.println("enter your contact info:");
-			RegistCredential.put("contact_info", stdIn.readLine());
-			System.out.println("enter your role: 1 for boss, 2 for department head, 3 for regular employee"); // TODO:
-																				// GUI
-			RegistCredential.put("role_id", stdIn.readLine());
-		} catch (Exception e) {
+                    RegistCredential.put("ver_code", VerificationCode);
+                    RegistCredential.put("user_id", Username);
+                    RegistCredential.put("password", Password);
+                    RegistCredential.put("person_name", RealName);
+                    RegistCredential.put("contact_info", ContactInfo);
+                    RegistCredential.put("role_id", Role_ID);
+                } catch (Exception e) {
 		}
 		;
 
 		clientRequest registRequest = new clientRequest(
-				Constants.REGIST_REQUEST_ID, RegistCredential);
+				Constants.REGIST_REQUEST_ID, Username, RegistCredential);
 		String retXML = registRequest.generateXMLforRequest();
 		out.println(retXML);
 	}
@@ -81,21 +85,28 @@ public class EntNetClient {
 	public static void clientLogin(String tmp_uid, String tmp_pwd)
 			throws IOException {
 
+            //System.out.println("in clientLogin()");
+            
 		// initial login credential: (TODO: this should correspond to GUI event
 		// in login page)
 		HashMap<String, String> loginCredential = new HashMap<String, String>();
-		loginCredential.put("user_id", tmp_uid); // username...TODO: implement
-													// in GUI
-		loginCredential.put("password", tmp_pwd); // password...TODO: implement
-													// in GUI
+		loginCredential.put("user_id", tmp_uid); 
+		loginCredential.put("password", tmp_pwd); 
 		clientRequest loginRequest = new clientRequest(
-				Constants.LOGIN_REQUEST_ID, loginCredential);
+				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential);
 		String retXML = loginRequest.generateXMLforRequest();
 		out.println(retXML);
-		// System.out.println(retXML);
-		String fromServer = in.readLine();
-		if (fromServer.equals("REGISTRATION_ACCEPTED"))
-			;
+		System.out.println(retXML);
+		
+                
+                String XMLfromServer = in.readLine();
+		
+                
+                System.out.println(XMLfromServer);
+                
+                
+                
+                //if (fromServer.equals("REGISTRATION_ACCEPTED"));
 		displayUserHomeBoard();
 		// CLOSE
 	}

@@ -4,7 +4,7 @@
  */
 package entnetclient;
 
-import XML.Constants;
+//import XML.Constants;
 import java.util.*;
 
 import Constants.*;
@@ -16,46 +16,25 @@ import XML.*;
  */
 public class clientRequest {
     private HashMap<String,String> requestMsg;
-    private int requestID;
-    public clientRequest(int reqID, HashMap<String,String> reqMsg){
+    private String requestID;
+    private String userID;
+    public clientRequest(String reqID, String uID, HashMap<String,String> reqMsg){
         this.requestID = reqID;
         this.requestMsg = reqMsg;
+        this.userID = uID;
     }
     public String generateXMLforRequest(){
         String retXML="";
         try{
 
-            XML_creator_API xmlapi = new XML_creator_API();
-            
-            switch(this.requestID){
-                case Constants.LOGIN_REQUEST_ID: 
-                    xmlapi.createRoot(String.format("%d",Constants.LOGIN_REQUEST_ID));
-                    xmlapi.createChild("user_id", "client_login_request");
-                    xmlapi.createText(this.requestMsg.get("user_id"), "user_id");
-                    xmlapi.createChild("password", "client_login_request");
-                    xmlapi.createText(this.requestMsg.get("password"), "password");
-                    break;
-                case Constants.REGIST_REQUEST_ID:
-                    xmlapi.createRoot(String.format("%d",Constants.REGIST_REQUEST_ID));
-                    xmlapi.createChild("ver_code", "5");
-                    xmlapi.createText(this.requestMsg.get("ver_code"), "ver_code");
-                    xmlapi.createChild("user_id", "client_regist_request");
-                    xmlapi.createText(this.requestMsg.get("user_id"), "user_id");
-                    xmlapi.createChild("password", "client_regist_request");
-                    xmlapi.createText(this.requestMsg.get("password"), "password");
-                    xmlapi.createChild("person_name", "client_regist_request");
-                    xmlapi.createText(this.requestMsg.get("person_name"), "person_name");
-                    xmlapi.createChild("contact_info", "client_regist_request");
-                    xmlapi.createText(this.requestMsg.get("contact_info"), "contact_info");
-                    xmlapi.createChild("role_id", "client_regist_request");
-                    xmlapi.createText(this.requestMsg.get("role_id"), "role_id");
-                    break;
-                default:
-
-                    break;
+            //XML_creator_API xmlapi = new XML_creator_API();
+            if (this.requestID.equals(Constants.LOGIN_REQUEST_ID)){
+                retXML = clientRequestLogin();
             }
-            
-            retXML = xmlapi.getXMLstring();
+            else if (this.requestID.equals(Constants.REGIST_REQUEST_ID)){
+                retXML = clientRequestRegist();
+            }
+
 
         }
         catch(Exception e){
@@ -64,6 +43,48 @@ public class clientRequest {
         finally{
             return retXML;
         }
+    }
+
+    
+    
+    private String clientRequestLogin() {
+        String myQuery = "SELECT * FROM user WHERE user_id='"
+                +requestMsg.get("user_id")+"' AND user_pwd='"
+                +requestMsg.get("password") +"'";
+        
+        XMLRequest xmlapi = new XMLRequest(
+                Constants.LOGIN_REQUEST_ID,
+                this.userID,
+                "", //region id
+                "", //session id...not for 
+                myQuery, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+                );
+                
+               return xmlapi.generateXMLRequest();
+     
+    }
+
+    private String clientRequestRegist() {
+
+                    String myQuery = "INSERT INTO user VALUES ('" + requestMsg.get("user_id") 
+                    + "', '" + requestMsg.get("password") 
+                    + "', '" + requestMsg.get("person_name")
+                    + "', '" + requestMsg.get("contact_info")
+                    + "', '" + requestMsg.get("role_id") + "')";
+        
+                    
+                    
+        XMLRequest xmlapi = new XMLRequest(
+                Constants.REGIST_REQUEST_ID,
+                this.userID,
+                "", //region id
+                "", //session id...not for 
+                myQuery, //request detail...SQL statement to be excuted by server
+                "UPDATE" //action id...can either be SELECT or UPDATE...see Constants package
+                );
+                
+               return xmlapi.generateXMLRequest();
     }
 }
 

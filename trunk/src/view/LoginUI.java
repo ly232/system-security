@@ -303,12 +303,23 @@ public class LoginUI extends javax.swing.JFrame {
 	}
 
 	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) {
-		EntNetClient.clientRegist(jTextFieldVcode.getText(), jTextFieldRegid.getText(), jTextFieldRegpwd.getText(), jTextFieldRegname.getText(), jTextFieldRegcontact.getText(), jTextFieldRegrole.getText());
+		EntNetClient.clientRegist(
+                        jTextFieldVcode.getText(), 
+                        jTextFieldRegid.getText(), 
+                        jTextFieldRegpwd.getText(), 
+                        jTextFieldRegname.getText(), 
+                        jTextFieldRegcontact.getText(), 
+                        jTextFieldRegrole.getText()
+                        );
 	}
 
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
-		EntNetClient.clientLogin(jTextFieldId.getText(),
-				jTextFieldPwd.getText());
+            try{
+                EntNetClient.clientLogin(
+                        jTextFieldId.getText(),
+                        jTextFieldPwd.getText()
+                        );
+            }catch(Exception e){};
 	}
 
 	private void jTextFieldIdActionPerformed(java.awt.event.ActionEvent evt) {
