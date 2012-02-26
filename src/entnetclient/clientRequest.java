@@ -4,9 +4,10 @@
  */
 package entnetclient;
 
+import XML.Constants;
 import java.util.*;
 
-import Constants.Constants;
+import Constants.*;
 import XML.*;
 
 /**
@@ -28,14 +29,14 @@ public class clientRequest {
             
             switch(this.requestID){
                 case Constants.LOGIN_REQUEST_ID: 
-                    xmlapi.createRoot("client_login_request");
+                    xmlapi.createRoot(String.format("%d",Constants.LOGIN_REQUEST_ID));
                     xmlapi.createChild("user_id", "client_login_request");
                     xmlapi.createText(this.requestMsg.get("user_id"), "user_id");
                     xmlapi.createChild("password", "client_login_request");
                     xmlapi.createText(this.requestMsg.get("password"), "password");
                     break;
                 case Constants.REGIST_REQUEST_ID:
-                    xmlapi.createRoot("client_regist_request");
+                    xmlapi.createRoot(String.format("%d",Constants.REGIST_REQUEST_ID));
                     xmlapi.createChild("ver_code", "5");
                     xmlapi.createText(this.requestMsg.get("ver_code"), "ver_code");
                     xmlapi.createChild("user_id", "client_regist_request");
