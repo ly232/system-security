@@ -29,7 +29,7 @@ public class DataBase {
          
          public void initialize() {
                 try {
-                		if (connection.isValid(0)) {
+                		if (connection != null && connection.isValid(0)) {
 							return;
 						}
                         Class.forName("com.mysql.jdbc.Driver").newInstance();
