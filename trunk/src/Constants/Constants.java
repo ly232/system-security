@@ -17,7 +17,7 @@ public abstract class Constants {
     
     //ACTION REFERENCE 
     public static final String SELECT = "SELECT";
-    public static final String UPDATE = "SELECT";
+    public static final String UPDATE = "UPDATE";
     
     //REGION REFERENCE
     public static final String REGION1 = "REGION1";
@@ -29,4 +29,8 @@ public abstract class Constants {
     public static final String REGION0 = "ALLREGION";
     
     //public static final int REGIST_INFO_ID = 3;
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+    
+    
 }
