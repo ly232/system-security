@@ -35,7 +35,10 @@ public class XML_parser_API {
         Element eElement = doc.getDocumentElement();
         NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
         Node nValue = (Node) nlList.item(0);
-        return nValue.getNodeValue();
+        if (nValue!=null)
+            return nValue.getNodeValue();
+        else
+            return null;
     }
     public String getRootTagName(){
         return doc.getDocumentElement().getNodeName();

@@ -100,11 +100,11 @@ import JDBC.DataBase;
                 		System.out.println("ready to serve");
 						String xml = read.nextLine();
                                                 
-                                                System.out.println(xml+"...hi4huial");
+                                                System.out.println(xml+"...<<<<<");
                                                 
 						XMLRequest request = new XMLRequest(xml);
                                                 
-                                                System.out.println(request.getRequestID()+"...hi4huial");
+                                                System.out.println(request.getRequestID()+"...<<<<<");
                                                 
 						if (request.getRequestID() == Constants.LOGIN_REQUEST_ID) {
 							System.out.println("server sees login request!!!");

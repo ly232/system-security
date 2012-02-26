@@ -71,7 +71,8 @@ public class XMLRequest {
                         String regionID,			 
                         String sessionID,
                         String requestDetail,
-                        String ActionID) {
+                        String ActionID) 
+                {
 			 this.requestID = requestID;
 			this.userID = userID;
 			this.regionID = regionID;
