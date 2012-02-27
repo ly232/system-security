@@ -24,7 +24,6 @@ public class loginServlet extends Servelet implements Runnable{
 		
 		DataBase dB =  handle.getSysDB();
 		ResultSet rSet = dB.DoQuery(sqlQuery);
-		System.out.println(sqlQuery.equals(sqlQuery));
 		try {
 			if (rSet.first()) {
 				xmlRequest.setRequestDetail(Constants.TRUE);
