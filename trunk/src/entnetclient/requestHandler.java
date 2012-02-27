@@ -55,8 +55,8 @@ public class requestHandler implements Runnable{
 	            
 	            XMLRequest resultRequest  = new XMLRequest(resultString);
 	            //callback(resultRequest)
-	            //TODO:
-	            //handleClient.requestThreadCallBack(resultRequest);
+	            
+	            handleClient.requestThreadCallBack(resultRequest);
 	            
 	            
 			} catch (IOException e) {

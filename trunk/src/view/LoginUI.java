@@ -22,13 +22,16 @@ public class LoginUI extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
 	public static PrintWriter out;
         private EntNetClient controller; 
-        private Thread clientMainThread;
+        //private ClientMainThreadHandler clientMainThread;
 	/** Creates new form UI */
 	public LoginUI() {
 		initComponents();
                 controller = EntNetClient.getInstance();
-                clientMainThread = controller.getClientMainThreadHandler();
+                //clientMainThread = controller.getClientMainThreadHandler();
+                //controller.startClientMainThread();
 	}
+        
+        
 
 	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -306,18 +309,23 @@ public class LoginUI extends javax.swing.JFrame {
 	}
 
 	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) {
-		EntNetClient.clientRegist(
+	/*	
+            EntNetClient.clientRegist(
                         jTextFieldVcode.getText(), 
                         jTextFieldRegid.getText(), 
                         jTextFieldRegpwd.getText(), 
                         jTextFieldRegname.getText(), 
                         jTextFieldRegcontact.getText(), 
                         jTextFieldRegrole.getText()
-                        );
+                        );*/
 	}
 
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
             try{
+                
+                controller.
+                
+                
                 /*
                 EntNetClient.clientLogin(
                         jTextFieldId.getText(),
