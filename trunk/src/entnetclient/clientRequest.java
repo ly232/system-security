@@ -74,11 +74,10 @@ public class clientRequest {
 
                     String myQuery = "INSERT INTO user VALUES ('" + requestMsg.get("user_id") 
                     + "', '" + requestMsg.get("password") 
-                    + "', '" + requestMsg.get("person_name")
+                    //+ "', '" + requestMsg.get("person_name")
                     + "', '" + requestMsg.get("contact_info")
-                    + "', '" + requestMsg.get("role_id") + "')";
-        
-                    
+                    + "', '" + requestMsg.get("role_id") + "');";
+    
                     
         XMLRequest xmlapi = new XMLRequest(
                 Constants.REGIST_REQUEST_ID,
@@ -106,7 +105,7 @@ public class clientRequest {
     }
     
     private XMLRequest getFriendList(String uid){
-        String query = "SELECT user2 FROM friend WHERE user1 = '" + uid + "'";
+        String query = "SELECT user2 FROM friend WHERE user1 = '" + uid + "';";
         XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -121,7 +120,7 @@ public class clientRequest {
     private XMLRequest getRegionInfo(String uid, String rid){
 
         if (rid.equals(Constants.REGION1)){
-            String query = "SELECT * FROM user WHERE user_id = '" + uid + "'";
+            String query = "SELECT * FROM user WHERE user_id = '" + uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -134,7 +133,7 @@ public class clientRequest {
         }
         else if (rid.equals(Constants.REGION2)){
             String query = "SELECT loc_name FROM currloc NATURAL JOIN location"
-                    + " WHERE user_id = '" + uid + "' AND currloc.loc_id = location.loc_id";
+                    + " WHERE user_id = '" + uid + "' AND currloc.loc_id = location.loc_id;";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -147,7 +146,7 @@ public class clientRequest {
         }
         else if (rid.equals(Constants.REGION3)){
             String query = "SELECT proj_name FROM project NATURAL JOIN workon"
-                    + " WHERE user_id = '" + uid + "' AND project.pid = workon.pid";
+                    + " WHERE user_id = '" + uid + "' AND project.pid = workon.pid;";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -160,7 +159,7 @@ public class clientRequest {
         }
         else if (rid.equals(Constants.REGION4)){
             String query = "SELECT msg_content FROM postworkmessage"
-                    + " WHERE did = '" + Constants.COMPANY_DID + "'";
+                    + " WHERE did = '" + Constants.COMPANY_DID + "';";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -176,7 +175,7 @@ public class clientRequest {
                     + "NAGURAL JOIN postworkmessage"
                     + " WHERE user.user_id = workat.userID_workat"
                     + " AND workat.deptID_workat = postworkmessage.did"
-                    + " AND user.user_id = '" + uid + "'";
+                    + " AND user.user_id = '" + uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -188,7 +187,7 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION6)){
-            String query = "SELECT * FROM friend WHERE user1 = '" + uid + "'";
+            String query = "SELECT * FROM friend WHERE user1 = '" + uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                     Constants.READ_REGION_ID,
                     uid,

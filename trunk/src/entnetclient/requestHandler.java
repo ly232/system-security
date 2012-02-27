@@ -45,8 +45,8 @@ public class requestHandler implements Runnable{
 	            String resultString = new String();
 	            String onelineString = new String();
 	            while ((onelineString = in.readLine()).equals(Constants.END_STRING) == false) {
-	            		resultString += onelineString;
-				}
+	            	resultString += onelineString;
+		    }
 	            
 	            XMLRequest resultRequest  = new XMLRequest(resultString);
 	            
