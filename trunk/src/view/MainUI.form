@@ -414,10 +414,16 @@
               </StringArray>
             </Property>
           </Properties>
+<<<<<<< .mine
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="adsf"/>
+          </Events>
+=======
           <Events>
             <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="jList1InputMethodTextChanged"/>
             <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jList1PropertyChange"/>
           </Events>
+>>>>>>> .r69
         </Component>
       </SubComponents>
     </Container>

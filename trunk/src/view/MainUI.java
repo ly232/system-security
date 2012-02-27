@@ -6,10 +6,20 @@
 
 package view;
 
+<<<<<<< .mine
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+
+=======
 import XML.*;
 import entnetclient.EntNetClient;
 import java.util.ArrayList;
 
+>>>>>>> .r69
 /**
  *
  * @author  __USER__
@@ -276,6 +286,26 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
+<<<<<<< .mine
+			public Object getElementAt(int i) {
+				return strings[i];
+			}
+		});
+		jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
+	          public   void   mouseClicked(MouseEvent   e)   { 
+	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
+	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
+	                    
+	          } 
+	  }; 
+	  jList1.addMouseListener(mouseListener);
+	
+
+		
+		
+		jScrollPane1.setViewportView(jList1);
+=======
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -323,6 +353,7 @@ public class MainUI extends javax.swing.JFrame {
                             .addComponent(Region6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Region3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
+>>>>>>> .r69
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -331,6 +362,10 @@ public class MainUI extends javax.swing.JFrame {
             // TODO add your handling code here:
         }//GEN-LAST:event_jList1PropertyChange
 
+<<<<<<< .mine
+	
+
+=======
         private void jList1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jList1InputMethodTextChanged
             // TODO add your handling code here:
         }//GEN-LAST:event_jList1InputMethodTextChanged
@@ -344,6 +379,7 @@ public class MainUI extends javax.swing.JFrame {
             }
         }//GEN-LAST:event_jButton1ActionPerformed
 
+>>>>>>> .r69
 	/**
 	 * @param args the command line arguments
 	 */
