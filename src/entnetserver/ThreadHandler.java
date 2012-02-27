@@ -72,7 +72,6 @@ import JDBC.DataBase;
         	    outStream = incoming.getOutputStream();
         		read = new Scanner(inStream);
         		write = new PrintWriter(outStream, true); //true means autoflush
-        		write.println("===Connect with the server===");
         }
         
 
@@ -85,9 +84,10 @@ import JDBC.DataBase;
         public void callBackResult(XMLRequest rq) throws IOException {
 
 				synchronized (write) {
-	        		write.print(rq.generateXMLRequest());
-					write.flush();
-					write.println(Constants.END_STRING);
+	        		write.println(rq.generateXMLRequest());
+	        		write.println(Constants.END_STRING);
+					//write.flush();
+					//write.println(Constants.END_STRING);
 				}
 
 		}
@@ -99,38 +99,33 @@ import JDBC.DataBase;
                 	
                     //write.println("please enter 'login' or 'register'");
                     
-                	while (true) {
+               //while (true) {
                 		System.out.println("ready to serve");
-						String xml = read.nextLine();                                
+						String xml = read.nextLine();
+						System.out.println(xml);
 						XMLRequest request = new XMLRequest(xml);
-                       
-                                                System.out.println(request.getRequestID()+"...<<<<<");
-                                                
-						if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
-
-
+ 						if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
                                                     user_id = request.getUserID();
                                                     loginServlet lServlet = new loginServlet(request, this);
                                                     Thread t = new Thread(lServlet);
                                                     t.start();
                                                     threadCount++;
 							
-						}
-
-						if (request.getActionID().equals(Constants.SELECT)) {
-
-							ReadServlet rServelet = new ReadServlet(request, this);
-							Thread t = new Thread(rServelet);
-							t.start();
-							threadCount++;
-						}else if (request.getActionID().equals(Constants.UPDATE)) {
-							UpdateServlet uServlet = new UpdateServlet(request, this);
-							Thread t = new Thread(uServlet);
-							t.start();
-							threadCount++;
+						}else {
+							if (request.getActionID().equals(Constants.SELECT)) {
+								ReadServlet rServelet = new ReadServlet(request, this);
+								Thread t = new Thread(rServelet);
+								t.start();
+								threadCount++;
+							}else if (request.getActionID() == Constants.UPDATE) {
+								UpdateServlet uServlet = new UpdateServlet(request, this);
+								Thread t = new Thread(uServlet);
+								t.start();
+								threadCount++;
+							}
 						}
 						
-					}
+					//}
                 /*
                     XML_parser_API login_regist_xml = new XML_parser_API(read.nextLine());
                     if (login_regist_xml.getRootTagName().equals(String.format("%d"

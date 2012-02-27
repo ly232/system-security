@@ -19,10 +19,14 @@ public class loginServlet extends Servelet implements Runnable{
 
 	@Override
 	public void run() {
-		String sqlQuery = "select * from entnetdb_v2.user U where U.user_id = " + xmlRequest.getUserID() + 
-				" AND U.user_pwd = " + xmlRequest.getRequestDetail() + ";";
+		String sqlQuery = "select * from entnetdb_v2.user U where U.user_id = \"" + xmlRequest.getUserID() + 
+				"\" AND U.user_pwd = \"" + xmlRequest.getRequestDetail() + "\";";
+		String sqlQuerytest = "select * from entnetdb_v2.user U where U.user_id = \"" + xmlRequest.getUserID() 
+				+ "\" AND U.user_pwd = \"" + xmlRequest.getRequestDetail() + "\";";
+		
 		DataBase dB =  handle.getSysDB();
-		ResultSet rSet = dB.DoQuery(sqlQuery);
+		ResultSet rSet = dB.DoQuery(sqlQuerytest);
+		System.out.println(sqlQuery.equals(sqlQuerytest));
 		try {
 			if (rSet.first()) {
 				xmlRequest.setRequestDetail(Constants.TRUE);
