@@ -23,6 +23,9 @@ public class clientRequest {
         this.requestMsg = reqMsg;
         this.userID = uID;
     }
+    
+    
+    /*
     public String generateXMLforRequest(){
         String retXML="";
         try{
@@ -43,11 +46,11 @@ public class clientRequest {
         finally{
             return retXML;
         }
-    }
+    }*/
 
     
     
-    private String clientRequestLogin() {
+    public XMLRequest clientRequestLogin() {
         String myQuery = "SELECT * FROM user WHERE user_id='"
                 +requestMsg.get("user_id")+"' AND user_pwd='"
                 +requestMsg.get("password") +"'";
@@ -59,15 +62,14 @@ public class clientRequest {
                 Constants.INVALID, //session id...not for 
                 myQuery, //request detail...SQL statement to be excuted by server
                 "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
-                );
+            );
                 
-        
-        
-               return xmlapi.generateXMLRequest();
+
+               return xmlapi;
      
     }
 
-    private String clientRequestRegist() {
+    public XMLRequest clientRequestRegist() {
 
                     String myQuery = "INSERT INTO user VALUES ('" + requestMsg.get("user_id") 
                     + "', '" + requestMsg.get("password") 
@@ -86,7 +88,25 @@ public class clientRequest {
                 "UPDATE" //action id...can either be SELECT or UPDATE...see Constants package
                 );
                 
-               return xmlapi.generateXMLRequest();
+               //return xmlapi.generateXMLRequest();
+        return xmlapi;
     }
+
+    public ArrayList<XMLRequest> clientRequestHomeBoard() {
+        ArrayList<XMLRequest> retArrList = new ArrayList<XMLRequest>();
+        //1. get all friends
+        XMLRequest friendListXMLRequest = getFriendList(this.userID);
+        retArrList.add(friendListXMLRequest);
+        //2. update each region in seq.
+    }
+    
+    private XMLRequest getFriendList(String uid){
+        
+    }
+    
+    private void getRegionInfo(String uid, String rid){
+        
+    }
+    
 }
 

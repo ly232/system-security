@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import Constants.*;
+import XML.XMLRequest;
 import java.nio.CharBuffer;
 import view.LoginUI;
 /**
@@ -35,6 +36,7 @@ public class EntNetClient {
         private EntNetClient(){
             // establish client side socket:
 		try {
+                    /*
 			s = new Socket("localhost", 8189); 
 			out = new PrintWriter(s.getOutputStream(), true); // true means																// autoflush
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -43,13 +45,12 @@ public class EntNetClient {
                         Runnable r = 
                                 new ClientMainThreadHandler();
                         clientMainThread = new Thread(r);
-                        clientMainThread.start();        
-		} catch (Exception e) {
+                        clientMainThread.start();  */      
+		} 
+                catch (Exception e) {
 		}
         }   
-        public Thread getClientMainThreadHandler(){
-            return clientMainThread;
-        }
+
         public static EntNetClient getInstance() {
             if (instance==null)
                 return new EntNetClient();
@@ -62,18 +63,100 @@ public class EntNetClient {
         ///////////////////////////////////
         
         
-        
+        public void clientRegist(
+                String VerificationCode, 
+                String Username,
+                String Password,
+                String RealName,
+                String ContactInfo,
+                String Role_ID 
+                        ) 
+        {
+		HashMap<String, String> RegistCredential = new HashMap<String, String>();
+		try {
+                    RegistCredential.put("ver_code", VerificationCode);
+                    RegistCredential.put("user_id", Username);
+                    RegistCredential.put("password", Password);
+                    RegistCredential.put("person_name", RealName);
+                    RegistCredential.put("contact_info", ContactInfo);
+                    RegistCredential.put("role_id", Role_ID);
+                } catch (Exception e) {
+		}
+		;
+
+		clientRequest registRequest = new clientRequest(
+				Constants.REGIST_REQUEST_ID, Username, RegistCredential);
+		//String retXML = registRequest.generateXMLforRequest();
+		XMLRequest xmlr = registRequest.clientRequestRegist();
+                        
+                
+                invokeRequestThread(xmlr);
+	}
         
 	
 
+        
+        public void clientLogin(String tmp_uid, String tmp_pwd)
+			throws IOException {
+
+		HashMap<String, String> loginCredential = new HashMap<String, String>();
+		loginCredential.put("user_id", tmp_uid); 
+		loginCredential.put("password", tmp_pwd); 
+		clientRequest loginRequest = new clientRequest(
+				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential);
+		XMLRequest xmlr= loginRequest.clientRequestLogin();
+                
+                invokeRequestThread(xmlr);
+	}
+        
+        public void clientHomeBoardRequest(String uid)
+                throws IOException {
+            HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
+            //homeBoardRequestInfo.put("user_id",uid);
+            clientRequest homeBoardRequest = new clientRequest(
+				Constants.READ_REGION_ID, uid, homeBoardRequestInfo); 
+            XMLRequest xmlr= homeBoardRequest.clientRequestHomeBoard(Constants.REGION0);
+            
+        }
+        
 	
 
     
-
+/*
     public ArrayList<String> fetchUidPwdFromGUI(String uid, String pwd){
         ArrayList<String> retArrList = new ArrayList<String>();
         
         return retArrList;
+    }*/
+
+    private void invokeRequestThread(XMLRequest xmlr) {
+        requestHandler rh = new requestHandler(xmlr, this);
+        Thread t = new Thread(rh);
+        t.start();
     }
+    
+    public void requestThreadCallBack(XMLRequest xmlreq){
+        if (xmlreq.getRequestID().equals(Constants.LOGIN_REQUEST_ID)){
+            //check if the login is successful
+            String LoginStat = xmlreq.getRequestDetail();
+            if (LoginStat.equals(Constants.TRUE)){
+                //successful login
+                //goto user's home page by asking server to send xml of user homeboard
+                try{
+                    clientHomeBoardRequest(xmlreq.getUserID());
+                }catch(IOException e){};
+            }
+            else{
+                //failed login...TODO: solution?
+            }
+            
+            
+        }
+        else if (xmlreq.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
+            
+        }
+            
+    }
+    
     
 }
