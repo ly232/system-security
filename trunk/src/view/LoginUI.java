@@ -21,19 +21,25 @@ public class LoginUI extends javax.swing.JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	public static PrintWriter out;
-
+        public static EntNetClient controller;
 	/** Creates new form UI */
-	public LoginUI() {
+	public LoginUI(EntNetClient ec) {
 		initComponents();
-	}
 
+                controller = ec;
+                //controller = EntNetClient.getInstance();
+                //clientMainThread = controller.getClientMainThreadHandler();
+                //controller.startClientMainThread();
+
+	}
+        /*
 	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				new LoginUI().setVisible(true);
 			}
 		});
-	}
+	}*/
 
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -303,12 +309,20 @@ public class LoginUI extends javax.swing.JFrame {
 	}
 
 	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) {
-		EntNetClient.clientRegist(jTextFieldVcode.getText(), jTextFieldRegid.getText(), jTextFieldRegpwd.getText(), jTextFieldRegname.getText(), jTextFieldRegcontact.getText(), jTextFieldRegrole.getText());
+		controller.clientRegist(jTextFieldVcode.getText(), jTextFieldRegid.getText(), jTextFieldRegpwd.getText(), jTextFieldRegname.getText(), jTextFieldRegcontact.getText(), jTextFieldRegrole.getText());
 	}
 
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
-		EntNetClient.clientLogin(jTextFieldId.getText(),
-				jTextFieldPwd.getText());
+
+            try{
+                //System.out.println(">>>>>");
+                controller.clientLogin(jTextFieldId.getText(), jTextFieldPwd.getText());
+                //System.out.println(">>>>>");
+                
+            }catch(Exception e){
+                e.printStackTrace();
+            };
+
 	}
 
 	private void jTextFieldIdActionPerformed(java.awt.event.ActionEvent evt) {
