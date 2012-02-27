@@ -109,14 +109,14 @@ public class EntNetClient {
                 invokeRequestThread(xmlr);
 	}
         
-        public void clientHomeBoardRequest(String uid)
+        public ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
                 throws IOException {
             HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
             //homeBoardRequestInfo.put("user_id",uid);
             clientRequest homeBoardRequest = new clientRequest(
 				Constants.READ_REGION_ID, uid, homeBoardRequestInfo); 
-            XMLRequest xmlr= homeBoardRequest.clientRequestHomeBoard(Constants.REGION0);
-            
+            ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
+            return al_xmlr;
         }
         
 	
@@ -143,7 +143,9 @@ public class EntNetClient {
                 //successful login
                 //goto user's home page by asking server to send xml of user homeboard
                 try{
-                    clientHomeBoardRequest(xmlreq.getUserID());
+                    ArrayList<XMLRequest> homeBoardInfoXML 
+                            = clientHomeBoardRequest(xmlreq.getUserID());
+                    //populate screen
                 }catch(IOException e){};
             }
             else{

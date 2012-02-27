@@ -98,14 +98,113 @@ public class clientRequest {
         XMLRequest friendListXMLRequest = getFriendList(this.userID);
         retArrList.add(friendListXMLRequest);
         //2. update each region in seq.
+        for (int i=1;i<=6;i++){
+            retArrList.add(getRegionInfo(this.userID, "REGION"+i));
+        }
+        return retArrList;
     }
     
     private XMLRequest getFriendList(String uid){
-        
+        String query = "SELECT user2 FROM friend WHERE user1 = '" + uid + "'";
+        XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.INVALID, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+        );
+        return xmlapi;
     }
     
-    private void getRegionInfo(String uid, String rid){
+    private XMLRequest getRegionInfo(String uid, String rid){
+
+        if (rid.equals(Constants.REGION1)){
+            String query = "SELECT * FROM user WHERE user_id = '" + uid + "'";
+            XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.REGION1, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
+        else if (rid.equals(Constants.REGION2)){
+            String query = "SELECT loc_name FROM currloc NATURAL JOIN location"
+                    + " WHERE user_id = '" + uid + "' AND currloc.loc_id = location.loc_id";
+            XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.REGION2, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
+        else if (rid.equals(Constants.REGION3)){
+            String query = "SELECT proj_name FROM project NATURAL JOIN workon"
+                    + " WHERE user_id = '" + uid + "' AND project.pid = workon.pid";
+            XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.REGION3, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
+        else if (rid.equals(Constants.REGION4)){
+            String query = "SELECT msg_content FROM postworkmessage"
+                    + " WHERE did = '" + Constants.COMPANY_DID + "'";
+            XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.REGION4, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
+        else if (rid.equals(Constants.REGION5)){
+            String query = "SELECT msg_content FROM postworkmessage NATURAL JOIN user "
+                    + "NAGURAL JOIN postworkmessage"
+                    + " WHERE user.user_id = workat.userID_workat"
+                    + " AND workat.deptID_workat = postworkmessage.did"
+                    + " AND user.user_id = '" + uid + "'";
+            XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.REGION5, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
+        else if (rid.equals(Constants.REGION6)){
+            String query = "SELECT * FROM friend WHERE user1 = '" + uid + "'";
+            XMLRequest xmlapi = new XMLRequest(
+                    Constants.READ_REGION_ID,
+                    uid,
+                    Constants.REGION6, //region id
+                    Constants.INVALID, //session id...not for 
+                    query, //request detail...SQL statement to be excuted by server
+                    "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
+        else{
+            System.err.println("ERROR: getRegionInfo");
+            return null;
+        }
         
+        
+         
     }
     
 }
