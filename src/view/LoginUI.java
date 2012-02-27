@@ -309,7 +309,13 @@ public class LoginUI extends javax.swing.JFrame {
 	}
 
 	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) {
-		controller.clientRegist(jTextFieldVcode.getText(), jTextFieldRegid.getText(), jTextFieldRegpwd.getText(), jTextFieldRegname.getText(), jTextFieldRegcontact.getText(), jTextFieldRegrole.getText());
+		controller.clientRegist(
+                        jTextFieldVcode.getText(), 
+                        jTextFieldRegid.getText(), 
+                        jTextFieldRegpwd.getText(), 
+                        jTextFieldRegname.getText(), 
+                        jTextFieldRegcontact.getText(), 
+                        jTextFieldRegrole.getText());
 	}
 
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {

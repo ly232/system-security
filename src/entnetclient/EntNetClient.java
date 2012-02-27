@@ -25,13 +25,7 @@ public class EntNetClient {
 	 *            the command line arguments
 	 */
 
-	private PrintWriter out = null;
-	private BufferedReader in = null;
-
-        //for singleton controller
-        private static EntNetClient instance;
-        private Socket s;
-        //private Thread clientMainThread;        
+        private static EntNetClient instance;    
         private ClientMain clientMain;
         private EntNetClient(ClientMain cm){
             clientMain = cm;
@@ -91,10 +85,7 @@ public class EntNetClient {
 		clientRequest loginRequest = new clientRequest(
 				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential);
 		XMLRequest xmlr= loginRequest.clientRequestLogin();
-                
-                System.out.println(">>>>>>"+xmlr.getRequestDetail());
-                
-                
+
                 invokeRequestThread(xmlr);
 	}
         
@@ -108,15 +99,11 @@ public class EntNetClient {
             return al_xmlr;
         }
         
+        
+        
 	
 
     
-/*
-    public ArrayList<String> fetchUidPwdFromGUI(String uid, String pwd){
-        ArrayList<String> retArrList = new ArrayList<String>();
-        
-        return retArrList;
-    }*/
 
     private void invokeRequestThread(XMLRequest xmlr) {
         requestHandler rh = new requestHandler(xmlr, this);
@@ -139,14 +126,28 @@ public class EntNetClient {
                 }catch(IOException e){};
             }
             else{
-                //failed login...return an empty ArrayList
-                
+                     return;           
             }
-            
-            
         }
         else if (xmlreq.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
-            
+            //check if the login is successful
+            String rowAffected = xmlreq.getRequestDetail();
+            if (rowAffected.equals("1")){
+                //successful registration
+                //goto user's home page by asking server to send xml of user homeboard
+                try{
+                    ArrayList<XMLRequest> homeBoardInfoXML 
+                            = clientHomeBoardRequest(xmlreq.getUserID());
+                    //populate screen: close loginUI, open new UI
+                    this.clientMain.killLoginUI();
+                }
+                catch(IOException e){
+                };
+            }
+            else{
+                //failed registration
+                
+            }
         }
             
     }
