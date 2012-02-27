@@ -15,6 +15,18 @@ public class requestHandler implements Runnable{
 		private static Socket socket;
 		private XMLRequest xmlRequest;
 		private EntNetClient handleClient;
+		public boolean setXML = false;
+		private XMLRequest testRequest;
+		
+		
+		public XMLRequest getTestRequest() {
+			return testRequest;
+		}
+
+		public void setTestRequest(XMLRequest testRequest) {
+			this.testRequest = testRequest;
+		}
+
 		//private
 		public requestHandler(XMLRequest rq, EntNetClient enc) {
 			xmlRequest = rq;
@@ -33,6 +45,17 @@ public class requestHandler implements Runnable{
 			}
 			
 		}
+		
+		public XMLRequest getXmlRequest() {
+			return xmlRequest;
+		}
+
+
+		public void setXmlRequest(XMLRequest xmlRequest) {
+			this.xmlRequest = xmlRequest;
+		}
+		
+		
 		@Override
 		public void run() {
 			try {
@@ -49,7 +72,8 @@ public class requestHandler implements Runnable{
 		    }
 	            
 	            XMLRequest resultRequest  = new XMLRequest(resultString);
-	            
+	            testRequest = resultRequest;
+	            setXML = true;
 	            handleClient.requestThreadCallBack(resultRequest);
 	            
 	            
