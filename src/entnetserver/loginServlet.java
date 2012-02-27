@@ -21,12 +21,10 @@ public class loginServlet extends Servelet implements Runnable{
 	public void run() {
 		String sqlQuery = "select * from entnetdb_v2.user U where U.user_id = \"" + xmlRequest.getUserID() + 
 				"\" AND U.user_pwd = \"" + xmlRequest.getRequestDetail() + "\";";
-		String sqlQuerytest = "select * from entnetdb_v2.user U where U.user_id = \"" + xmlRequest.getUserID() 
-				+ "\" AND U.user_pwd = \"" + xmlRequest.getRequestDetail() + "\";";
 		
 		DataBase dB =  handle.getSysDB();
-		ResultSet rSet = dB.DoQuery(sqlQuerytest);
-		System.out.println(sqlQuery.equals(sqlQuerytest));
+		ResultSet rSet = dB.DoQuery(sqlQuery);
+		System.out.println(sqlQuery.equals(sqlQuery));
 		try {
 			if (rSet.first()) {
 				xmlRequest.setRequestDetail(Constants.TRUE);
@@ -36,11 +34,10 @@ public class loginServlet extends Servelet implements Runnable{
 			handle.callBackResult(xmlRequest);
 		} catch (SQLException e) {
 			System.out.println("SQLfault at login");
+			xmlRequest.setRequestDetail(Constants.FALSE);
+			handle.callBackResult(xmlRequest);
 			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("call Back fault");
-			e.printStackTrace();
-		}
+		} 
 	}
 
 	

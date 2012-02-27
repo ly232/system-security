@@ -9,6 +9,7 @@ import javax.sql.rowset.WebRowSet;
 
 import com.sun.rowset.WebRowSetImpl;
 
+import Constants.Constants;
 import JDBC.DataBase;
 import XML.XMLRequest;
 
@@ -31,9 +32,14 @@ public class ReadServlet extends Servelet implements Runnable{
  			xmlRequest.setRequestDetail(result);
  			handle.callBackResult(xmlRequest);
 		} catch (SQLException e) {
+			System.err.println("SQL FAIL");
+			xmlRequest.setRequestDetail(Constants.INVALID_REQUEST);
+			handle.callBackResult(xmlRequest);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			xmlRequest.setRequestDetail(Constants.INVALID_REQUEST);
+			handle.callBackResult(xmlRequest);
+			System.err.println("READ XML FAIL");
 			e.printStackTrace();
 		}
 		

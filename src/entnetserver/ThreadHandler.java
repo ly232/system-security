@@ -81,13 +81,11 @@ import JDBC.DataBase;
          * @return the output of the SQLQuery, the String will forget afterwards.
          * @throws IOException 
          */
-        public void callBackResult(XMLRequest rq) throws IOException {
+        public void callBackResult(XMLRequest rq) {
 
 				synchronized (write) {
 	        		write.println(rq.generateXMLRequest());
 	        		write.println(Constants.END_STRING);
-					//write.flush();
-					//write.println(Constants.END_STRING);
 				}
 
 		}
@@ -95,14 +93,10 @@ import JDBC.DataBase;
         public void run(){
                 try{
                 	
-                	initializeServer();
-                	
-                    //write.println("please enter 'login' or 'register'");
-                    
-               //while (true) {
+                		initializeServer();
                 		System.out.println("ready to serve");
 						String xml = read.nextLine();
-						System.out.println(xml);
+						System.out.println("request formart : \n" + xml);
 						XMLRequest request = new XMLRequest(xml);
  						if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
                                                     user_id = request.getUserID();
