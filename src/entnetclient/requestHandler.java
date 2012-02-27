@@ -12,7 +12,7 @@ import XML.XMLRequest;
 
 public class requestHandler implements Runnable{
 	
-		private static Socket socket;// = new Socket("localhost",8189);
+		private static Socket socket;
 		private XMLRequest xmlRequest;
 		private EntNetClient handleClient;
 		//private
@@ -41,20 +41,14 @@ public class requestHandler implements Runnable{
 	            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
 	            out.println(xmlRequest.generateXMLRequest());
-	            //out.flush();
-	            //socket.getOutputStream().flush();
-	            //out.println(Constants.END_STRING);
 	            
 	            String resultString = new String();
 	            String onelineString = new String();
 	            while ((onelineString = in.readLine()).equals(Constants.END_STRING) == false) {
-	            	if(onelineString.contains("<?xml")){
 	            		resultString += onelineString;
-	            	}
 				}
 	            
 	            XMLRequest resultRequest  = new XMLRequest(resultString);
-	            //callback(resultRequest)
 	            
 	            handleClient.requestThreadCallBack(resultRequest);
 	            
