@@ -37,5 +37,7 @@ public abstract class Constants {
     
     //end of the transaction
     public static final String END_STRING = "END_STRING";
+    
+    public static final String COMPANY_DID = "0";
 
 }
