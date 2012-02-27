@@ -94,31 +94,32 @@ import JDBC.DataBase;
                 try{
                 	
                 		initializeServer();
-                		System.out.println("ready to serve");
-						String xml = read.nextLine();
-						System.out.println("request formart : \n" + xml);
-						XMLRequest request = new XMLRequest(xml);
- 						if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
-                                                    user_id = request.getUserID();
-                                                    loginServlet lServlet = new loginServlet(request, this);
-                                                    Thread t = new Thread(lServlet);
-                                                    t.start();
-                                                    threadCount++;
-							
-						}else {
-							if (request.getActionID().equals(Constants.SELECT)) {
-								ReadServlet rServelet = new ReadServlet(request, this);
-								Thread t = new Thread(rServelet);
-								t.start();
-								threadCount++;
-							}else if (request.getActionID() == Constants.UPDATE) {
-								UpdateServlet uServlet = new UpdateServlet(request, this);
-								Thread t = new Thread(uServlet);
-								t.start();
-								threadCount++;
-							}
-						}
-						
+                		while (true) {
+                			System.out.println("ready to serve");
+    						String xml = read.nextLine();
+    						System.out.println("request formart : \n" + xml);
+    						XMLRequest request = new XMLRequest(xml);
+     						if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
+                                                        user_id = request.getUserID();
+                                                        loginServlet lServlet = new loginServlet(request, this);
+                                                        Thread t = new Thread(lServlet);
+                                                        t.start();
+                                                        threadCount++;
+    							
+    						}else {
+    							if (request.getActionID().equals(Constants.SELECT)) {
+    								ReadServlet rServelet = new ReadServlet(request, this);
+    								Thread t = new Thread(rServelet);
+    								t.start();
+    								threadCount++;
+    							}else if (request.getActionID().equals(Constants.UPDATE)) {
+    								UpdateServlet uServlet = new UpdateServlet(request, this);
+    								Thread t = new Thread(uServlet);
+    								t.start();
+    								threadCount++;
+    							}
+    						}
+						}	
 					//}
                 /*
                     XML_parser_API login_regist_xml = new XML_parser_API(read.nextLine());
