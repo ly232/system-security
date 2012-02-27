@@ -1,5 +1,6 @@
 package entnetclient;
 
+import entnetserver.EntNetServer;
 import Constants.Constants;
 import XML.XMLRequest;
 import junit.framework.TestCase;
@@ -15,8 +16,9 @@ public class requestHandlerTest extends TestCase {
 	}
 
 	public void testRequestHandler() {
-		XMLRequest xmlRequest = new XMLRequest(Constants.LOGIN_REQUEST_ID, "tao",
-															Constants.REGION0, null, "123", Constants.SELECT);
+		XMLRequest xmlRequest = new XMLRequest(Constants.READ_REGION_ID, "tao",
+															Constants.REGION0, null, "select * from user;", Constants.SELECT);
+		//EntNetClient testEntNetClient = EntNetClient.getInstance();
 		//requestHandler hrHandler = new requestHandler(xmlRequest);
 		//hrHandler.run();
 		//("Not yet implemented");
