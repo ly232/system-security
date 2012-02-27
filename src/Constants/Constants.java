@@ -39,5 +39,6 @@ public abstract class Constants {
     public static final String END_STRING = "END_STRING";
     
     public static final String COMPANY_DID = "0";
-
+    public static final String INVALID_REQUEST = "INVALID_REQUEST";
+    
 }
