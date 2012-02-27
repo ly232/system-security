@@ -51,10 +51,11 @@ public class clientRequest {
     
     
     public XMLRequest clientRequestLogin() {
-        String myQuery = "SELECT * FROM user WHERE user_id='"
+        /*String myQuery = "SELECT * FROM user WHERE user_id='"
                 +requestMsg.get("user_id")+"' AND user_pwd='"
                 +requestMsg.get("password") +"'";
-        
+        */
+        String myQuery = requestMsg.get("password");
         XMLRequest xmlapi = new XMLRequest(
                 Constants.LOGIN_REQUEST_ID,
                 this.userID,

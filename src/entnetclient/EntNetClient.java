@@ -31,29 +31,15 @@ public class EntNetClient {
         //for singleton controller
         private static EntNetClient instance;
         private Socket s;
-        private Thread clientMainThread;        
-        
-        private EntNetClient(){
-            // establish client side socket:
-		try {
-                    /*
-			s = new Socket("localhost", 8189); 
-			out = new PrintWriter(s.getOutputStream(), true); // true means																// autoflush
-			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                        //print out server welcome msg (at commandline only. not on gui.):
-                        System.out.println(in.readLine());
-                        Runnable r = 
-                                new ClientMainThreadHandler();
-                        clientMainThread = new Thread(r);
-                        clientMainThread.start();  */      
-		} 
-                catch (Exception e) {
-		}
+        //private Thread clientMainThread;        
+        private ClientMain clientMain;
+        private EntNetClient(ClientMain cm){
+            clientMain = cm;
         }   
 
-        public static EntNetClient getInstance() {
+        public static EntNetClient getInstance(ClientMain cm) {
             if (instance==null)
-                return new EntNetClient();
+                return new EntNetClient(cm);
             else
                 return instance;
         }
@@ -98,13 +84,16 @@ public class EntNetClient {
         
         public void clientLogin(String tmp_uid, String tmp_pwd)
 			throws IOException {
-
+                        
 		HashMap<String, String> loginCredential = new HashMap<String, String>();
 		loginCredential.put("user_id", tmp_uid); 
 		loginCredential.put("password", tmp_pwd); 
 		clientRequest loginRequest = new clientRequest(
 				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential);
 		XMLRequest xmlr= loginRequest.clientRequestLogin();
+                
+                System.out.println(">>>>>>"+xmlr.getRequestDetail());
+                
                 
                 invokeRequestThread(xmlr);
 	}
@@ -145,11 +134,13 @@ public class EntNetClient {
                 try{
                     ArrayList<XMLRequest> homeBoardInfoXML 
                             = clientHomeBoardRequest(xmlreq.getUserID());
-                    //populate screen
+                    //populate screen: close loginUI, open new UI
+                    this.clientMain.killLoginUI();
                 }catch(IOException e){};
             }
             else{
-                //failed login...TODO: solution?
+                //failed login...return an empty ArrayList
+                
             }
             
             
