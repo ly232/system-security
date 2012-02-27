@@ -69,19 +69,20 @@ public class XML_creator_API {
         try{
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            
             DOMSource source = new DOMSource(doc);
             
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             //Writer wtr = new OutputStreamWriter(baos,"UTF-8");
             StreamResult result = new StreamResult(baos);
+            StreamResult output = new StreamResult(System.out);
             transformer.transform(source, result);
-            
-            retXML = new String(baos.toByteArray());//baos.toString();
-            
-        }catch(TransformerException e){
-            System.err.println("Transformer Error Message: " + e.getMessage());
+            retXML = baos.toString();
         }
+        catch (TransformerException ex) {
+        	System.err.println(ex.getMessageAndLocation());
+					}
         finally{
             return retXML;
         }
