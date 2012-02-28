@@ -7,11 +7,15 @@ package entnetclient;
 //import XML.Constants;
 import java.io.*;
 import java.net.*;
+import java.sql.SQLException;
 import java.util.*;
 import Constants.*;
 import XML.XMLRequest;
+import com.sun.rowset.WebRowSetImpl;
 import java.nio.CharBuffer;
+import javax.sql.rowset.WebRowSet;
 import view.LoginUI;
+import view.MainUI;
 /**
  * 
  * @author Lin
@@ -69,7 +73,6 @@ public class EntNetClient {
 		//String retXML = registRequest.generateXMLforRequest();
 		XMLRequest xmlr = registRequest.clientRequestRegist();
                         
-                
                 invokeRequestThread(xmlr);
 	}
         
@@ -85,11 +88,32 @@ public class EntNetClient {
 		clientRequest loginRequest = new clientRequest(
 				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential);
 		XMLRequest xmlr= loginRequest.clientRequestLogin();
-
                 invokeRequestThread(xmlr);
+
 	}
         
-        public ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
+        public void clientViewOtherBoard(){
+            
+        }
+        
+        public void clientPostFriendMessage(String uIDsrc, String uIDdest, String friendMsg){
+            
+        }
+        
+        
+        public void clientUpdateRegion(String regionID, String newContent, String uIDsrc){
+                HashMap<String, String> updateCredential = new HashMap<String, String>();
+		updateCredential.put("regionID", regionID); 
+		updateCredential.put("newContent", newContent); 
+		clientRequest updateRegionRequest = new clientRequest(
+				Constants.UPDATE_REGION_ID, uIDsrc, updateCredential);
+		XMLRequest xmlr= updateRegionRequest.clientRequestUpdateRegion(regionID, newContent, uIDsrc);
+                invokeRequestThread(xmlr);
+        }
+        
+        
+        
+        private ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
                 throws IOException {
             HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
             //homeBoardRequestInfo.put("user_id",uid);
@@ -98,11 +122,6 @@ public class EntNetClient {
             ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
             return al_xmlr;
         }
-        
-        
-        
-	
-
     
 
     private void invokeRequestThread(XMLRequest xmlr) {
@@ -111,7 +130,7 @@ public class EntNetClient {
         t.start();
     }
     
-    public void requestThreadCallBack(XMLRequest xmlreq){
+    public void requestThreadCallBack(XMLRequest xmlreq) throws SQLException{
         if (xmlreq.getRequestID().equals(Constants.LOGIN_REQUEST_ID)){
             //check if the login is successful
             String LoginStat = xmlreq.getRequestDetail();
@@ -121,14 +140,23 @@ public class EntNetClient {
                 try{
                     ArrayList<XMLRequest> homeBoardInfoXML 
                             = clientHomeBoardRequest(xmlreq.getUserID());
+                    
                     //populate screen: close loginUI, open new UI
                     this.clientMain.killLoginUI();
+                    
+                    
+                    //now we are in homepage...load home board content
+                    for (int i=0;i<homeBoardInfoXML.size();i++){
+                        invokeRequestThread(homeBoardInfoXML.get(i));
+                    }
+
                 }catch(IOException e){};
             }
             else{
                      return;           
             }
-        }
+        } //end of login request threadCallBack
+                
         else if (xmlreq.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
             //check if the login is successful
             String rowAffected = xmlreq.getRequestDetail();
@@ -140,17 +168,53 @@ public class EntNetClient {
                             = clientHomeBoardRequest(xmlreq.getUserID());
                     //populate screen: close loginUI, open new UI
                     this.clientMain.killLoginUI();
+                    
+                    
+                    //now we are in homepage...load home board content
+                    for (int i=0;i<homeBoardInfoXML.size();i++){
+                        invokeRequestThread(homeBoardInfoXML.get(i));
+                    }
+                    
                 }
                 catch(IOException e){
                 };
             }
             else{
                 //failed registration
+                return;
+            }
+        } //end of regist request threadCallBack
+        else if (xmlreq.getRequestID().equals(Constants.READ_REGION_ID)){
+            //TODO: this is for home board loading and other refresh page operations
+            //      need to use Tao's MyResultSet
+            System.out.println("inside callback readRegionRequest");
+            System.out.println(xmlreq.getRequestDetail());
+            
+            //TODO: send to UI a hashmap containing:
+            // 1. region ID
+            // 2. region content
+            
+            
+        }
+        else if (xmlreq.getRequestID().equals(Constants.UPDATE_REGION_ID)){
+            String rowAffected = xmlreq.getRequestDetail();
+            if (rowAffected.equals("1")){
+                //update successful. do nothing
+                System.out.println("update region successful");
                 
             }
+            else{
+                //failed registration
+                System.err.println("ERROR: requestThreadCallBack cannot update region");
+                return;
+            }
+            
         }
             
     }
+
+
     
+
     
 }

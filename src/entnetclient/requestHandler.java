@@ -18,6 +18,9 @@ import org.xml.sax.SAXException;
 import Constants.Constants;
 import XML.MyResultSet;
 import XML.XMLRequest;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class requestHandler implements Runnable {
 
@@ -75,6 +78,7 @@ public class requestHandler implements Runnable {
 					InputStream o = socket.getInputStream();
 					in = new ObjectInputStream(o);
 				}
+
 				out.println(xmlRequest.generateXMLRequest());
 				String resultString = new String();
 				String onelineString = new String();
@@ -94,32 +98,55 @@ public class requestHandler implements Runnable {
 				}
 				testRequest = resultRequest;
 				setXML = true;
-				handleClient.requestThreadCallBack(resultRequest);
+
+                                try {
+                                    handleClient.requestThreadCallBack(resultRequest);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+
 			} catch (IOException e) {
 				System.out.println("socket error");
 				System.err.println(e.getLocalizedMessage());
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-				handleClient.requestThreadCallBack(resultRequest);
+                                try {
+                                    handleClient.requestThreadCallBack(resultRequest);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 				e.printStackTrace();
 			} // true means
 			catch (ClassNotFoundException e) {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-				handleClient.requestThreadCallBack(resultRequest);
+                                try {
+                                    handleClient.requestThreadCallBack(resultRequest);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 				System.err.println("classNotFound");
 				e.printStackTrace();
 			} catch (ParserConfigurationException e) {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-				handleClient.requestThreadCallBack(resultRequest);
+                                try {
+                                    handleClient.requestThreadCallBack(resultRequest);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 				System.err.println("Parse Problem");
 				e.printStackTrace();
 			} catch (SAXException e) {
 				System.err.println("Parse Problem");
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-				handleClient.requestThreadCallBack(resultRequest);
+                                try {
+                                    handleClient.requestThreadCallBack(resultRequest);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 				e.printStackTrace();
 			}
 		}

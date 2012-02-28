@@ -6,13 +6,15 @@
 
 package view;
 
+import XML.*;
+import entnetclient.EntNetClient;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -26,10 +28,11 @@ public class MainUI extends javax.swing.JFrame {
                 controller = ec;
 	}
 
-        public void populateInitScreen(ArrayList<XMLRequest> xmlr_arr){
+        public void populateInitScreen(){
             
-            
-            
+            //XMLRequest friendNameListinXMLReq = xmlr_arr.get(0);
+            //System.out.println("FROM MainUI, printing friendList: "+friendNameListinXMLReq.getRequestDetail());
+ 
         }
         
 	/** This method is called from within the constructor to
@@ -256,9 +259,21 @@ public class MainUI extends javax.swing.JFrame {
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            
+            
+            
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+    	jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+  		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
+  	          public   void   mouseClicked(MouseEvent   e)   { 
+  	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
+  	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
+  	                    
+  	          } 
+  	  }; 
+  	  jList1.addMouseListener(mouseListener);
         jList1.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -280,25 +295,53 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-			public Object getElementAt(int i) {
-				return strings[i];
-			}
-		});
-		jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
-	          public   void   mouseClicked(MouseEvent   e)   { 
-	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
-	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
-	                    
-	          } 
-	  }; 
-	  jList1.addMouseListener(mouseListener);
-	
-
-		
-		
-		jScrollPane1.setViewportView(jList1);
-
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Region1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Region3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Region2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(Region6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Region5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Region4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Region1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Region4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addContainerGap(249, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Region2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Region5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Region6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Region3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -307,7 +350,18 @@ public class MainUI extends javax.swing.JFrame {
             // TODO add your handling code here:
         }//GEN-LAST:event_jList1PropertyChange
 
+        private void jList1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jList1InputMethodTextChanged
+            // TODO add your handling code here:
+        }//GEN-LAST:event_jList1InputMethodTextChanged
 
+        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+            try{
+                
+            }
+            catch(Exception e){
+                
+            }
+        }//GEN-LAST:event_jButton1ActionPerformed
 
 	/**
 	 * @param args the command line arguments
