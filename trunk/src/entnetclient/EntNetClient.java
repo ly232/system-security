@@ -5,6 +5,8 @@
 package entnetclient;
 
 //import XML.Constants;
+import XML.XMLRequest;
+
 import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
@@ -80,7 +82,21 @@ public class EntNetClient {
 	}
         
 	
-
+        public void friendRequest(String friend_id){
+      	  String sqlQueryString = "insert into friend values(\"" + thisUserID + "\",\"" + friend_id + 
+      			  									"\",\"" + Constants.ADD_FRIEND_ID + "\",null);";
+      	  XMLRequest xmlRequest = new XMLRequest(Constants.ADD_FRIEND_ID, 
+      			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
+      	  invokeRequestThread(xmlRequest);
+        }
+        
+        public void getFriendList(){
+        	  String sqlQueryString = null;//"insert into friend values("tao","lin","hello",null);";
+        	  XMLRequest xmlRequest = new XMLRequest(Constants.READ_REGION_ID, 
+        			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.SELECT);
+          	  invokeRequestThread(xmlRequest);
+        }
+        
         
         public void clientLogin(String tmp_uid, String tmp_pwd)
 			throws IOException {
@@ -132,6 +148,9 @@ public class EntNetClient {
         Thread t = new Thread(rh);
         t.start();
     }
+    
+
+    
     
     public void requestThreadCallBack(XMLRequest xmlreq) throws SQLException{
         if (xmlreq.getRequestID().equals(Constants.LOGIN_REQUEST_ID)){
@@ -270,7 +289,6 @@ public class EntNetClient {
             }
             
         }
-            
     }
 
 
