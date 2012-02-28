@@ -27,7 +27,6 @@ public class LoginUI extends javax.swing.JFrame {
 		initComponents();
 
                 controller = ec;
-                controller.getLoginUIHandle(this);
                 //controller = EntNetClient.getInstance();
                 //clientMainThread = controller.getClientMainThreadHandler();
                 //controller.startClientMainThread();

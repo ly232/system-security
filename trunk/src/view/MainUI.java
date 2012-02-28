@@ -270,6 +270,10 @@ public class MainUI extends javax.swing.JFrame {
   	          public   void   mouseClicked(MouseEvent   e)   { 
   	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
   	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
+							  try{
+								controller.clientViewOtherPersonBoard("chen"); //just a test. will need index's user id string as input
+							  }
+							  catch(Exception mye){System.err.println("jList error!");};
   	                    
   	          } 
   	  }; 
