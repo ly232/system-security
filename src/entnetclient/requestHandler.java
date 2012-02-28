@@ -26,7 +26,7 @@ public class requestHandler implements Runnable {
 	private EntNetClient handleClient;
 	public boolean setXML = false;
 	private XMLRequest testRequest;
-
+	private static ObjectInput in;
 	public XMLRequest getTestRequest() {
 		return testRequest;
 	}
@@ -70,27 +70,26 @@ public class requestHandler implements Runnable {
 				PrintWriter out = new PrintWriter(socket.getOutputStream(),
 						true);
 				// autoflush
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						socket.getInputStream()));
-
+				//BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				if (in == null) {
+					InputStream o = socket.getInputStream();
+					in = new ObjectInputStream(o);
+				}
 				out.println(xmlRequest.generateXMLRequest());
-
 				String resultString = new String();
 				String onelineString = new String();
-				while (!(onelineString = in.readLine()).equals(Constants.INVALID)) {
+				while (!(onelineString = (String)in.readObject()).equals(Constants.INVALID)) {
 				}
-				while ((onelineString = in.readLine())
+				while ((onelineString = (String)in.readObject())
 						.equals(Constants.END_STRING) == false) {
 						resultString += onelineString;
 				}
 				XMLRequest resultRequest = new XMLRequest(resultString);
 				if (resultRequest.getRequestDetail().equals(
 						Constants.RETURN_RESULTSET)) {
-					while (!(onelineString = in.readLine()).equals(Constants.RETURN_RESULTSET)) {
+					while (!(onelineString = (String)in.readObject()).equals(Constants.RETURN_RESULTSET)) {
 					}
-					InputStream o = socket.getInputStream();
-					ObjectInput s = new ObjectInputStream(o);
-					MyResultSet mrs = (MyResultSet) s.readObject();
+					MyResultSet mrs = (MyResultSet) in.readObject();
 					resultRequest.setMyResultSet(mrs);
 				}
 				testRequest = resultRequest;
