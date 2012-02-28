@@ -191,7 +191,6 @@ public class EntNetClient {
             //      need to use Tao's MyResultSet
             System.out.println("inside callback readRegionRequest");
             System.out.println(xmlreq.getRequestDetail());
-            
             //TODO: send to UI (to clientMain) a hashmap containing:
             // 1. region ID
             // 2. region content
