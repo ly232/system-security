@@ -32,6 +32,8 @@ public class EntNetClient {
 
         private static EntNetClient instance;    
         private ClientMain clientMain;
+        private String thisUserID;
+        
         private EntNetClient(ClientMain cm){
             clientMain = cm;
         }   
@@ -141,7 +143,7 @@ public class EntNetClient {
                 try{
                     ArrayList<XMLRequest> homeBoardInfoXML 
                             = clientHomeBoardRequest(xmlreq.getUserID());
-                    
+                    this.thisUserID = xmlreq.getUserID();
                     //populate screen: close loginUI, open new UI
                     this.clientMain.killLoginUI();
                     
@@ -198,9 +200,16 @@ public class EntNetClient {
             MyResultSet myRS;
             if (xmlreq.getRequestDetail().equals(Constants.RETURN_RESULTSET))
                 myRS = xmlreq.getMyResultSet();
-            else
+            else{
                 System.err.println("ERROR: entnetclient callback readregion did not return myresultset");
+                return;
+            }
             if (regionID.equals(Constants.FRIENDLISTREGION)){
+                for (int i=0;i<myRS.getTable().size();i++){
+                    String friendUID = myRS.getStringValue(i, "user_id");
+                    resultSetHashMap.put("user_id", friendUID);
+                    //TODO: send resultSetHashMap to GUI--waiting for shuai's api
+                }
                 
             }
             else if (regionID.equals(Constants.REGION1)){
