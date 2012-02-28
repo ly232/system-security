@@ -105,7 +105,10 @@ public class clientRequest {
     }
     
     private XMLRequest getFriendList(String uid){
-        String query = "SELECT user2 FROM friend WHERE user1 = '" + uid + "';";
+        String query = "SELECT F.user2 FROM friend F WHERE F.user1 = '" + uid + "'"
+                + "AND F.user1 in ("
+                + "SELECT F2.user2 FROM friend F2 WHERE F2.user1=F.user2);";
+        
         XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
