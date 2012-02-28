@@ -169,7 +169,6 @@ public class EntNetClient {
                     //populate screen: close loginUI, open new UI
                     this.clientMain.killLoginUI();
                     
-                    
                     //now we are in homepage...load home board content
                     for (int i=0;i<homeBoardInfoXML.size();i++){
                         invokeRequestThread(homeBoardInfoXML.get(i));
@@ -190,9 +189,15 @@ public class EntNetClient {
             System.out.println("inside callback readRegionRequest");
             System.out.println(xmlreq.getRequestDetail());
             
-            //TODO: send to UI a hashmap containing:
+            //TODO: send to UI (to clientMain) a hashmap containing:
             // 1. region ID
             // 2. region content
+            HashMap<String, String> resultSetHashMap = new HashMap<String, String>();
+            String regionID = xmlreq.getMyResultSeStringt();
+            if (regionID.equals(Constants.FRIENDLISTREGION)){
+                
+            }
+            
             
             
         }
