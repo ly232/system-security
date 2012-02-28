@@ -4,6 +4,8 @@
  */
 package Constants;
 
+import com.sun.tools.doclets.formats.html.resources.standard;
+
 /**
  *
  * @author Lin
@@ -42,5 +44,6 @@ public abstract class Constants {
     public static final String INVALID_REQUEST = "INVALID_REQUEST";
     
     public static final String RETURN_RESULTSET = "RETURN_RESULTSET";
+    public static final String GET_RESULTSET = "GET_RESULTSET";
     
 }
