@@ -104,6 +104,15 @@ public class clientRequest {
         return retArrList;
     }
     
+    /*
+    public ArrayList<XMLRequest> clientRequestOtherPersonBoard(String otherPersonUid) {
+        ArrayList<XMLRequest> retArrList = new ArrayList<XMLRequest>();
+        for (int i=1;i<=6;i++){
+            retArrList.add(getRegionInfo(otherPersonUid, "REGION"+i));            
+        }
+        return retArrList;
+    }*/
+    
     private XMLRequest getFriendList(String uid){
         String query = "SELECT F.user2 FROM friend F WHERE F.user1 = '" + uid + "'"
                 + "AND F.user1 in ("

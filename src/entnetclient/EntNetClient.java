@@ -119,13 +119,28 @@ public class EntNetClient {
 
 	}
         
-        public void clientViewOtherBoard(){
+        
+        /*
+        public void  clientViewOtherPersonBoard(String otherPersonUid){
+                //kill the current view and goto another person's board...maybe not?
             
+                HashMap<String, String> otherPersonBoardInfo = new HashMap<String, String>();
+		otherPersonBoardInfo.put("user_id", otherPersonUid); 
+		clientRequest viewOtherPersonBoardRequest = new clientRequest(
+				Constants.READ_REGION_ID, otherPersonUid, otherPersonBoardInfo);
+		ArrayList<XMLRequest> arr_xmlr= viewOtherPersonBoardRequest.clientRequestOtherPersonBoard(otherPersonUid);
+                //arr_xmlr contains an array of xml requests to read other person's board
+                //need to send each request to server ==> multiple threads
+                
+                for (int i=0;i<arr_xmlr.size();i++){
+                    invokeRequestThread(arr_xmlr.get(i));
+                }     
+        }*/
+        
+        public void  clientViewOtherPersonBoard(String otherPersonUid) throws IOException{
+            clientHomeBoardRequest(otherPersonUid);
         }
         
-        public void clientPostFriendMessage(String uIDsrc, String uIDdest, String friendMsg){
-            
-        }
         
         
         public void clientUpdateRegion(String regionID, String newContent, String uIDsrc){
@@ -146,6 +161,7 @@ public class EntNetClient {
             //homeBoardRequestInfo.put("user_id",uid);
             clientRequest homeBoardRequest = new clientRequest(
 				Constants.READ_REGION_ID, uid, homeBoardRequestInfo); 
+            System.out.println("clientHomeBoardRequest uid="+uid);
             ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
             return al_xmlr;
         }
@@ -173,7 +189,6 @@ public class EntNetClient {
                     this.thisUserID = xmlreq.getUserID();
                     //populate screen: close loginUI, open new UI
                     this.clientMain.killLoginUI();
-                    
                     
                     //now we are in homepage...load home board content
                     for (int i=0;i<homeBoardInfoXML.size();i++){
@@ -217,7 +232,7 @@ public class EntNetClient {
             //TODO: this is for home board loading and other refresh page operations
             //      need to use Tao's MyResultSet
             System.out.println("inside callback readRegionRequest");
-            System.out.println(xmlreq.getRequestDetail());
+            //System.out.println(xmlreq.getRequestDetail());
             //TODO: send to UI (to clientMain) a hashmap containing:
             // 1. region ID
             // 2. region content
@@ -230,30 +245,37 @@ public class EntNetClient {
                 System.err.println("ERROR: entnetclient callback readregion did not return myresultset");
                 return;
             }
+            
             if (regionID.equals(Constants.FRIENDLISTREGION)){
+                System.out.println("FRIENDLISTREGION");
                 for (int i=0;i<myRS.getTable().size();i++){
                     String friendUID = myRS.getStringValue(i, "user_id");
                     resultSetHashMap.put("user_id", friendUID);
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 
+                //System.out.println(resultSetHashMap);
             }
             else if (regionID.equals(Constants.REGION1)){
+                System.out.println("REGION1");
                 String contact_info = myRS.getStringValue(0, "contact_info");
                 resultSetHashMap.put("contact_info", contact_info);
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION2)){
+                System.out.println("REGION2");
                 String currLocName = myRS.getStringValue(0, "loc_name");
                 resultSetHashMap.put("loc_name", currLocName);
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION3)){
+                System.out.println("REGION3");
                 String currProj = myRS.getStringValue(0, "proj_name");
                 resultSetHashMap.put("proj_name", currProj);
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION4)){
+                System.out.println("REGION4");
                 for (int i=0;i<myRS.getTable().size();i++){
                     String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
                     String msg_content = myRS.getStringValue(i, "msg_content");
@@ -262,6 +284,7 @@ public class EntNetClient {
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION5)){
+                System.out.println("REGION5");
                 for (int i=0;i<myRS.getTable().size();i++){
                     String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
                     String msg_content = myRS.getStringValue(i, "msg_content");
@@ -270,6 +293,7 @@ public class EntNetClient {
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION6)){
+                System.out.println("REGION6");
                 for (int i=0;i<myRS.getTable().size();i++){
                     String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
                     String msg_content = myRS.getStringValue(i, "msg_content");
