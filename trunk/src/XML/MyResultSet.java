@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class MyResultSet implements Serializable {
@@ -17,8 +20,21 @@ public class MyResultSet implements Serializable {
 	 * transfer the result from table to 
 	 */
 	ArrayList<ArrayList<String>> table; 
-	HashMap<String, Integer> columes;
-
+	Hashtable<String, Integer> columes;
+	
+	public String getStringValue(int row, String ColumeName){
+		try {
+			Object[] rows =  table.toArray();
+			ArrayList<String> record= (ArrayList<String>) rows[row];
+			Object[] attributes =  record.toArray();
+			String result = (String)attributes[columes.get(ColumeName) - 1];
+			//Object[] attributes = ((ArrayList<String>)rows[row]).toArray();
+			return result;//attributes[columes.get(ColumeName)];
+		} catch (Exception e) {
+			System.err.println("getStringValue error");
+			return null;
+		}
+	}
 	
 	
     public ArrayList<ArrayList<String>> getTable() {
@@ -33,23 +49,29 @@ public class MyResultSet implements Serializable {
 
 
 
-	public HashMap<String, Integer> getColumes() {
+	public Hashtable<String, Integer> getColumes() {
 		return columes;
 	}
 
 
 
-	public void setColumes(HashMap<String, Integer> columes) {
+	public void setColumes(Hashtable<String, Integer> columes) {
 		this.columes = columes;
 	}
 
-
+   
 
 	public MyResultSet(ResultSet resultSet)
     	throws SQLException {  
+		
+		//ResultSetUtils rus = ResultSetUtills.cr
+		
+		//	ResultSetUtil rsu = new ResultSetUtil().;
+		//	data = rsu.resultSetto
+		
 	        int columnCount = resultSet.getMetaData().getColumnCount();  
 	         ResultSetMetaData srmdData = resultSet.getMetaData();
-	         columes = new HashMap<String, Integer>();
+	         columes = new Hashtable<String, Integer>();
 	        for (int i = 1; i <= columnCount; i++) {
 				columes.put(srmdData.getColumnName(i), i);
 			}
