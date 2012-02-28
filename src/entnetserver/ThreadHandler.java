@@ -12,6 +12,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import XML.*;
 
 import Constants.Constants;
@@ -38,11 +40,12 @@ class ThreadedHandler implements Runnable {
 									// serving
 	private String VERIFICATION_CODE = "cornell"; // used for user registration
 	private Scanner read;
-	private PrintWriter write;
+	//private PrintWriter write;
 	private InputStream inStream;
 	private OutputStream outStream;
 	private int threadCount = 0;
-
+	private ObjectOutputStream oos;
+	
 	public OutputStream getOutStream() {
 		return outStream;
 	}
@@ -72,7 +75,8 @@ class ThreadedHandler implements Runnable {
 		inStream = incoming.getInputStream();
 		outStream = incoming.getOutputStream();
 		read = new Scanner(inStream);
-		write = new PrintWriter(outStream, true); // true means autoflush
+		//write = new PrintWriter(outStream, true); // true means autoflush
+		oos = new ObjectOutputStream(outStream);
 	}
 
 	/**
@@ -82,19 +86,24 @@ class ThreadedHandler implements Runnable {
 	 * @throws IOException
 	 */
 	public void callBackResult(XMLRequest rq) {
-		synchronized (write) {
+		synchronized (oos) {
 			synchronized (read) {
-			write.println(Constants.INVALID);
-			write.println(rq.generateXMLRequest());
-			write.println(Constants.END_STRING);
-			if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
 				try {
-					    write.println(Constants.RETURN_RESULTSET);
-						ObjectOutputStream oos = new ObjectOutputStream(outStream);
+			oos.writeObject(new String("flush"));
+			oos.writeObject(new String(Constants.INVALID));
+			oos.writeObject(new String(rq.generateXMLRequest()));
+			oos.writeObject(new String(Constants.END_STRING));
+			//write.println(Constants.INVALID);
+			//write.println(rq.generateXMLRequest());
+			//write.println(Constants.END_STRING);
+			if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
+
+					    oos.writeObject(new String(Constants.RETURN_RESULTSET));
 						oos.writeObject(rq.getMyResultSet());
-				} catch (IOException e) {
+				} 
+				}catch (IOException e) {
 					System.err.println("err for writeobject");
-					write.println(Constants.END_STRING);
+					//oos.writeObject(new String(Constants.END_STRING));
 					e.printStackTrace();
 				}
 				// write.println(rq.getMyResultSeStringt());
@@ -103,7 +112,7 @@ class ThreadedHandler implements Runnable {
 		}
 		}
 
-	}
+	
 
 	public void run() {
 		try {
@@ -133,8 +142,9 @@ class ThreadedHandler implements Runnable {
 				} else {
 					if (request.getActionID().equals(Constants.SELECT)) {
 						ReadServlet rServelet = new ReadServlet(request, this);
-						Thread t = new Thread(rServelet);
-						t.start();
+						//Thread t = new Thread(rServelet);
+						//t.start();
+						rServelet.run();
 						threadCount++;
 					} else if (request.getActionID().equals(Constants.UPDATE)) {
 						UpdateServlet uServlet = new UpdateServlet(request,
@@ -146,19 +156,19 @@ class ThreadedHandler implements Runnable {
 				}
 			} catch (IOException e) {
 				System.err.println("xml parse failed");
-				write.println(Constants.END_STRING);
+				//write.println(Constants.END_STRING);
 				e.printStackTrace();
 			} catch (ParserConfigurationException e) {
 				System.err.println("xml parse failed");
-				write.println(Constants.END_STRING);
+				//write.println(Constants.END_STRING);
 				e.printStackTrace();
 			} catch (SAXException e) {
 				System.err.println("xml parse failed");
-				write.println(Constants.END_STRING);
+				//write.println(Constants.END_STRING);
 				e.printStackTrace();
 			} catch (Exception e) {
 				System.err.println("ThreadHandle failed");
-				write.println(Constants.END_STRING);
+				//write.println(Constants.END_STRING);
 				e.printStackTrace();
 			}
 
