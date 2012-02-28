@@ -158,7 +158,7 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION4)){
-            String query = "SELECT msg_content FROM postworkmessage"
+            String query = "SELECT msg_id, msg_content FROM postworkmessage"
                     + " WHERE did = " + Constants.COMPANY_DID + ";";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
@@ -171,7 +171,7 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION5)){
-            String query = "SELECT msg_content FROM postworkmessage NATURAL JOIN user "
+            String query = "SELECT msg_id, msg_content FROM postworkmessage NATURAL JOIN user "
                     + "NATURAL JOIN workat"
                     + " WHERE user.user_id = workat.userID_workat"
                     + " AND workat.deptID_workat = postworkmessage.did"

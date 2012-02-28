@@ -196,7 +196,7 @@ public class EntNetClient {
             // 1. region ID
             // 2. region content
             HashMap<String, String> resultSetHashMap = new HashMap<String, String>();
-            String regionID = xmlreq.getMyResultSeStringt();
+            String regionID = xmlreq.getRegionID();
             MyResultSet myRS;
             if (xmlreq.getRequestDetail().equals(Constants.RETURN_RESULTSET))
                 myRS = xmlreq.getMyResultSet();
@@ -208,27 +208,48 @@ public class EntNetClient {
                 for (int i=0;i<myRS.getTable().size();i++){
                     String friendUID = myRS.getStringValue(i, "user_id");
                     resultSetHashMap.put("user_id", friendUID);
-                    //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 }
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 
             }
             else if (regionID.equals(Constants.REGION1)){
-                
+                String contact_info = myRS.getStringValue(0, "contact_info");
+                resultSetHashMap.put("contact_info", contact_info);
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION2)){
-                
+                String currLocName = myRS.getStringValue(0, "loc_name");
+                resultSetHashMap.put("loc_name", currLocName);
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION3)){
-                
+                String currProj = myRS.getStringValue(0, "proj_name");
+                resultSetHashMap.put("proj_name", currProj);
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION4)){
-                
+                for (int i=0;i<myRS.getTable().size();i++){
+                    String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
+                    String msg_content = myRS.getStringValue(i, "msg_content");
+                    resultSetHashMap.put(msg_id, msg_content);
+                }
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION5)){
-                
+                for (int i=0;i<myRS.getTable().size();i++){
+                    String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
+                    String msg_content = myRS.getStringValue(i, "msg_content");
+                    resultSetHashMap.put(msg_id, msg_content);
+                }
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION6)){
-                
+                for (int i=0;i<myRS.getTable().size();i++){
+                    String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
+                    String msg_content = myRS.getStringValue(i, "msg_content");
+                    resultSetHashMap.put(msg_id, msg_content);
+                }
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else{
                 System.err.println("requestThreadCallBack ERROR: cannot identify region id");
