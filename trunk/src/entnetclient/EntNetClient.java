@@ -90,6 +90,14 @@ public class EntNetClient {
       	  invokeRequestThread(xmlRequest);
         }
         
+        public void postMessage(String friend_id, String messageString){
+        	  String sqlQueryString = "insert into friend values(\"" + thisUserID + "\",\"" + friend_id + 
+							"\",\"" + messageString + "\",null);";
+        	  XMLRequest xmlRequest = new XMLRequest(Constants.UPDATE_REGION_ID, 
+        			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
+        	  invokeRequestThread(xmlRequest);
+        }
+        
         public void getFriendList(){
         	  String sqlQueryString = null;//"insert into friend values("tao","lin","hello",null);";
         	  XMLRequest xmlRequest = new XMLRequest(Constants.READ_REGION_ID, 
