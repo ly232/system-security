@@ -41,4 +41,6 @@ public abstract class Constants {
     public static final String COMPANY_DID = "0";
     public static final String INVALID_REQUEST = "INVALID_REQUEST";
     
+    public static final String RETURN_RESULTSET = "RETURN_RESULTSET";
+    
 }
