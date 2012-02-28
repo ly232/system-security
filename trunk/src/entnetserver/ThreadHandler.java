@@ -86,6 +86,18 @@ import JDBC.DataBase;
 				synchronized (write) {
 	        		write.println(rq.generateXMLRequest());
 	        		write.println(Constants.END_STRING);
+	        		if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
+	        			try {
+							ObjectOutputStream oos = new ObjectOutputStream(outStream);
+							oos.writeObject(rq.getMyResultSet());
+						} catch (IOException e) {
+							
+							write.println(Constants.END_STRING);
+							e.printStackTrace();
+						}
+						//write.println(rq.getMyResultSeStringt());
+		        		//write.println(Constants.END_STRING);
+					}
 				}
 
 		}
