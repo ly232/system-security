@@ -40,14 +40,14 @@ public class requestHandlerTest extends TestCase {
 		//test Login
 		ClientMain testmain= new ClientMain();
 		EntNetClient testEntNetClient = EntNetClient.getInstance(testmain);
-		/*
+		
 		requestHandler hrHandler = new requestHandler(loginRequest,testEntNetClient);
 		hrHandler.run();
-		XMLRequest testRequest = hrHandler.getTestRequest();
+		 testRequest = hrHandler.getTestRequest();
 		assertEquals(testRequest.getRequestDetail(), Constants.TRUE);
 		
 		String myQuery = "INSERT INTO entnetdb_v2.user VALUES (\"shuai\",\"123\",\"607111111\",1);";
-		regiRequest = new XMLRequest(Constants.UPDATE_REGION_ID, "tao",
+		XMLRequest regiRequest = new XMLRequest(Constants.UPDATE_REGION_ID, "tao",
 															Constants.REGION0, null, myQuery, Constants.UPDATE);
 		requestHandler hr2 = new requestHandler(regiRequest,testEntNetClient);
 		hr2.run();
@@ -63,7 +63,7 @@ public class requestHandlerTest extends TestCase {
 		hr3.run();
 		testRequest = hr3.getTestRequest();
 		assertEquals(testRequest.getRequestDetail(), "1");
-				*/
+		
 		String q4 = "select * from entnetdb_v2.user U where U.user_id = \"tao\";";
 		XMLRequest rq4 = new XMLRequest(Constants.READ_REGION_ID, "tao",
 															Constants.REGION1, null, q4, Constants.SELECT);
