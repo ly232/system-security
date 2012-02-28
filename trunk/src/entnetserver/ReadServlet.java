@@ -27,12 +27,7 @@ public class ReadServlet extends Servelet implements Runnable{
        	 	DataBase db = handle.getSysDB();
 			db.initialize();
 			MyResultSet rs = new MyResultSet(db.DoQuery(xmlRequest.getRequestDetail()));
-			//ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			//ObjectOutputStream oStream = new ObjectOutputStream(baos);
-			//oStream.writeObject(rs);
-			//String result = new String(baos.toByteArray(),"UTF-8");
  			xmlRequest.setRequestDetail(Constants.RETURN_RESULTSET);
- 			//xmlRequest.setMyResultSeStringt(result);
  			xmlRequest.setMyResultSet(rs);
  			handle.callBackResult(xmlRequest);
 		}  catch (SQLException e) {
