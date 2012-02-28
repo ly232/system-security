@@ -32,6 +32,7 @@ public class MyResultSet implements Serializable {
 			return result;//attributes[columes.get(ColumeName)];
 		} catch (Exception e) {
 			System.err.println("getStringValue error");
+			System.err.println(e.getLocalizedMessage());
 			return null;
 		}
 	}
