@@ -10,6 +10,7 @@ import java.net.*;
 import java.sql.SQLException;
 import java.util.*;
 import Constants.*;
+import XML.MyResultSet;
 import XML.XMLRequest;
 import com.sun.rowset.WebRowSetImpl;
 import java.nio.CharBuffer;
@@ -194,12 +195,37 @@ public class EntNetClient {
             // 2. region content
             HashMap<String, String> resultSetHashMap = new HashMap<String, String>();
             String regionID = xmlreq.getMyResultSeStringt();
+            MyResultSet myRS;
+            if (xmlreq.getRequestDetail().equals(Constants.RETURN_RESULTSET))
+                myRS = xmlreq.getMyResultSet();
+            else
+                System.err.println("ERROR: entnetclient callback readregion did not return myresultset");
             if (regionID.equals(Constants.FRIENDLISTREGION)){
                 
             }
-            
-            
-            
+            else if (regionID.equals(Constants.REGION1)){
+                
+            }
+            else if (regionID.equals(Constants.REGION2)){
+                
+            }
+            else if (regionID.equals(Constants.REGION3)){
+                
+            }
+            else if (regionID.equals(Constants.REGION4)){
+                
+            }
+            else if (regionID.equals(Constants.REGION5)){
+                
+            }
+            else if (regionID.equals(Constants.REGION6)){
+                
+            }
+            else{
+                System.err.println("requestThreadCallBack ERROR: cannot identify region id");
+                return;
+            }
+
         }
         else if (xmlreq.getRequestID().equals(Constants.UPDATE_REGION_ID)){
             String rowAffected = xmlreq.getRequestDetail();
