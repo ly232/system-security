@@ -4,6 +4,8 @@
  */
 package entnetclient;
 
+import XML.XMLRequest;
+import java.util.ArrayList;
 import view.*;
 
 /**
@@ -32,6 +34,7 @@ public class ClientMain {
             lui.setVisible(false);
             mui = new MainUI(controller);
             mui.setVisible(true);
+            mui.populateInitScreen();
         }
         
 }

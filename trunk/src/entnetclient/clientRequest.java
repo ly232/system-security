@@ -76,10 +76,10 @@ public class clientRequest {
                     + "', '" + requestMsg.get("password") 
                     //+ "', '" + requestMsg.get("person_name")
                     + "', '" + requestMsg.get("contact_info")
-                    + "', '" + requestMsg.get("role_id") + "');";
+                    + "', " + requestMsg.get("role_id") + ");";
     
-                    
-        XMLRequest xmlapi = new XMLRequest(
+                
+            XMLRequest xmlapi = new XMLRequest(
                 Constants.REGIST_REQUEST_ID,
                 this.userID,
                 Constants.INVALID, //region id
@@ -99,7 +99,7 @@ public class clientRequest {
         retArrList.add(friendListXMLRequest);
         //2. update each region in seq.
         for (int i=1;i<=6;i++){
-            retArrList.add(getRegionInfo(this.userID, "REGION"+i));
+            retArrList.add(getRegionInfo(this.userID, "REGION"+i));            
         }
         return retArrList;
     }
@@ -120,7 +120,7 @@ public class clientRequest {
     private XMLRequest getRegionInfo(String uid, String rid){
 
         if (rid.equals(Constants.REGION1)){
-            String query = "SELECT * FROM user WHERE user_id = '" + uid + "';";
+            String query = "SELECT contact_info FROM user WHERE user_id = '" + uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -146,7 +146,7 @@ public class clientRequest {
         }
         else if (rid.equals(Constants.REGION3)){
             String query = "SELECT proj_name FROM project NATURAL JOIN workon"
-                    + " WHERE user_id = '" + uid + "' AND project.pid = workon.pid;";
+                    + " WHERE uid = '" + uid + "' AND project.proj_id = workon.pid;";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -159,7 +159,7 @@ public class clientRequest {
         }
         else if (rid.equals(Constants.REGION4)){
             String query = "SELECT msg_content FROM postworkmessage"
-                    + " WHERE did = '" + Constants.COMPANY_DID + "';";
+                    + " WHERE did = " + Constants.COMPANY_DID + ";";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -172,7 +172,7 @@ public class clientRequest {
         }
         else if (rid.equals(Constants.REGION5)){
             String query = "SELECT msg_content FROM postworkmessage NATURAL JOIN user "
-                    + "NAGURAL JOIN postworkmessage"
+                    + "NATURAL JOIN workat"
                     + " WHERE user.user_id = workat.userID_workat"
                     + " AND workat.deptID_workat = postworkmessage.did"
                     + " AND user.user_id = '" + uid + "';";
@@ -205,6 +205,61 @@ public class clientRequest {
         
         
          
+    }
+
+    XMLRequest clientRequestUpdateRegion(String regionID, String newContent, String uIDsrc) {
+        
+        /*
+            UPDATE table_name
+            SET column1=value, column2=value2,...
+            WHERE some_column=some_value
+         */
+        String myQuery = "";
+        if (regionID.equals(Constants.REGION1)){ //contact info
+            myQuery = "UPDATE user SET contact_info = '" + newContent 
+                    + "' WHERE user_id = '" + uIDsrc + "';";
+        }
+        else if (regionID.equals(Constants.REGION2)){ //location info
+            myQuery = "UPDATE currloc SET loc_id = '" + newContent 
+                    + "' WHERE user_id = '" + uIDsrc + "';";
+            //TODO: GUI on region 2 should have a drop list of valid locations
+        }
+        else if (regionID.equals(Constants.REGION3)){ //current project
+            myQuery = "UPDATE workon SET pid = '" + newContent 
+                    + "' WHERE user_id = '" + uIDsrc + "';";
+            //TODO: GUI on region 2 should have a drop list of valid locations
+        }
+        else if (regionID.equals(Constants.REGION4)){ //company announcement board
+            //should not be allowed.
+            //new company messages should be inserted. existing ones should not be edited
+            System.err.println("ERROR: should not change existing company message");
+        }
+        else if (regionID.equals(Constants.REGION5)){ //department board
+            //should not be allowed.
+            //new dept messages should be inserted. existing ones should not be edited
+            System.err.println("ERROR: should not change existing dept message");
+        }
+        else if (regionID.equals(Constants.REGION6)){ //friend board
+            //should not be allowed.
+            //new friend messages should be inserted. existing ones should not be edited
+            System.err.println("ERROR: should not change existing friend message");
+        }
+        else{
+            System.err.println("incorrect regionID for clientRequest::clientRequestUpdateRegion");
+            return null;
+        }
+
+        
+            XMLRequest xmlapi = new XMLRequest(
+                Constants.UPDATE_REGION_ID,
+                this.userID,
+                regionID, //region id
+                Constants.INVALID, //session id...not for 
+                myQuery, //request detail...SQL statement to be excuted by server
+                "UPDATE" //action id...can either be SELECT or UPDATE...see Constants package
+                );
+
+        return xmlapi;
     }
     
 }
