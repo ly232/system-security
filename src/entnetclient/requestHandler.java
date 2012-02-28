@@ -11,94 +11,119 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import Constants.Constants;
 import XML.MyResultSet;
 import XML.XMLRequest;
 
-public class requestHandler implements Runnable{
-	
-		private static Socket socket;
-		private XMLRequest xmlRequest;
-		private EntNetClient handleClient;
-		public boolean setXML = false;
-		private XMLRequest testRequest;
-		
-		
-		public XMLRequest getTestRequest() {
-			return testRequest;
-		}
+public class requestHandler implements Runnable {
 
-		public void setTestRequest(XMLRequest testRequest) {
-			this.testRequest = testRequest;
-		}
+	private static Socket socket;
+	private XMLRequest xmlRequest;
+	private EntNetClient handleClient;
+	public boolean setXML = false;
+	private XMLRequest testRequest;
 
-		//private
-		public requestHandler(XMLRequest rq, EntNetClient enc) {
-			xmlRequest = rq;
-			handleClient = enc;
-			if (socket == null) {
-				try {
-					socket = new Socket("localhost",8189);
-					System.out.println("Client Socket initialized, connect with server");
-				} catch (UnknownHostException e) {
-					    System.out.println("Socket initialize fail");
-					e.printStackTrace();
-				} catch (IOException e) {
-						System.out.println("socket initialize fail");
-					e.printStackTrace();
-				}
-			}
-			
-		}
-		
-		public XMLRequest getXmlRequest() {
-			return xmlRequest;
-		}
+	public XMLRequest getTestRequest() {
+		return testRequest;
+	}
 
+	public void setTestRequest(XMLRequest testRequest) {
+		this.testRequest = testRequest;
+	}
 
-		public void setXmlRequest(XMLRequest xmlRequest) {
-			this.xmlRequest = xmlRequest;
-		}
-		
-		
-		@Override
-		public void run() {
+	// private
+	public requestHandler(XMLRequest rq, EntNetClient enc) {
+		xmlRequest = rq;
+		handleClient = enc;
+		if (socket == null) {
 			try {
-				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+				socket = new Socket("localhost", 8189);
+				System.out
+						.println("Client Socket initialized, connect with server");
+			} catch (UnknownHostException e) {
+				System.out.println("Socket initialize fail");
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("socket initialize fail");
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public XMLRequest getXmlRequest() {
+		return xmlRequest;
+	}
+
+	public void setXmlRequest(XMLRequest xmlRequest) {
+		this.xmlRequest = xmlRequest;
+	}
+
+	@Override
+	public void run() {
+		synchronized (socket) {
+			try {
+				PrintWriter out = new PrintWriter(socket.getOutputStream(),
+						true);
 				// autoflush
-	            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				
-	            out.println(xmlRequest.generateXMLRequest());
-	            
-	            String resultString = new String();
-	            String onelineString = new String();
-	            while ((onelineString = in.readLine()).equals(Constants.END_STRING) == false) {
-	            	resultString += onelineString;
-	            }
-	            XMLRequest resultRequest  = new XMLRequest(resultString);
-	            if (resultRequest.getRequestDetail().equals(Constants.RETURN_RESULTSET) ){
-	            	InputStream o = socket.getInputStream();
-	            	ObjectInput s = new ObjectInputStream(o);
-	            	//ois = new ObjectInputStream(socket.getInputStream());
-	            	MyResultSet mrs = (MyResultSet) s.readObject();
-	            	resultRequest.setMyResultSet(mrs);
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));
+
+				out.println(xmlRequest.generateXMLRequest());
+
+				String resultString = new String();
+				String onelineString = new String();
+				while (!(onelineString = in.readLine()).equals(Constants.INVALID)) {
 				}
-	            testRequest = resultRequest;
-	            setXML = true;
-	            handleClient.requestThreadCallBack(resultRequest);
+				while ((onelineString = in.readLine())
+						.equals(Constants.END_STRING) == false) {
+						resultString += onelineString;
+				}
+				XMLRequest resultRequest = new XMLRequest(resultString);
+				if (resultRequest.getRequestDetail().equals(
+						Constants.RETURN_RESULTSET)) {
+					while (!(onelineString = in.readLine()).equals(Constants.RETURN_RESULTSET)) {
+					}
+					InputStream o = socket.getInputStream();
+					ObjectInput s = new ObjectInputStream(o);
+					MyResultSet mrs = (MyResultSet) s.readObject();
+					resultRequest.setMyResultSet(mrs);
+				}
+				testRequest = resultRequest;
+				setXML = true;
+				//handleClient.requestThreadCallBack(resultRequest);
 			} catch (IOException e) {
 				System.out.println("socket error");
 				System.err.println(e.getLocalizedMessage());
+				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
+						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+				handleClient.requestThreadCallBack(resultRequest);
 				e.printStackTrace();
 			} // true means
- catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			catch (ClassNotFoundException e) {
+				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
+						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+				handleClient.requestThreadCallBack(resultRequest);
+				System.err.println("classNotFound");
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
+						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+				handleClient.requestThreadCallBack(resultRequest);
+				System.err.println("Parse Problem");
+				e.printStackTrace();
+			} catch (SAXException e) {
+				System.err.println("Parse Problem");
+				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
+						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+				handleClient.requestThreadCallBack(resultRequest);
 				e.printStackTrace();
 			}
-
 		}
-		
-		
-		
-		
+	}
+
 }

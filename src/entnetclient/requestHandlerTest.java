@@ -30,6 +30,9 @@ public class requestHandlerTest extends TestCase {
 	}
 
 	public void testRequestHandler() {
+		XMLRequest testRequest = null;
+		MyResultSet mrs = null;
+		Object[] rows = null;
 		XMLRequest xmlRequest = new XMLRequest(Constants.READ_REGION_ID, "tao",
 															Constants.REGION0, null, "select * from user;", Constants.SELECT);
 		XMLRequest loginRequest = new XMLRequest(Constants.LOGIN_REQUEST_ID, "tao",
@@ -37,13 +40,14 @@ public class requestHandlerTest extends TestCase {
 		//test Login
 		ClientMain testmain= new ClientMain();
 		EntNetClient testEntNetClient = EntNetClient.getInstance(testmain);
+		/*
 		requestHandler hrHandler = new requestHandler(loginRequest,testEntNetClient);
 		hrHandler.run();
 		XMLRequest testRequest = hrHandler.getTestRequest();
 		assertEquals(testRequest.getRequestDetail(), Constants.TRUE);
 		
 		String myQuery = "INSERT INTO entnetdb_v2.user VALUES (\"shuai\",\"123\",\"607111111\",1);";
-		XMLRequest regiRequest = new XMLRequest(Constants.UPDATE_REGION_ID, "tao",
+		regiRequest = new XMLRequest(Constants.UPDATE_REGION_ID, "tao",
 															Constants.REGION0, null, myQuery, Constants.UPDATE);
 		requestHandler hr2 = new requestHandler(regiRequest,testEntNetClient);
 		hr2.run();
@@ -59,29 +63,28 @@ public class requestHandlerTest extends TestCase {
 		hr3.run();
 		testRequest = hr3.getTestRequest();
 		assertEquals(testRequest.getRequestDetail(), "1");
-		
+				*/
 		String q4 = "select * from entnetdb_v2.user U where U.user_id = \"tao\";";
 		XMLRequest rq4 = new XMLRequest(Constants.READ_REGION_ID, "tao",
 															Constants.REGION1, null, q4, Constants.SELECT);
 		requestHandler hr4 = new requestHandler(rq4,testEntNetClient);
 		hr4.run();
 		testRequest = hr4.getTestRequest();
-		MyResultSet mrs = testRequest.getMyResultSet();
-		Object[] rows = mrs.getTable().toArray();
+		mrs = testRequest.getMyResultSet();
+		rows = mrs.getTable().toArray();
 		assertEquals(rows.length, 1);
-		
-		String q5 = "DELETE FROM entnetdb_v2.user WHERE user_id = \"shuai\";";
-		XMLRequest rq5 = new XMLRequest(Constants.UPDATE_REGION_ID, "tao",
-															Constants.REGION0, null, q5, Constants.UPDATE);
+
+		String q5 = "SELECT L.loc_name FROM entnetdb_v2.currloc C, entnetdb_v2.location L WHERE C.user_id = \"tao\" AND L.loc_id = C.loc_id;";
+		XMLRequest rq5 = new XMLRequest(Constants.READ_REGION_ID, "tao",
+															Constants.REGION0, null, q5, Constants.SELECT);
 		requestHandler hr5 = new requestHandler(rq5,testEntNetClient);
 		hr5.run();
 		testRequest = hr5.getTestRequest();
-		assertEquals(testRequest.getRequestDetail(), "1");
-		
-		
-		
-       
-		
+		mrs = testRequest.getMyResultSet();
+	    rows =  mrs.getTable().toArray();
+		assertEquals(rows.length, 1);
+		System.err.println(mrs.getStringValue(0, "loc_name"));
+		assertEquals(mrs.getStringValue(0, "loc_name"),"ShangHai");
 		//("Not yet implemented");
 	}
 
