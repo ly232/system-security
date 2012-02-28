@@ -94,7 +94,7 @@ public class requestHandler implements Runnable {
 				}
 				testRequest = resultRequest;
 				setXML = true;
-				//handleClient.requestThreadCallBack(resultRequest);
+				handleClient.requestThreadCallBack(resultRequest);
 			} catch (IOException e) {
 				System.out.println("socket error");
 				System.err.println(e.getLocalizedMessage());
