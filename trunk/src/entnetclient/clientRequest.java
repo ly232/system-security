@@ -109,7 +109,7 @@ public class clientRequest {
         XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
-                Constants.INVALID, //region id
+                Constants.FRIENDLISTREGION, //region id
                 Constants.INVALID, //session id...not for 
                 query, //request detail...SQL statement to be excuted by server
                 "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
