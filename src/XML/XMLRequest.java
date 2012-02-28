@@ -1,5 +1,11 @@
 package XML;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 public class XMLRequest {
 		String requestID;
 		String userID;
@@ -101,8 +107,11 @@ public class XMLRequest {
 	   /**
 	    * initialize using a xml file
 	 * @param xmlString
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	public XMLRequest(String xmlString) {
+	public XMLRequest(String xmlString) throws ParserConfigurationException, SAXException, IOException {
 		   this.ParseXML(xmlString);
 		}
 		
@@ -126,14 +135,14 @@ public class XMLRequest {
 			return xmlString;
 		}
 		
-		public void ParseXML(String xmlString) {
-			XML_parser_API xmlNewApi = new XML_parser_API(xmlString);
-			requestID = xmlNewApi.getRootTagName();
-			userID = xmlNewApi.getTagValue("userID");
-			regionID = xmlNewApi.getTagValue("regionID");
-			//this.sessionID = sessionID;//for the later use
-			requestDetail = xmlNewApi.getTagValue("requestDetail");
-			actionID = xmlNewApi.getTagValue("actionID");
-			return;
+		public void ParseXML(String xmlString) throws ParserConfigurationException, SAXException, IOException {
+				XML_parser_API xmlNewApi = new XML_parser_API(xmlString);
+				requestID = xmlNewApi.getRootTagName();
+				userID = xmlNewApi.getTagValue("userID");
+				regionID = xmlNewApi.getTagValue("regionID");
+				//this.sessionID = sessionID;//for the later use
+				requestDetail = xmlNewApi.getTagValue("requestDetail");
+				actionID = xmlNewApi.getTagValue("actionID");
+
 		}
 }
