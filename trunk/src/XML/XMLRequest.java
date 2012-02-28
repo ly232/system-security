@@ -7,8 +7,25 @@ public class XMLRequest {
 		String sessionID;//for the later use
 		String requestDetail;
 		String actionID;
-		
-		
+		String myResultSeStringt;
+		MyResultSet myResultSet;
+
+		public MyResultSet getMyResultSet() {
+			return myResultSet;
+		}
+
+		public void setMyResultSet(MyResultSet myResultSet) {
+			this.myResultSet = myResultSet;
+		}
+
+		public String getMyResultSeStringt() {
+			return myResultSeStringt;
+		}
+
+		public void setMyResultSeStringt(String myResultSeStringt) {
+			this.myResultSeStringt = myResultSeStringt;
+		}
+
 		public String getRequestID() {
 			return requestID;
 		}
