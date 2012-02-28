@@ -22,6 +22,7 @@ public abstract class Constants {
     public static final String UPDATE = "UPDATE";
     
     //REGION REFERENCE
+    public static final String FRIENDLISTREGION = "FRIENDLISTREGION";
     public static final String REGION1 = "REGION1";
     public static final String REGION2 = "REGION2";
     public static final String REGION3 = "REGION3";
