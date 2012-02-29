@@ -101,21 +101,27 @@ public class requestHandler implements Runnable {
 				}
 				testRequest = resultRequest;
 				setXML = true;
-				try {
-					handleClient.requestThreadCallBack(resultRequest);
-				} catch (SQLException e) {
-					
-					e.printStackTrace();
-				}
+                                try {
+                    try {
+                        handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 			} catch (IOException e) {
 				System.out.println("socket error");
 				System.err.println(e.getLocalizedMessage());
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+                                try {
                     try {
                         handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                                 catch (SQLException ex) {
+                                } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
 				e.printStackTrace();
@@ -123,8 +129,12 @@ public class requestHandler implements Runnable {
 			catch (ClassNotFoundException e) {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+                                try {
                     try {
                         handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -133,10 +143,12 @@ public class requestHandler implements Runnable {
 			} catch (ParserConfigurationException e) {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-
+                                try {
                     try {
                         handleClient.requestThreadCallBack(resultRequest);
-                    
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -146,9 +158,13 @@ public class requestHandler implements Runnable {
 				System.err.println("Parse Problem");
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
+                                try {
                     try {
                         handleClient.requestThreadCallBack(resultRequest);
-                    }  catch (SQLException ex) {
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                                } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
 				e.printStackTrace();
