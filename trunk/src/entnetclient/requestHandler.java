@@ -99,7 +99,11 @@ public class requestHandler implements Runnable {
 				testRequest = resultRequest;
 				setXML = true;
                                 try {
-                                    handleClient.requestThreadCallBack(resultRequest);
+                    try {
+                        handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -109,7 +113,11 @@ public class requestHandler implements Runnable {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
                                 try {
-                                    handleClient.requestThreadCallBack(resultRequest);
+                    try {
+                        handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -119,7 +127,11 @@ public class requestHandler implements Runnable {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
                                 try {
-                                    handleClient.requestThreadCallBack(resultRequest);
+                    try {
+                        handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -129,7 +141,11 @@ public class requestHandler implements Runnable {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
                                 try {
-                                    handleClient.requestThreadCallBack(resultRequest);
+                    try {
+                        handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -140,7 +156,11 @@ public class requestHandler implements Runnable {
 				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
 						Constants.INVALID, Constants.INVALID, Constants.INVALID);
                                 try {
-                                    handleClient.requestThreadCallBack(resultRequest);
+                    try {
+                        handleClient.requestThreadCallBack(resultRequest);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
