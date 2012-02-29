@@ -113,6 +113,7 @@ public class CommandLineClientTest {
 			Put("=========");
 			Put("");
 		}else {
+			Put("invalid username or password");
 			login();
 		}
 	}
