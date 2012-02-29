@@ -3,6 +3,7 @@ package entnetclient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import Constants.Constants;
@@ -90,9 +91,9 @@ public class CommandLineClientTest {
 		}
 	}
 	
-	public void personPanelCallback(String region, HashMap<String,String> result){
-			//Put(region);
-			Put(result.toString());
+	public void personPanelCallback(String region, ArrayList<String> str){
+			Put(region);
+			Put(str.toString());
 	}
 	
 	
@@ -107,7 +108,6 @@ public class CommandLineClientTest {
 				Put("input the password");
 				String friend_id = bReader.readLine();
 				controller.clientLogin(user_id, friend_id);
-				controller.clientLogin("tao", "123");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
