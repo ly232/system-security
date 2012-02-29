@@ -295,6 +295,11 @@ public class EntNetClient {
                 }catch(IOException e){};
             }
             else{
+            	if (commandline) {
+					test.LoginCallBack(xmlreq);
+				} else {
+
+				}
                      return;           
             }
         } //end of login request threadCallBack
