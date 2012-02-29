@@ -16,6 +16,9 @@ public abstract class Constants {
     public static final String READ_REGION_ID = "READ_REGION_ID";
     public static final String UPDATE_REGION_ID = "UPDATE_REGION_ID";
     public static final String ADD_FRIEND_ID = "ADD_FRIEND_ID";
+    public static final String DELETE_FRIEND_ID = "DELETE_FRIEND_ID";
+    public static final String QUIT_ID = "QUIT_ID";
+    
     
     //ACTION REFERENCE 
     public static final String SELECT = "SELECT";
@@ -50,7 +53,5 @@ public abstract class Constants {
     //switch board constatns:
     public static final String HOME_TO_OTHER_VIEW = "HOME_TO_OTHER_VIEW";
     public static final String OTHER_TO_OTHER_VIEW = "OTHER_TO_OTHER_VIEW";
-    public static final String OTHER_TO_HOME_VIEW = "OTHER_TO_HOME_VIEW";
-    
-    
+    public static final String OTHER_TO_HOME_VIEW = "OTHER_TO_HOME_VIEW";   
 }
