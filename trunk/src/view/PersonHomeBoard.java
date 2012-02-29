@@ -18,11 +18,12 @@ import javax.swing.ListSelectionModel;
  * @author  __USER__
  */
 public class PersonHomeBoard extends javax.swing.JFrame {
-        public static EntNetClient controller;
+	public static EntNetClient controller;
+
 	/** Creates new form UserHomeBoard */
 	public PersonHomeBoard(EntNetClient ec) {
 		initComponents();
-                controller = ec;
+		controller = ec;
 	}
 
 	/** This method is called from within the constructor to
@@ -59,6 +60,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 		jPanel6 = new javax.swing.JPanel();
 		jLabel6 = new javax.swing.JLabel();
 		jTextFieldMessage = new javax.swing.JTextField();
+		jButtonFM = new javax.swing.JButton();
 		jButtonLogout = new javax.swing.JButton();
 		jButtonReturn = new javax.swing.JButton();
 
@@ -76,15 +78,6 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
-		jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
- 		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
- 	          public   void   mouseClicked(MouseEvent   e)   { 
- 	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
- 	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
- 	                    
- 	          } 
- 	  }; 
- 	  jList1.addMouseListener(mouseListener);
 		jScrollPane1.setViewportView(jList1);
 
 		jPanel1.setBackground(new java.awt.Color(255, 255, 204));
@@ -375,6 +368,8 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 
 		jLabel6.setText("Friend Messages");
 
+		jButtonFM.setText("Submit");
+
 		javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(
 				jPanel6);
 		jPanel6.setLayout(jPanel6Layout);
@@ -395,11 +390,17 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 																javax.swing.GroupLayout.PREFERRED_SIZE,
 																114,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																jLabel6,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																134,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
+														.addGroup(
+																jPanel6Layout
+																		.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.TRAILING)
+																		.addComponent(
+																				jButtonFM)
+																		.addComponent(
+																				jLabel6,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				134,
+																				javax.swing.GroupLayout.PREFERRED_SIZE)))
 										.addContainerGap(27, Short.MAX_VALUE)));
 		jPanel6Layout
 				.setVerticalGroup(jPanel6Layout
@@ -417,7 +418,9 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(78, Short.MAX_VALUE)));
+										.addGap(26, 26, 26)
+										.addComponent(jButtonFM)
+										.addContainerGap(27, Short.MAX_VALUE)));
 
 		jButtonLogout.setText("Logout");
 
@@ -570,6 +573,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
+	private javax.swing.JButton jButtonFM;
 	private javax.swing.JButton jButtonLogout;
 	private javax.swing.JButton jButtonReturn;
 	private javax.swing.JLabel jLabel1;
