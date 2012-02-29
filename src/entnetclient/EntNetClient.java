@@ -335,7 +335,7 @@ public class EntNetClient {
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 
                 if (commandline) {
-					test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
+					//test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
@@ -347,7 +347,7 @@ public class EntNetClient {
                 resultSetArrayList.add(contact_info);
                 //resultSetHashMap.put("contact_info", contact_info);
                 if (commandline) {
-					test.personPanelCallback(Constants.REGION1, resultSetArrayList);
+					//test.personPanelCallback(Constants.REGION1, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
@@ -358,7 +358,7 @@ public class EntNetClient {
                 resultSetArrayList.add(currLocName);
                 //resultSetHashMap.put("loc_name", currLocName);
                 if (commandline) {
-					test.personPanelCallback(Constants.REGION2, resultSetArrayList);
+					//test.personPanelCallback(Constants.REGION2, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
@@ -385,7 +385,7 @@ public class EntNetClient {
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
-					test.personPanelCallback(Constants.REGION4, resultSetArrayList);
+					//test.personPanelCallback(Constants.REGION4, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}

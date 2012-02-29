@@ -610,5 +610,10 @@ public class PersonHomeBoard extends javax.swing.JFrame {
     }
 
     private String[] strArrFromClientLogic;
+    
+    public void dataRefresh(ArrayList<String> a, String s){
+        
+    }
+    
         
 }
