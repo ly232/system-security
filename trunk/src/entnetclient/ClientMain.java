@@ -33,7 +33,7 @@ public class ClientMain {
         
         public void LoginToHome(){
             lui.setVisible(false);
-            uui = new MainUI(controller);
+            uui = new UserHomeBoard(controller);
             uui.setVisible(true);
             //uui.populateInitScreen();
         }
