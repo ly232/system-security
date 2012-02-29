@@ -74,6 +74,15 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
+		jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+ 		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
+ 	          public   void   mouseClicked(MouseEvent   e)   { 
+ 	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
+ 	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
+ 	                    
+ 	          } 
+ 	  }; 
+ 	  jList1.addMouseListener(mouseListener);
 		jScrollPane1.setViewportView(jList1);
 
 		jPanel1.setBackground(new java.awt.Color(255, 255, 204));
