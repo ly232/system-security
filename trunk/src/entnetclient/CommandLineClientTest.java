@@ -20,6 +20,7 @@ public class CommandLineClientTest {
 	
 	  public EntNetClient controller;
 	  private BufferedReader bReader;
+	  private String userid;
 	public static void main(String[] args){
 		 CommandLineClientTest mainTest = new CommandLineClientTest();
 		 mainTest.start();
