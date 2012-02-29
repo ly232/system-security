@@ -674,7 +674,6 @@ public class UserHomeBoard extends javax.swing.JFrame {
             controller.friendRequest(jTextFieldAddfriend.getText());
 	}
         
-    
         
 
 	protected void jComboBoxProjectActionPerformed(ActionEvent evt) {
@@ -710,8 +709,12 @@ public class UserHomeBoard extends javax.swing.JFrame {
 			}	
 		}
 		if (s.equals(Constants.REGION1)) {
-			jLabelID.setText("");
+			jLabelID.setText(a.get(0).toString());
+                        jLabel8.setText(a.get(1).toString());
 			jPanel1.repaint();
+                        
+                        //System.out.println(a);
+                        
 		}
 		if (s.equals(Constants.REGION2)) {
 			
@@ -730,20 +733,36 @@ public class UserHomeBoard extends javax.swing.JFrame {
                     String[] x = (String[]) a.toArray(new String[a.size()]);
                     String k = "";
 			for (int i=0; i<a.size(); i++) {
-                            k = "-"+x[i]+"\r\n";
+                            k += "-"+x[i]+"\r\n";
                         }
 
                     jTextAreaCA.setText(k);
+                    
                     
 			//jTextAreaCA.setText("");
 			jPanel4.repaint();
 		}
 		if (s.equals(Constants.REGION5)) {
-			jTextAreaDA.setText("");
-			jPanel5.repaint();
+			//jTextAreaDA.setText("");
+			
+                    String[] x = (String[]) a.toArray(new String[a.size()]);
+                    String k = "";
+			for (int i=0; i<a.size(); i++) {
+                            k += "-"+x[i]+"\r\n";
+                        }
+
+                    jTextAreaDA.setText(k);
+                    
+                    jPanel5.repaint();
 		}
 		if (s.equals(Constants.REGION6)) {
-			jTextAreaFM.setText("");
+			String[] x = (String[]) a.toArray(new String[a.size()]);
+                    String k = "";
+			for (int i=0; i<a.size(); i++) {
+                            k += "-"+x[i]+"\r\n";
+                        }
+
+                    jTextAreaFM.setText(k);
 			jPanel6.repaint();
 		}
 	}
