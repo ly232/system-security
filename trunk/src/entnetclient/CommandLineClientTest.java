@@ -75,7 +75,7 @@ public class CommandLineClientTest {
 			Put("Input the friend ID");
 			String friend_id = Gets();
 			controller.deleteFriend(friend_id);
-		}else if (request.equals("Show All Region")) {
+		}else if (request.equals("Show My Region")) {
 			try {
 				controller.returnUserHomePage();
 			} catch (IOException e) {
@@ -88,6 +88,16 @@ public class CommandLineClientTest {
 			Put("input the the messege content");
 			String messageString = Gets();
 			controller.postMessage(friend_id, messageString);
+		}else if (request.equals("Switch to")) {
+			Put("input the friend ID");
+			String friend_id = Gets();
+			try {
+				Put(friend_id);
+				controller.clientViewOtherPersonBoard(friend_id, null);
+			} catch (IOException e) {
+				System.out.println("Show all Region Failed");
+				e.printStackTrace();
+			}
 		}else {
 			Put("invalide command");
 			Put("please input again");
@@ -108,13 +118,17 @@ public class CommandLineClientTest {
 	}
 	
 	public void personPanelCallback(String region, ArrayList<String> str){
-			Put(region);
-			//Put(str.toString());
-			Object[] strObjects = str.toArray();
-			for (int i = 0; i < strObjects.length; i++) {
-				Put(strObjects[i].toString());
+			try {
+				   Put(region);
+					//Put(str.toString());
+					Object[] strObjects = str.toArray();
+					for (int i = 0; i < strObjects.length; i++) {
+						Put(strObjects[i].toString());
+					}
+					Put("");
+			} catch (Exception e) {
+				
 			}
-			Put("");
 	}
 	
 	

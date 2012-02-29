@@ -169,20 +169,25 @@ public class EntNetClient {
             //1. my home board -> other person's home board
             //2. other person's home board -> other person's home board
             //3. other person's home board -> my home board
-
-            if (otherPersonUid.equals(Constants.HOME_TO_OTHER_VIEW)){
-                clientMain.HomeToPerson();
-            }
-            else if (otherPersonUid.equals(Constants.OTHER_TO_OTHER_VIEW)){
-                clientMain.PersonToPerson();
-            }
-            else if (otherPersonUid.equals(Constants.OTHER_TO_HOME_VIEW)){
-                clientMain.PersonToHome();
-            }
-            else {
-                System.err.println("ERROR: invalid switchBoardCode in EntNetClient::clientViewOtherPersonBoard");
-                return;
-            }
+            
+            if (commandline) {
+				
+			} else {
+				if (otherPersonUid.equals(Constants.HOME_TO_OTHER_VIEW)){
+	                clientMain.HomeToPerson();
+	            }
+	            else if (otherPersonUid.equals(Constants.OTHER_TO_OTHER_VIEW)){
+	                clientMain.PersonToPerson();
+	            }
+	            else if (otherPersonUid.equals(Constants.OTHER_TO_HOME_VIEW)){
+	                clientMain.PersonToHome();
+	            }
+	            else {
+	                System.err.println("ERROR: invalid switchBoardCode in EntNetClient::clientViewOtherPersonBoard");
+	                return;
+	            }
+			}
+            
             
             
             for (int i=0;i<otherPersonBoardInfoXML.size();i++){
@@ -353,7 +358,7 @@ public class EntNetClient {
                 resultSetArrayList.add(contact_info);
                 //resultSetHashMap.put("contact_info", contact_info);
                 if (commandline) {
-					//test.personPanelCallback(Constants.REGION1, resultSetArrayList);
+					test.personPanelCallback(Constants.REGION1, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
@@ -364,7 +369,7 @@ public class EntNetClient {
                 resultSetArrayList.add(currLocName);
                 //resultSetHashMap.put("loc_name", currLocName);
                 if (commandline) {
-					//test.personPanelCallback(Constants.REGION2, resultSetArrayList);
+					test.personPanelCallback(Constants.REGION2, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
@@ -391,7 +396,7 @@ public class EntNetClient {
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
-					//test.personPanelCallback(Constants.REGION4, resultSetArrayList);
+					test.personPanelCallback(Constants.REGION4, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
