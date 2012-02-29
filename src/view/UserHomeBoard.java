@@ -314,12 +314,9 @@ public class UserHomeBoard extends javax.swing.JFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(26, 26, 26)
-										.addComponent(
-												jButtonProject,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												25, Short.MAX_VALUE)
-										.addGap(27, 27, 27)));
+										.addGap(18, 18, 18)
+										.addComponent(jButtonProject)
+										.addContainerGap(35, Short.MAX_VALUE)));
 
 		jPanel4.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -606,9 +603,11 @@ public class UserHomeBoard extends javax.swing.JFrame {
 	}// </editor-fold>
 	//GEN-END:initComponents
 
-	jButtonProjectActionPerformed();
+	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt) {
+		// TODO add your handling code here:
+	}
 
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonLocationActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 	}
 
