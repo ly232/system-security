@@ -219,10 +219,14 @@ public class EntNetClient {
                 for (int i=0;i<xmlreq.size();i++){
                         invokeRequestThread(xmlreq.get(i));
                     }
-                this.clientMain.PersonToHome();
-                
+                if (commandline) {
+					
+				} else {
+	                this.clientMain.PersonToHome();
+				}  
         }
     
+        
 
     private void invokeRequestThread(XMLRequest xmlr) {
     	if (commandline) {
