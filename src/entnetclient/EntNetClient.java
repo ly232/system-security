@@ -36,7 +36,7 @@ public class EntNetClient {
         private ClientMain clientMain;
         private String thisUserID;
         private CommandLineClientTest test;
-        private boolean commandline = true;
+        private boolean commandline = false;
         
         private EntNetClient(ClientMain cm){
             clientMain = cm;
@@ -219,11 +219,13 @@ public class EntNetClient {
                 for (int i=0;i<xmlreq.size();i++){
                         invokeRequestThread(xmlreq.get(i));
                     }
+
                 if (commandline) {
 					
 				} else {
 	                this.clientMain.PersonToHome();
 				}  
+
         }
     
         
