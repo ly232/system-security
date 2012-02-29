@@ -15,7 +15,8 @@ import view.*;
 public class ClientMain {
     static private EntNetClient controller;
     static public LoginUI lui;
-    static public MainUI mui;
+    static public UserHomeBoard uui;
+    static public PersonHomeBoard pui;
     
     public ClientMain(){
         controller = EntNetClient.getInstance(this);
@@ -30,11 +31,28 @@ public class ClientMain {
 		});
 	}
         
-        public void killLoginUI(){
+        public void LoginToHome(){
             lui.setVisible(false);
-            mui = new MainUI(controller);
-            mui.setVisible(true);
-            mui.populateInitScreen();
+            uui = new MainUI(controller);
+            uui.setVisible(true);
+            //uui.populateInitScreen();
         }
+        
+        public void HomeToPerson(){
+            uui.setVisible(false);
+            pui = new PersonHomeBoard(controller);
+            pui.setVisible(true);
+            //
+        }
+        
+        public void PersonToPerson(){
+            
+        }
+        
+        public void PersonToHome(){
+            
+        }
+        
+        
         
 }

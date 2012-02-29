@@ -38,7 +38,11 @@ public class EntNetClient {
         
         private EntNetClient(ClientMain cm){
             clientMain = cm;
-        }   
+        }
+        
+        public EntNetClient(){
+            
+        }
 
         public static EntNetClient getInstance(ClientMain cm) {
             if (instance==null)
@@ -137,11 +141,38 @@ public class EntNetClient {
                 }     
         }*/
         
-        public void  clientViewOtherPersonBoard(String otherPersonUid) throws IOException{
-            clientHomeBoardRequest(otherPersonUid);
+        public void  clientViewOtherPersonBoard(String otherPersonUid, String switchBoardCode) throws IOException{
+            
+            //general logic: close current MainUI, then open a new MainUI populated based on the retXML
+            
+            ArrayList<XMLRequest> otherPersonBoardInfoXML = clientHomeBoardRequest(otherPersonUid);
+            
+            //close the current ui, then open a new ui
+            //there are 3 possible senarios to switch:
+            //1. my home board -> other person's home board
+            //2. other person's home board -> other person's home board
+            //3. other person's home board -> my home board
+
+            if (otherPersonUid.equals(Constants.HOME_TO_OTHER_VIEW)){
+                clientMain.HomeToPerson();
+            }
+            else if (otherPersonUid.equals(Constants.OTHER_TO_OTHER_VIEW)){
+                clientMain.PersonToPerson();
+            }
+            else if (otherPersonUid.equals(Constants.OTHER_TO_HOME_VIEW)){
+                clientMain.PersonToHome();
+            }
+            else {
+                System.err.println("ERROR: invalid switchBoardCode in EntNetClient::clientViewOtherPersonBoard");
+                return;
+            }
+            
+            
+            for (int i=0;i<otherPersonBoardInfoXML.size();i++){
+                invokeRequestThread(otherPersonBoardInfoXML.get(i));
+            }
+
         }
-        
-        
         
         public void clientUpdateRegion(String regionID, String newContent, String uIDsrc){
                 HashMap<String, String> updateCredential = new HashMap<String, String>();
@@ -188,7 +219,7 @@ public class EntNetClient {
                             = clientHomeBoardRequest(xmlreq.getUserID());
                     this.thisUserID = xmlreq.getUserID();
                     //populate screen: close loginUI, open new UI
-                    this.clientMain.killLoginUI();
+                    this.clientMain.LoginToHome();
                     
                     //now we are in homepage...load home board content
                     for (int i=0;i<homeBoardInfoXML.size();i++){
@@ -212,7 +243,7 @@ public class EntNetClient {
                     ArrayList<XMLRequest> homeBoardInfoXML 
                             = clientHomeBoardRequest(xmlreq.getUserID());
                     //populate screen: close loginUI, open new UI
-                    this.clientMain.killLoginUI();
+                    this.clientMain.LoginToHome();
                     
                     //now we are in homepage...load home board content
                     for (int i=0;i<homeBoardInfoXML.size();i++){

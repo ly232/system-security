@@ -47,4 +47,10 @@ public abstract class Constants {
     public static final String RETURN_RESULTSET = "RETURN_RESULTSET";
     public static final String GET_RESULTSET = "GET_RESULTSET";
     
+    //switch board constatns:
+    public static final String HOME_TO_OTHER_VIEW = "HOME_TO_OTHER_VIEW";
+    public static final String OTHER_TO_OTHER_VIEW = "OTHER_TO_OTHER_VIEW";
+    public static final String OTHER_TO_HOME_VIEW = "OTHER_TO_HOME_VIEW";
+    
+    
 }
