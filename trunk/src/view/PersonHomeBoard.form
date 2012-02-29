@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -37,7 +37,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jPanel6" max="32767" attributes="1"/>
-                  <Component id="jPanel4" alignment="0" min="0" pref="173" max="32767" attributes="1"/>
+                  <Component id="jPanel4" alignment="0" min="0" max="32767" attributes="1"/>
                   <Component id="jPanel5" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -54,7 +54,7 @@
                   <Component id="jButtonLogout" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jScrollPane1" alignment="0" pref="287" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" pref="301" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jPanel4" min="0" max="32767" attributes="1"/>
@@ -239,7 +239,7 @@
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabelProject" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace pref="72" max="32767" attributes="0"/>
+                  <EmptySpace pref="73" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -270,7 +270,7 @@
                       <Component id="jScrollPaneCA" alignment="0" min="-2" pref="139" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="0" min="-2" pref="157" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="16" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -281,7 +281,7 @@
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPaneCA" min="-2" pref="100" max="-2" attributes="0"/>
-                  <EmptySpace pref="16" max="32767" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -373,7 +373,12 @@
                       <Component id="jTextFieldMessage" alignment="0" min="-2" pref="114" max="-2" attributes="0"/>
                       <Component id="jLabel6" alignment="0" min="-2" pref="134" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="29" max="32767" attributes="0"/>
+                  <EmptySpace pref="39" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="118" max="32767" attributes="0"/>
+                  <Component id="jButtonFM" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -384,7 +389,9 @@
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldMessage" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="79" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jButtonFM" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="36" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -396,6 +403,11 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldMessage">
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonFM">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Post"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
