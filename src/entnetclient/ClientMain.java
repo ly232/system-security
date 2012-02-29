@@ -43,8 +43,7 @@ public class ClientMain {
         
         public void giveArrayListToUI(ArrayList<String> al, String RegionID){
             if (currUI.equals("UserHomeBoard")){
-
-                uui.dataRefresh(al, RegionID);
+                //uui.dataRefresh(al, RegionID);
             }
             else if (currUI.equals("PersonHomeBoard")){
                 pui.dataRefresh(al, RegionID);
