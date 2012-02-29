@@ -6,6 +6,7 @@
 
 package view;
 
+import entnetclient.EntNetClient;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,10 +18,11 @@ import javax.swing.ListSelectionModel;
  * @author  __USER__
  */
 public class PersonHomeBoard extends javax.swing.JFrame {
-
+        public static EntNetClient controller;
 	/** Creates new form UserHomeBoard */
-	public PersonHomeBoard() {
+	public PersonHomeBoard(EntNetClient ec) {
 		initComponents();
+                controller = ec;
 	}
 
 	/** This method is called from within the constructor to
@@ -561,7 +563,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 	public static void main(String args[]) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new PersonHomeBoard().setVisible(true);
+				new PersonHomeBoard(controller).setVisible(true);
 			}
 		});
 	}

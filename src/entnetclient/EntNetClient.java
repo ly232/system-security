@@ -17,8 +17,8 @@ import XML.XMLRequest;
 import com.sun.rowset.WebRowSetImpl;
 import java.nio.CharBuffer;
 import javax.sql.rowset.WebRowSet;
-import view.LoginUI;
-import view.MainUI;
+import view.*;
+//import view.MainUI;
 /**
  * 
  * @author Lin

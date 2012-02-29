@@ -19,8 +19,8 @@ public class LoginUI extends javax.swing.JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	public static PrintWriter out;
+	//private static final long serialVersionUID = 1L;
+	//public static PrintWriter out;
         public static EntNetClient controller;
 	/** Creates new form UI */
 	public LoginUI(EntNetClient ec) {
