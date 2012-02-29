@@ -133,6 +133,9 @@ class ThreadedHandler implements Runnable {
 			System.out.println("request formart : \n" + xml);
 			XMLRequest request;
 				request = new XMLRequest(xml);
+				if (request.getRequestID().equals(Constants.QUIT_ID)) {
+					return;
+				}
 				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
 					user_id = request.getUserID();
 					loginServlet lServlet = new loginServlet(request, this);
