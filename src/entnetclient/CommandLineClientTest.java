@@ -4,20 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Hashtable;
-
-import sun.security.action.PutAllAction;
 
 import Constants.Constants;
 
 import XML.XMLRequest;
 
-import com.sun.java_cup.internal.runtime.Scanner;
-
 
 public class CommandLineClientTest {
-	
-	
 	  public EntNetClient controller;
 	  private BufferedReader bReader;
 	  private String userid;
@@ -39,8 +32,50 @@ public class CommandLineClientTest {
 	    	  login();
 	         // bReader.readLine();
 		  while (true) {
+			  Put("===============");
+			  Put("input the commond");
+			  Put("================");
+			  try {
+				String commandString = bReader.readLine();
+				if (parseRequest(commandString)) {
+					return;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	      
+	}
+	
+	
+	private String Gets(){
+		try {
+			String friend_id = bReader.readLine();
+			return friend_id;
+		} catch (IOException e) {
+			Put("get string error");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public boolean parseRequest(String request){
+		if (request.equals("Add Friend")) {
+			Put("Input the friend ID");
+			String friend_id = Gets();
+			controller.friendRequest(friend_id);
+			return false;
+		} else if (request.equals("Quit")) {
+			Put("Quit the client");
+			controller.quitClient();
+			return true;
+		}else if (request.equals("Delete Friend")) {
+			Put("Input the friend ID");
+			String friend_id = Gets();
+			controller.deleteFriend(friend_id);
+		}
+		return false;
 	}
 	
 	
@@ -48,6 +83,8 @@ public class CommandLineClientTest {
 		if( rq.getRequestDetail().equals(Constants.TRUE)){
 			PersonalPanel();
 			Put("Login Success");
+			Put("=========");
+			Put("");
 		}else {
 			login();
 		}
