@@ -372,7 +372,7 @@ pack();
 	}
 
 	private void jButtonReturnActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		controller.returnUserHomePage();
 	}
 
 	private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {
@@ -396,17 +396,16 @@ pack();
 		if (s.equals(Constants.REGION1)) {
                     //System.out.println(a);
 			jLabelID.setText(a.get(0).toString());
-                        jLabel8.setText(a.get(1).toString());
+                        jLabelContactInfo.setText(a.get(1).toString());
 			jPanel1.repaint();
 		}
 		if (s.equals(Constants.REGION2)) {
-			
-                        //jComboBoxLocation.addItem(a);
+			jLabelLocation.setText(a.get(0).toString());
 			jPanel2.repaint();
 
                 }
 		if (s.equals(Constants.REGION3)) {
-			//jComboBoxProject.addItem(a);
+                        jLabelProject.setText(a.get(0).toString());
 			jPanel3.repaint();
 		}
 		if (s.equals(Constants.REGION4)) {

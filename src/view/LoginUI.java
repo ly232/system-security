@@ -324,7 +324,6 @@ public class LoginUI extends javax.swing.JFrame {
             try{
                 //System.out.println(">>>>>");
                 controller.clientLogin(jTextFieldId.getText(), jTextFieldPwd.getText());
-                //System.out.println(">>>>>");
                 
             }catch(Exception e){
                 e.printStackTrace();
