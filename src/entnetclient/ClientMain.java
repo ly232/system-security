@@ -35,24 +35,28 @@ public class ClientMain {
 		});
 	}
         
-        public void giveArrayListToUI(ArrayList<String> al){
+        public void giveArrayListToUI(ArrayList<String> al, String RegionID){
             if (currUI.equals("UserHomeBoard")){
-                String[] x = al.toArray(new String[al.size()]);
-                
-                uui.getArrayList(x);
+                //String[] x = al.toArray(new String[al.size()]);
+                //uui.getArrayList(x);
+                uui.dataRefresh(al, RegionID);
             }
             else if (currUI.equals("PersonHomeBoard")){
-                pui.getArrayList(al.toArray(new String[al.size()]));
+                //pui.getArrayList(al.toArray(new String[al.size()]));
+                pui.dataRefresh(al, RegionID);
             }
             else{
-                System.out.println("ERROR: encountered invalid board id in ClientMain::giveHashMapToUI");
+                System.err.println("ERROR: encountered invalid board id in ClientMain::giveHashMapToUI");
                 return;
             }
         }
         
+        
+        /*
         public void changeCurrUIid(String UIid){
             currUI = UIid;
-        }
+        }*/
+        
         
         public void LoginToHome(){
             lui.setVisible(false);

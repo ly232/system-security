@@ -66,15 +66,15 @@ public class UserHomeBoard extends javax.swing.JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		jList1.setModel(new javax.swing.AbstractListModel() {
-			//String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
-			//		"Item 5" };
+			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
+					"Item 5" };
 
 			public int getSize() {
-				return strArrFromClientLogic.length;
+				return strings.length;
 			}
 
 			public Object getElementAt(int i) {
-				return strArrFromClientLogic[i];
+				return strings[i];
 			}
 		});
 		jScrollPane1.setViewportView(jList1);
