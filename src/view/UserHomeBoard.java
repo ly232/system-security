@@ -76,8 +76,7 @@ public class UserHomeBoard extends javax.swing.JFrame {
 
 		
 		jList1.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
-					"Item 5" };
+			String[] strings = {  };
 
 			public int getSize() {
 				return strings.length;
@@ -209,7 +208,7 @@ public class UserHomeBoard extends javax.swing.JFrame {
 		jLabel2.setText("Current Location");
 
 		jComboBoxLocation.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+				));
 		jComboBoxLocation
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -284,7 +283,7 @@ public class UserHomeBoard extends javax.swing.JFrame {
 		jLabel3.setText("Current Project");
 
 		jComboBoxProject.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+				));
 		jComboBoxProject.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jComboBoxProjectActionPerformed(evt);

@@ -13,13 +13,17 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+
+import Constants.Constants;
 
 /**
  *
- * @author  __USER__
+ * @author  Shuai
  */
 public class PersonHomeBoard extends javax.swing.JFrame {
+	DefaultListModel model = new DefaultListModel();
 	public static EntNetClient controller;
 
 	/** Creates new form UserHomeBoard */
@@ -69,8 +73,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		jList1.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
-					"Item 5" };
+			String[] strings = { };
 
 			public int getSize() {
 				return strings.length;
@@ -80,6 +83,15 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
+		jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+ 		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
+ 	          public   void   mouseClicked(MouseEvent   e)   { 
+ 	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
+ 	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
+ 	                    
+ 	          } 
+ 	  }; 
+ 	  jList1.addMouseListener(mouseListener);
 		jScrollPane1.setViewportView(jList1);
 
 		jPanel1.setBackground(new java.awt.Color(255, 255, 204));
@@ -163,7 +175,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												22,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(40, Short.MAX_VALUE)));
+										.addContainerGap(52, Short.MAX_VALUE)));
 
 		jPanel2.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -259,7 +271,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												22,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(72, Short.MAX_VALUE)));
+										.addContainerGap(73, Short.MAX_VALUE)));
 
 		jPanel4.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -294,7 +306,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 																javax.swing.GroupLayout.PREFERRED_SIZE,
 																157,
 																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(4, Short.MAX_VALUE)));
+										.addContainerGap(16, Short.MAX_VALUE)));
 		jPanel4Layout
 				.setVerticalGroup(jPanel4Layout
 						.createParallelGroup(
@@ -311,9 +323,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												100,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)));
+										.addContainerGap(20, Short.MAX_VALUE)));
 
 		jPanel5.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -344,9 +354,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 																javax.swing.GroupLayout.PREFERRED_SIZE,
 																139,
 																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)));
+										.addContainerGap(24, Short.MAX_VALUE)));
 		jPanel5Layout
 				.setVerticalGroup(jPanel5Layout
 						.createParallelGroup(
@@ -358,8 +366,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 										.addComponent(jLabel5)
 										.addPreferredGap(
 												javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
+												9, Short.MAX_VALUE)
 										.addComponent(
 												jScrollPaneDA,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -370,7 +377,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 
 		jLabel6.setText("Friend Messages");
 
-		jButtonFM.setText("Submit");
+		jButtonFM.setText("Post");
 
 		javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(
 				jPanel6);
@@ -392,18 +399,18 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 																javax.swing.GroupLayout.PREFERRED_SIZE,
 																114,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addGroup(
-																jPanel6Layout
-																		.createParallelGroup(
-																				javax.swing.GroupLayout.Alignment.TRAILING)
-																		.addComponent(
-																				jButtonFM)
-																		.addComponent(
-																				jLabel6,
-																				javax.swing.GroupLayout.PREFERRED_SIZE,
-																				134,
-																				javax.swing.GroupLayout.PREFERRED_SIZE)))
-										.addContainerGap(27, Short.MAX_VALUE)));
+														.addComponent(
+																jLabel6,
+																javax.swing.GroupLayout.PREFERRED_SIZE,
+																134,
+																javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(39, Short.MAX_VALUE))
+						.addGroup(
+								javax.swing.GroupLayout.Alignment.TRAILING,
+								jPanel6Layout.createSequentialGroup()
+										.addContainerGap(118, Short.MAX_VALUE)
+										.addComponent(jButtonFM)
+										.addContainerGap()));
 		jPanel6Layout
 				.setVerticalGroup(jPanel6Layout
 						.createParallelGroup(
@@ -420,9 +427,9 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(26, 26, 26)
+										.addGap(18, 18, 18)
 										.addComponent(jButtonFM)
-										.addContainerGap(27, Short.MAX_VALUE)));
+										.addContainerGap(36, Short.MAX_VALUE)));
 
 		jButtonLogout.setText("Logout");
 
@@ -475,7 +482,10 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 														javax.swing.GroupLayout.DEFAULT_SIZE,
 														javax.swing.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE)
-												.addComponent(jPanel4, 0, 173,
+												.addComponent(
+														jPanel4,
+														0,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE)
 												.addComponent(
 														jPanel5,
@@ -504,7 +514,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 																						jScrollPane1,
 																						javax.swing.GroupLayout.Alignment.LEADING,
 																						javax.swing.GroupLayout.DEFAULT_SIZE,
-																						287,
+																						301,
 																						Short.MAX_VALUE)
 																				.addGroup(
 																						layout.createSequentialGroup()
@@ -514,7 +524,7 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 																												.addComponent(
 																														jPanel4,
 																														0,
-																														144,
+																														javax.swing.GroupLayout.DEFAULT_SIZE,
 																														Short.MAX_VALUE)
 																												.addComponent(
 																														jPanel1,
@@ -562,6 +572,40 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 	}// </editor-fold>
 	//GEN-END:initComponents
 
+	public void dataRefreshPer(ArrayList a, String s) {
+		if (s.equals(Constants.FRIENDLISTREGION)) {
+			String[] x = (String[]) a.toArray(new String[a.size()]);
+			for (int i = 0;; i++) {
+				model.add(i, x[i]);
+			}
+		}
+		if (s.equals(Constants.REGION1)) {
+			jLabelID.setText("");
+			jLabelContactInfo.setText("");
+			jPanel1.repaint();
+		}
+		if (s.equals(Constants.REGION2)) {
+			jLabelLocation.setText("");
+			jPanel2.repaint();
+		}
+		if (s.equals(Constants.REGION3)) {
+			jLabelProject.setText("");
+			jPanel3.repaint();
+		}
+		if (s.equals(Constants.REGION4)) {
+			jTextAreaCA.setText("");
+			jPanel4.repaint();
+		}
+		if (s.equals(Constants.REGION5)) {
+			jTextAreaDA.setText("");
+			jPanel5.repaint();
+		}
+		if (s.equals(Constants.REGION6)) {
+			
+			jPanel6.repaint();
+		}
+	}
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -603,17 +647,17 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 	private javax.swing.JTextArea jTextAreaCA;
 	private javax.swing.JTextArea jTextAreaDA;
 	private javax.swing.JTextField jTextFieldMessage;
+
 	// End of variables declaration//GEN-END:variables
 
-        public void getArrayList(String[] strArr) {
-        this.strArrFromClientLogic = strArr;
-    }
+	public void getArrayList(String[] strArr) {
+		this.strArrFromClientLogic = strArr;
+	}
 
-    private String[] strArrFromClientLogic;
-    
-    public void dataRefresh(ArrayList<String> a, String s){
-        
-    }
-    
-        
+	private String[] strArrFromClientLogic;
+
+	public void dataRefresh(ArrayList<String> a, String s) {
+
+	}
+
 }
