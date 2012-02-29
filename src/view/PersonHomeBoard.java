@@ -10,6 +10,8 @@ import entnetclient.EntNetClient;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ListSelectionModel;
 
@@ -603,4 +605,10 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 	private javax.swing.JTextField jTextFieldMessage;
 	// End of variables declaration//GEN-END:variables
 
+        public void getArrayList(String[] strArr) {
+        this.strArrFromClientLogic = strArr;
+    }
+
+    private String[] strArrFromClientLogic;
+        
 }
