@@ -104,14 +104,6 @@ public class clientRequest {
         return retArrList;
     }
     
-    /*
-    public ArrayList<XMLRequest> clientRequestOtherPersonBoard(String otherPersonUid) {
-        ArrayList<XMLRequest> retArrList = new ArrayList<XMLRequest>();
-        for (int i=1;i<=6;i++){
-            retArrList.add(getRegionInfo(otherPersonUid, "REGION"+i));            
-        }
-        return retArrList;
-    }*/
     
     private XMLRequest getFriendList(String uid){
         String query = "SELECT F.user2 FROM friend F WHERE F.user1 = '" + uid + "'"
@@ -132,7 +124,7 @@ public class clientRequest {
     private XMLRequest getRegionInfo(String uid, String rid){
 
         if (rid.equals(Constants.REGION1)){
-            String query = "SELECT contact_info FROM user WHERE user_id = '" + uid + "';";
+            String query = "SELECT user_id, contact_info FROM user WHERE user_id = '" + uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,

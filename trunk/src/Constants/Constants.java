@@ -44,7 +44,7 @@ public abstract class Constants {
     //end of the transaction
     public static final String END_STRING = "END_STRING";
     
-    public static final String COMPANY_DID = "0";
+    public static final String COMPANY_DID = "1";
     public static final String INVALID_REQUEST = "INVALID_REQUEST";
     
     public static final String RETURN_RESULTSET = "RETURN_RESULTSET";

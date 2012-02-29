@@ -38,6 +38,10 @@ public class EntNetClient {
         private CommandLineClientTest test;
         private boolean commandline = false;
         
+        public String getThisUserID(){
+            return thisUserID;
+        }
+        
         private EntNetClient(ClientMain cm){
             clientMain = cm;
         }
@@ -116,7 +120,7 @@ public class EntNetClient {
         }
         
         public void postMessage(String friend_id, String messageString){
-        	  String sqlQueryString = "insert into friend values(\"" + thisUserID + "\",\"" + friend_id + 
+        	  String sqlQueryString = "insert into friend values(\"" + friend_id + "\",\"" + thisUserID + 
 							"\",\"" + messageString + "\",null);";
         	  XMLRequest xmlRequest = new XMLRequest(Constants.UPDATE_REGION_ID, 
         			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
@@ -383,8 +387,9 @@ public class EntNetClient {
             }
             else if (regionID.equals(Constants.REGION1)){
                 String contact_info = myRS.getStringValue(0, "contact_info");
+                String uid = myRS.getStringValue(0,"user_id");
+                resultSetArrayList.add(uid);
                 resultSetArrayList.add(contact_info);
-                //resultSetHashMap.put("contact_info", contact_info);
                 if (commandline) {
 					test.personPanelCallback(Constants.REGION1, resultSetArrayList);
 				} else {
