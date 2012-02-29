@@ -8,6 +8,7 @@ import XML.XMLRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import view.*;
+import Constants.*;
 
 /**
  *
@@ -25,6 +26,11 @@ public class ClientMain {
         controller = EntNetClient.getInstance(this);
         currUI = "LoginUI";
     }
+    
+    public void quit(){
+        System.exit(0);
+    }
+    
         public static void main(String[] args) {
             ClientMain cm = new ClientMain();
             java.awt.EventQueue.invokeLater(new Runnable() {
@@ -37,12 +43,10 @@ public class ClientMain {
         
         public void giveArrayListToUI(ArrayList<String> al, String RegionID){
             if (currUI.equals("UserHomeBoard")){
-                //String[] x = al.toArray(new String[al.size()]);
-                //uui.getArrayList(x);
+
                 uui.dataRefresh(al, RegionID);
             }
             else if (currUI.equals("PersonHomeBoard")){
-                //pui.getArrayList(al.toArray(new String[al.size()]));
                 pui.dataRefresh(al, RegionID);
             }
             else{
@@ -63,22 +67,25 @@ public class ClientMain {
             uui = new UserHomeBoard(controller);
             uui.setVisible(true);
             //uui.populateInitScreen();
-            currUI = "UserHomeBoard";
+            currUI = Constants.UserHomeBoard;
         }
         
         public void HomeToPerson(){
             uui.setVisible(false);
             pui = new PersonHomeBoard(controller);
             pui.setVisible(true);
-            currUI = "PersonHomeBoard";
+            currUI = Constants.PersonHomeBoard;
         }
         
         public void PersonToPerson(){
-            
+            //dont need to do anything here...just stay in the same gui frame. data content will be refreshed by another method
         }
         
         public void PersonToHome(){
-            currUI = "UserHomeBoard";
+            pui.setVisible(false);
+            uui = new UserHomeBoard(controller);
+            uui.setVisible(true);
+            currUI = Constants.UserHomeBoard;
         }
         
         

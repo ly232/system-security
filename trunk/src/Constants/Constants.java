@@ -54,4 +54,8 @@ public abstract class Constants {
     public static final String HOME_TO_OTHER_VIEW = "HOME_TO_OTHER_VIEW";
     public static final String OTHER_TO_OTHER_VIEW = "OTHER_TO_OTHER_VIEW";
     public static final String OTHER_TO_HOME_VIEW = "OTHER_TO_HOME_VIEW";   
+    
+    //GUI board identifiers:
+    public static final String UserHomeBoard = "UserHomeBoard";
+    public static final String PersonHomeBoard = "PersonHomeBoard";
 }
