@@ -91,6 +91,8 @@ public class EntNetClient {
         	XMLRequest xmlRequest = new XMLRequest(Constants.QUIT_ID, 
         			  thisUserID,Constants.FRIENDLISTREGION, null, Constants.QUIT_ID, Constants.UPDATE);
         	  invokeRequestThread(xmlRequest);
+                  //System.exit(0);
+                  this.clientMain.quit();
         }
 	
         public void deleteFriend(String friend_id){
@@ -190,13 +192,13 @@ public class EntNetClient {
         }
        
         
-        public void clientUpdateRegion(String regionID, String newContent, String uIDsrc){
+        public void clientUpdateRegion(String regionID, String newContent){
                 HashMap<String, String> updateCredential = new HashMap<String, String>();
 		updateCredential.put("regionID", regionID); 
 		updateCredential.put("newContent", newContent); 
 		clientRequest updateRegionRequest = new clientRequest(
-				Constants.UPDATE_REGION_ID, uIDsrc, updateCredential);
-		XMLRequest xmlr= updateRegionRequest.clientRequestUpdateRegion(regionID, newContent, uIDsrc);
+				Constants.UPDATE_REGION_ID, this.thisUserID, updateCredential);
+		XMLRequest xmlr= updateRegionRequest.clientRequestUpdateRegion(regionID, newContent, this.thisUserID);
                 invokeRequestThread(xmlr);
         }
         
@@ -210,6 +212,15 @@ public class EntNetClient {
 				Constants.READ_REGION_ID, uid, homeBoardRequestInfo); 
             ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
             return al_xmlr;
+        }
+        
+        public void returnUserHomePage() throws IOException{
+                ArrayList<XMLRequest> xmlreq = clientHomeBoardRequest(this.thisUserID);
+                for (int i=0;i<xmlreq.size();i++){
+                        invokeRequestThread(xmlreq.get(i));
+                    }
+                this.clientMain.PersonToHome();
+                
         }
     
 
