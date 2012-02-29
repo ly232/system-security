@@ -243,7 +243,7 @@ public class EntNetClient {
         
         
         private ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
-                throws IOException {
+                 {
             HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
             //homeBoardRequestInfo.put("user_id",uid);
             clientRequest homeBoardRequest = new clientRequest(
@@ -252,17 +252,19 @@ public class EntNetClient {
             return al_xmlr;
         }
         
-        public void returnUserHomePage() throws IOException{
-                ArrayList<XMLRequest> xmlreq = clientHomeBoardRequest(this.thisUserID);
-                for (int i=0;i<xmlreq.size();i++){
-                        invokeRequestThread(xmlreq.get(i));
-                    }
+        public void returnUserHomePage() {
+                
 
                 if (commandline) {
 					
 				} else {
 	                this.clientMain.PersonToHome();
 				}  
+                
+                ArrayList<XMLRequest> xmlreq = clientHomeBoardRequest(this.thisUserID);
+                for (int i=0;i<xmlreq.size();i++){
+                        invokeRequestThread(xmlreq.get(i));
+                    }
 
         }
     
@@ -315,7 +317,7 @@ public class EntNetClient {
 
                     
                     
-                }catch(IOException e){};
+                }catch(Exception e){};
             }
             else{
             	if (commandline) {
@@ -345,7 +347,7 @@ public class EntNetClient {
                     }
                     
                 }
-                catch(IOException e){
+                catch(Exception e){
                 };
             }
             else{
