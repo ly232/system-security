@@ -98,14 +98,11 @@ public class requestHandler implements Runnable {
 				}
 				testRequest = resultRequest;
 				setXML = true;
-
                                 try {
                                     handleClient.requestThreadCallBack(resultRequest);
                                 } catch (SQLException ex) {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-
-
 			} catch (IOException e) {
 				System.out.println("socket error");
 				System.err.println(e.getLocalizedMessage());

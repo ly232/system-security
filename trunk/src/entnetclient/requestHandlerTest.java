@@ -85,7 +85,30 @@ public class requestHandlerTest extends TestCase {
 		assertEquals(rows.length, 1);
 		System.err.println(mrs.getStringValue(0, "loc_name"));
 		assertEquals(mrs.getStringValue(0, "loc_name"),"ShangHai");
+		
+		String q6 = "insert into friend values(\"tao\",\"lin\",\"hello\",null);";
+		XMLRequest rq6 = new XMLRequest(Constants.ADD_FRIEND_ID, "tao",
+															Constants.REGION0, null, q6, Constants.UPDATE);
+		requestHandler hr6 = new requestHandler(rq6,testEntNetClient);
+		hr6.run();
+		testRequest = hr6.getTestRequest();
+		assertEquals(testRequest.getRequestDetail(), "1");
 		//("Not yet implemented");
+  	    
+		String thisUserID = "tao";
+		String friend_id = "lin";
+		String messageString = "hello yin";
+  	    String q7 = "insert into friend values(\"" + thisUserID + "\",\"" + friend_id + 
+						"\",\"" + messageString + "\",null);";
+		
+  	   // String q7 = "insert into friend values(\"tao\",\"lin\",\"hello\",null);";
+		XMLRequest rq7 = new XMLRequest(Constants.ADD_FRIEND_ID, "tao",
+															Constants.REGION0, null, q7, Constants.UPDATE);
+		requestHandler hr7 = new requestHandler(rq7,testEntNetClient);
+		hr7.run();
+		testRequest = hr7.getTestRequest();
+		assertEquals(testRequest.getRequestDetail(), "1");
+  	  
 	}
 
 	public void testRun() {
