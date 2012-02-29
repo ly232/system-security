@@ -65,10 +65,10 @@ public class CommandLineClientTest {
 	public void login(){
 		    try {
 		    	Put("input the user name");
-				//String user_id = bReader.readLine();
+				String user_id = bReader.readLine();
 				Put("input the password");
-				//String friend_id = bReader.readLine();
-				//controller.clientLogin(user_id, friend_id);
+				String friend_id = bReader.readLine();
+				controller.clientLogin(user_id, friend_id);
 				controller.clientLogin("tao", "123");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
