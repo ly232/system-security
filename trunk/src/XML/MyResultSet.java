@@ -25,6 +25,9 @@ public class MyResultSet implements Serializable {
 	public String getStringValue(int row, String ColumeName){
 		try {
 			Object[] rows =  table.toArray();
+			if (rows.length == 0) {
+				return null;
+			}
 			ArrayList<String> record= (ArrayList<String>) rows[row];
 			Object[] attributes =  record.toArray();
 			String result = (String)attributes[columes.get(ColumeName) - 1];
