@@ -656,8 +656,53 @@ public class PersonHomeBoard extends javax.swing.JFrame {
 
 	private String[] strArrFromClientLogic;
 
-	public void dataRefresh(ArrayList<String> a, String s) {
+	public void dataRefresh(ArrayList a, String s) {
+		if (s.equals(Constants.FRIENDLISTREGION)) {
+			String[] x = (String[]) a.toArray(new String[a.size()]);
+			for (int i=0; i<a.size(); i++) {
+			    //model.add(i, a.get(i));
+                            //System.out.println("friend: "+a.get(i));
+                            //jScrollPane1.repaint();
+                            jList1.setListData(x);
+			}	
+		}
+		if (s.equals(Constants.REGION1)) {
+			jLabelID.setText("");
+			jPanel1.repaint();
+		}
+		if (s.equals(Constants.REGION2)) {
+			
+                        //jComboBoxLocation.addItem(a);
+			jPanel2.repaint();
 
+                }
+		if (s.equals(Constants.REGION3)) {
+			//jComboBoxProject.addItem(a);
+			jPanel3.repaint();
+		}
+		if (s.equals(Constants.REGION4)) {
+                    
+                    //System.out.println("company msg="+a.get(0));
+                    
+                    String[] x = (String[]) a.toArray(new String[a.size()]);
+                    String k = "";
+			for (int i=0; i<a.size(); i++) {
+                            k = "-"+x[i]+"\r\n";
+                        }
+
+                    jTextAreaCA.setText(k);
+                    
+			//jTextAreaCA.setText("");
+			jPanel4.repaint();
+		}
+		if (s.equals(Constants.REGION5)) {
+			jTextAreaDA.setText("");
+			jPanel5.repaint();
+		}
+		if (s.equals(Constants.REGION6)) {
+			//jTextAreaFM.setText("");
+			jPanel6.repaint();
+		}
 	}
 
 }

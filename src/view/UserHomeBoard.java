@@ -90,7 +90,11 @@ public class UserHomeBoard extends javax.swing.JFrame {
  		 MouseListener   mouseListener   =   new   MouseAdapter()   { 
  	          public   void   mouseClicked(MouseEvent   e)   { 
  	                          int   index   =   jList1.locationToIndex(e.getPoint()); 
- 	                          System.out.println( "Double   clicked   on   Item   "   +   index); 
+ 	                          //System.out.println( "Double   clicked   on   Item   "   +   index);
+							  System.out.println("selected: "+jList1.getSelectedValue());
+							  try{
+							   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.HOME_TO_OTHER_VIEW);
+							   }catch(Exception execp){};
  	                    
  	          } 
  	  }; 
@@ -664,9 +668,14 @@ public class UserHomeBoard extends javax.swing.JFrame {
 	}// </editor-fold>
 	//GEN-END:initComponents
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//add friend button
 		// TODO add your handling code here:
+            //System.out.println("add friend button");
+            controller.friendRequest(jTextFieldAddfriend.getText());
 	}
+        
+    
+        
 
 	protected void jComboBoxProjectActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
@@ -693,8 +702,11 @@ public class UserHomeBoard extends javax.swing.JFrame {
 	public void dataRefresh(ArrayList a, String s) {
 		if (s.equals(Constants.FRIENDLISTREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
-			for (int i=0; ; i++) {
-			    model.add(i, x[i]);
+			for (int i=0; i<a.size(); i++) {
+			    //model.add(i, a.get(i));
+                            //System.out.println("friend: "+a.get(i));
+                            //jScrollPane1.repaint();
+                            jList1.setListData(x);
 			}	
 		}
 		if (s.equals(Constants.REGION1)) {
@@ -702,15 +714,28 @@ public class UserHomeBoard extends javax.swing.JFrame {
 			jPanel1.repaint();
 		}
 		if (s.equals(Constants.REGION2)) {
-			jComboBoxLocation.addItem(a);
+			
+                        jComboBoxLocation.addItem(a);
 			jPanel2.repaint();
-		}
+
+                }
 		if (s.equals(Constants.REGION3)) {
 			jComboBoxProject.addItem(a);
 			jPanel3.repaint();
 		}
 		if (s.equals(Constants.REGION4)) {
-			jTextAreaCA.setText("");
+                    
+                    //System.out.println("company msg="+a.get(0));
+                    
+                    String[] x = (String[]) a.toArray(new String[a.size()]);
+                    String k = "";
+			for (int i=0; i<a.size(); i++) {
+                            k = "-"+x[i]+"\r\n";
+                        }
+
+                    jTextAreaCA.setText(k);
+                    
+			//jTextAreaCA.setText("");
 			jPanel4.repaint();
 		}
 		if (s.equals(Constants.REGION5)) {

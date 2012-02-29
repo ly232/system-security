@@ -36,7 +36,7 @@ public class EntNetClient {
         private ClientMain clientMain;
         private String thisUserID;
         private CommandLineClientTest test;
-        private boolean commandline = true;
+        private boolean commandline = false;
         
         private EntNetClient(ClientMain cm){
             clientMain = cm;
@@ -123,12 +123,32 @@ public class EntNetClient {
         	  invokeRequestThread(xmlRequest);
         }
         
+        /*
         public void getFriendList(){
         	  String sqlQueryString = null;//"insert into friend values("tao","lin","hello",null);";
         	  XMLRequest xmlRequest = new XMLRequest(Constants.READ_REGION_ID, 
         			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.SELECT);
           	  invokeRequestThread(xmlRequest);
-        }
+        }*/
+        
+        private XMLRequest getFriendList(String uid){
+        String query = "SELECT F.user2 FROM friend F WHERE F.user1 = '" + uid + "'"
+                + "AND F.user1 in ("
+                + "SELECT F2.user2 FROM friend F2 WHERE F2.user1=F.user2);";
+        
+        XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.FRIENDLISTREGION, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+        );
+        return xmlapi;
+    }
+        
+        
+        
         
         
         public void clientLogin(String tmp_uid, String tmp_pwd)
@@ -168,6 +188,10 @@ public class EntNetClient {
             
             ArrayList<XMLRequest> otherPersonBoardInfoXML = clientHomeBoardRequest(otherPersonUid);
             
+            XMLRequest myFriendListXMLreq = getFriendList(this.thisUserID);
+            
+            otherPersonBoardInfoXML.set(0, myFriendListXMLreq); 
+            
             //close the current ui, then open a new ui
             //there are 3 possible senarios to switch:
             //1. my home board -> other person's home board
@@ -176,14 +200,15 @@ public class EntNetClient {
             
             if (commandline) {
 				
-			} else {
-				if (otherPersonUid.equals(Constants.HOME_TO_OTHER_VIEW)){
+			} 
+            else {
+				if (switchBoardCode.equals(Constants.HOME_TO_OTHER_VIEW)){
 	                clientMain.HomeToPerson();
 	            }
-	            else if (otherPersonUid.equals(Constants.OTHER_TO_OTHER_VIEW)){
+	            else if (switchBoardCode.equals(Constants.OTHER_TO_OTHER_VIEW)){
 	                clientMain.PersonToPerson();
 	            }
-	            else if (otherPersonUid.equals(Constants.OTHER_TO_HOME_VIEW)){
+	            else if (switchBoardCode.equals(Constants.OTHER_TO_HOME_VIEW)){
 	                clientMain.PersonToHome();
 	            }
 	            else {
@@ -281,13 +306,7 @@ public class EntNetClient {
                         invokeRequestThread(homeBoardInfoXML.get(i));
                     }
 
-                    
-                    //populate screen: close loginUI, open new UI
-                    if (commandline) {
-						
-					}else {
-	                    this.clientMain.LoginToHome();
-					}
+
 
 
                     
@@ -398,9 +417,10 @@ public class EntNetClient {
             }
             else if (regionID.equals(Constants.REGION4)){
                 for (int i=0;i<myRS.getTable().size();i++){
-                    String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
+                    //String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
                     String msg_content = myRS.getStringValue(i, "msg_content");
                     resultSetArrayList.add(msg_content);
+                    System.out.println("company msg = "+msg_content);
                     //resultSetHashMap.put(msg_id, msg_content);
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
