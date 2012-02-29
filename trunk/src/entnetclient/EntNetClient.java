@@ -87,7 +87,20 @@ public class EntNetClient {
                 invokeRequestThread(xmlr);
 	}
         
+        public void quitClient(){
+        	XMLRequest xmlRequest = new XMLRequest(Constants.QUIT_ID, 
+        			  thisUserID,Constants.FRIENDLISTREGION, null, Constants.QUIT_ID, Constants.UPDATE);
+        	  invokeRequestThread(xmlRequest);
+        }
 	
+        public void deleteFriend(String friend_id){
+        	String sqlQueryString = "DELETE FROM friend where user1 = \"" + thisUserID + 
+        													"\" AND user2 = \"" + friend_id + "\";";
+          	XMLRequest xmlRequest = new XMLRequest(Constants.DELETE_FRIEND_ID, 
+          				thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
+          		invokeRequestThread(xmlRequest);
+        }
+        
         public void friendRequest(String friend_id){
       	  String sqlQueryString = "insert into friend values(\"" + thisUserID + "\",\"" + friend_id + 
       			  									"\",\"" + Constants.ADD_FRIEND_ID + "\",null);";
@@ -175,6 +188,7 @@ public class EntNetClient {
             }
 
         }
+       
         
         public void clientUpdateRegion(String regionID, String newContent, String uIDsrc){
                 HashMap<String, String> updateCredential = new HashMap<String, String>();
@@ -304,12 +318,10 @@ public class EntNetClient {
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 
-                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
-
                 if (commandline) {
 					//test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
 				} else {
-
+	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
 
                 //this.clientMain.LoginToHome();
@@ -400,7 +412,19 @@ public class EntNetClient {
                 return;
             }
 
-        }
+        }else if (xmlreq.getRequestID().equals(Constants.ADD_FRIEND_ID)) {
+            String rowAffected = xmlreq.getRequestDetail();
+            if (rowAffected.equals("1")) {
+				System.out.println("Add friend success");
+			}else{
+				System.out.println("Add friend fail");
+			}
+		}
+        else if (xmlreq.getRequestID().equals(Constants.DELETE_FRIEND_ID)) {
+            String rowAffected = xmlreq.getRequestDetail();
+            int rows  = Integer.parseInt(rowAffected);
+				System.out.println("Delete friend success");
+		}
         else if (xmlreq.getRequestID().equals(Constants.UPDATE_REGION_ID)){
             String rowAffected = xmlreq.getRequestDetail();
             if (rowAffected.equals("1")){
