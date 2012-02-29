@@ -7,19 +7,25 @@
 package view;
 
 import entnetclient.EntNetClient;
+
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+
+import Constants.Constants;
 
 /**
  *
  * @author  __USER__
  */
 public class UserHomeBoard extends javax.swing.JFrame {
+	DefaultListModel model = new DefaultListModel();
 	public static EntNetClient controller;
 
 	/** Creates new form UserHomeBoard */
@@ -32,8 +38,9 @@ public class UserHomeBoard extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
 
+		
 		jScrollPane1 = new javax.swing.JScrollPane();
-		jList1 = new javax.swing.JList();
+		jList1 = new javax.swing.JList(model);
 		jPanel1 = new javax.swing.JPanel();
 		jLabel1 = new javax.swing.JLabel();
 		jLabel7 = new javax.swing.JLabel();
@@ -47,7 +54,7 @@ public class UserHomeBoard extends javax.swing.JFrame {
 		jButtonLocation = new javax.swing.JButton();
 		jPanel3 = new javax.swing.JPanel();
 		jLabel3 = new javax.swing.JLabel();
-		jComboBox1 = new javax.swing.JComboBox();
+		jComboBoxProject = new javax.swing.JComboBox();
 		jButtonProject = new javax.swing.JButton();
 		jPanel4 = new javax.swing.JPanel();
 		jLabel4 = new javax.swing.JLabel();
@@ -62,9 +69,12 @@ public class UserHomeBoard extends javax.swing.JFrame {
 		jScrollPaneFM = new javax.swing.JScrollPane();
 		jTextAreaFM = new javax.swing.JTextArea();
 		jButtonLogout = new javax.swing.JButton();
+		jButton1 = new javax.swing.JButton();
+		jTextFieldAddfriend = new javax.swing.JTextField();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+		
 		jList1.setModel(new javax.swing.AbstractListModel() {
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
 					"Item 5" };
@@ -191,6 +201,12 @@ public class UserHomeBoard extends javax.swing.JFrame {
 
 		jComboBoxLocation.setModel(new javax.swing.DefaultComboBoxModel(
 				new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		jComboBoxLocation
+				.addActionListener(new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent evt) {
+						jComboBoxLocationActionPerformed(evt);
+					}
+				});
 
 		jButtonLocation.setText("Update");
 		jButtonLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -258,8 +274,13 @@ public class UserHomeBoard extends javax.swing.JFrame {
 
 		jLabel3.setText("Current Project");
 
-		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-				"Item 1", "Item 2", "Item 3", "Item 4" }));
+		jComboBoxProject.setModel(new javax.swing.DefaultComboBoxModel(
+				new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		jComboBoxProject.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jComboBoxProjectActionPerformed(evt);
+			}
+		});
 
 		jButtonProject.setText("Update");
 		jButtonProject.addActionListener(new java.awt.event.ActionListener() {
@@ -276,6 +297,12 @@ public class UserHomeBoard extends javax.swing.JFrame {
 						.createParallelGroup(
 								javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(
+								javax.swing.GroupLayout.Alignment.TRAILING,
+								jPanel3Layout.createSequentialGroup()
+										.addContainerGap(83, Short.MAX_VALUE)
+										.addComponent(jButtonProject)
+										.addContainerGap())
+						.addGroup(
 								jPanel3Layout
 										.createSequentialGroup()
 										.addContainerGap()
@@ -284,7 +311,7 @@ public class UserHomeBoard extends javax.swing.JFrame {
 														.createParallelGroup(
 																javax.swing.GroupLayout.Alignment.LEADING)
 														.addComponent(
-																jComboBox1,
+																jComboBoxProject,
 																javax.swing.GroupLayout.PREFERRED_SIZE,
 																100,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,13 +320,7 @@ public class UserHomeBoard extends javax.swing.JFrame {
 																javax.swing.GroupLayout.PREFERRED_SIZE,
 																134,
 																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(20, Short.MAX_VALUE))
-						.addGroup(
-								javax.swing.GroupLayout.Alignment.TRAILING,
-								jPanel3Layout.createSequentialGroup()
-										.addContainerGap(83, Short.MAX_VALUE)
-										.addComponent(jButtonProject)
-										.addContainerGap()));
+										.addContainerGap(20, Short.MAX_VALUE)));
 		jPanel3Layout
 				.setVerticalGroup(jPanel3Layout
 						.createParallelGroup(
@@ -312,9 +333,9 @@ public class UserHomeBoard extends javax.swing.JFrame {
 										.addPreferredGap(
 												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(
-												jComboBox1,
+												jComboBoxProject,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
+												22,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addGap(18, 18, 18)
 										.addComponent(jButtonProject)
@@ -480,6 +501,13 @@ public class UserHomeBoard extends javax.swing.JFrame {
 
 		jButtonLogout.setText("Logout");
 
+		jButton1.setText("Add Friend");
+		jButton1.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jButton1ActionPerformed(evt);
+			}
+		});
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
 		getContentPane().setLayout(layout);
@@ -488,10 +516,20 @@ public class UserHomeBoard extends javax.swing.JFrame {
 				.addGroup(
 						layout.createSequentialGroup()
 								.addGap(35, 35, 35)
-								.addComponent(jScrollPane1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										116,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.TRAILING)
+												.addComponent(
+														jScrollPane1,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														116,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jButton1)
+												.addComponent(
+														jTextFieldAddfriend,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														114,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(26, 26, 26)
 								.addGroup(
 										layout.createParallelGroup(
@@ -588,22 +626,49 @@ public class UserHomeBoard extends javax.swing.JFrame {
 																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 																.addGroup(
 																		layout.createParallelGroup(
-																				javax.swing.GroupLayout.Alignment.LEADING)
+																				javax.swing.GroupLayout.Alignment.TRAILING)
 																				.addComponent(
 																						jPanel6,
+																						javax.swing.GroupLayout.Alignment.LEADING,
 																						javax.swing.GroupLayout.DEFAULT_SIZE,
 																						javax.swing.GroupLayout.DEFAULT_SIZE,
 																						Short.MAX_VALUE)
 																				.addComponent(
 																						jPanel3,
+																						javax.swing.GroupLayout.Alignment.LEADING,
 																						javax.swing.GroupLayout.DEFAULT_SIZE,
 																						javax.swing.GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE))))
+																						Short.MAX_VALUE)
+																				.addGroup(
+																						layout.createSequentialGroup()
+																								.addComponent(
+																										jTextFieldAddfriend,
+																										javax.swing.GroupLayout.PREFERRED_SIZE,
+																										javax.swing.GroupLayout.DEFAULT_SIZE,
+																										javax.swing.GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(
+																										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																								.addComponent(
+																										jButton1)))))
 								.addGap(26, 26, 26)));
 
 		pack();
 	}// </editor-fold>
 	//GEN-END:initComponents
+
+	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+		// TODO add your handling code here:
+	}
+
+	protected void jComboBoxProjectActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+
+	}
+
+	protected void jComboBoxLocationActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+
+	}
 
 	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
@@ -614,7 +679,40 @@ public class UserHomeBoard extends javax.swing.JFrame {
 	}
 
 	private void jButtonIdActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here
+		
+	}
+
+	public void dataRefresh(ArrayList a, String s) {
+		if (s.equals(Constants.FRIENDLISTREGION)) {
+			String[] x = (String[]) a.toArray(new String[a.size()]);
+			for (int i=0; ; i++) {
+			    model.add(i, x[i]);
+			}	
+		}
+		if (s.equals(Constants.REGION1)) {
+			jLabelID.setText("");
+			jPanel1.repaint();
+		}
+		if (s.equals(Constants.REGION2)) {
+			jComboBoxLocation.addItem(a);
+			jPanel2.repaint();
+		}
+		if (s.equals(Constants.REGION3)) {
+			jComboBoxProject.addItem(a);
+			jPanel3.repaint();
+		}
+		if (s.equals(Constants.REGION4)) {
+			jTextAreaCA.setText("");
+			jPanel4.repaint();
+		}
+		if (s.equals(Constants.REGION5)) {
+			jTextAreaDA.setText("");
+			jPanel5.repaint();
+		}
+		if (s.equals(Constants.REGION6)) {
+			jTextAreaFM.setText("");
+			jPanel6.repaint();
+		}
 	}
 
 	/**
@@ -630,12 +728,13 @@ public class UserHomeBoard extends javax.swing.JFrame {
 
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
+	private javax.swing.JButton jButton1;
 	private javax.swing.JButton jButtonId;
 	private javax.swing.JButton jButtonLocation;
 	private javax.swing.JButton jButtonLogout;
 	private javax.swing.JButton jButtonProject;
-	private javax.swing.JComboBox jComboBox1;
 	private javax.swing.JComboBox jComboBoxLocation;
+	private javax.swing.JComboBox jComboBoxProject;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
@@ -659,13 +758,15 @@ public class UserHomeBoard extends javax.swing.JFrame {
 	private javax.swing.JTextArea jTextAreaCA;
 	private javax.swing.JTextArea jTextAreaDA;
 	private javax.swing.JTextArea jTextAreaFM;
+	private javax.swing.JTextField jTextFieldAddfriend;
 	private javax.swing.JTextField jTextFieldContactInfo;
+
 	// End of variables declaration//GEN-END:variables
 
-    public void getArrayList(String[] strArr) {
-        this.strArrFromClientLogic = strArr;
-    }
+	public void getArrayList(String[] strArr) {
+		this.strArrFromClientLogic = strArr;
+	}
 
-    private String[] strArrFromClientLogic;
+	private String[] strArrFromClientLogic;
 
 }
