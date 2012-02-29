@@ -36,7 +36,7 @@ public class EntNetClient {
         private ClientMain clientMain;
         private String thisUserID;
         private CommandLineClientTest test;
-        private boolean commandline = false;
+        private boolean commandline = true;
         
         private EntNetClient(ClientMain cm){
             clientMain = cm;
@@ -92,7 +92,11 @@ public class EntNetClient {
         			  thisUserID,Constants.FRIENDLISTREGION, null, Constants.QUIT_ID, Constants.UPDATE);
         	  invokeRequestThread(xmlRequest);
                   //System.exit(0);
-                  this.clientMain.quit();
+        	  if (commandline) {
+				
+			} else {
+                this.clientMain.quit();
+			}
         }
 	
         public void deleteFriend(String friend_id){
