@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.20, for osx10.6 (i386)
+-- MySQL dump 10.13  Distrib 5.5.15, for Win64 (x86)
 --
 -- Host: localhost    Database: entnetdb_v2
 -- ------------------------------------------------------
--- Server version	5.5.20
+-- Server version	5.5.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -39,6 +39,7 @@ CREATE TABLE `currloc` (
 
 LOCK TABLES `currloc` WRITE;
 /*!40000 ALTER TABLE `currloc` DISABLE KEYS */;
+INSERT INTO `currloc` VALUES (1,'aa111'),(1,'bb222'),(1,'cc333'),(1,'cw597'),(1,'dd444'),(1,'ly232'),(2,'ee555'),(2,'sy482'),(3,'ff666'),(3,'tl529');
 /*!40000 ALTER TABLE `currloc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +57,7 @@ CREATE TABLE `department` (
   PRIMARY KEY (`did`),
   KEY `dhead_uid` (`dhead_uid`),
   CONSTRAINT `` FOREIGN KEY (`dhead_uid`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +66,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'Tech','tao'),(2,'Boss','chen'),(3,'HR','lin');
+INSERT INTO `department` VALUES (1,'Boss','tl529'),(2,'IT','ly232'),(3,'HR','cw597'),(4,'Sales','sy482'),(5,'Root','root');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +110,7 @@ CREATE TABLE `location` (
   `loc_id` int(11) NOT NULL AUTO_INCREMENT,
   `loc_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`loc_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +119,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES (1,'ShangHai'),(2,'Guangzhou'),(3,'BeiJing');
+INSERT INTO `location` VALUES (1,'New York'),(2,'Boston'),(3,'Los Angles');
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,6 +147,7 @@ CREATE TABLE `manage` (
 
 LOCK TABLES `manage` WRITE;
 /*!40000 ALTER TABLE `manage` DISABLE KEYS */;
+INSERT INTO `manage` VALUES ('cw597','cc333'),('cw597','dd444'),('ly232','aa111'),('ly232','bb222'),('sy482','ee555'),('sy482','ff666'),('tl529','cw597'),('tl529','ly232'),('tl529','sy482');
 /*!40000 ALTER TABLE `manage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,6 +174,7 @@ CREATE TABLE `postworkmessage` (
 
 LOCK TABLES `postworkmessage` WRITE;
 /*!40000 ALTER TABLE `postworkmessage` DISABLE KEYS */;
+INSERT INTO `postworkmessage` VALUES (1,1,'Welcome to TCLS'),(2,1,'TCLS aims IPO next year'),(3,2,'NEW PROJECT: cloud computing'),(4,2,'NEW PROJECT: network infrastructure'),(5,3,'Starting intern hire this week!'),(6,3,'Targets 20 new full time hires this year'),(7,4,'Products shipping to Florida this week'),(8,4,'New contract signed with China');
 /*!40000 ALTER TABLE `postworkmessage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,7 +189,7 @@ CREATE TABLE `project` (
   `proj_id` int(11) NOT NULL AUTO_INCREMENT,
   `proj_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`proj_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +198,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (1,'large scale system'),(2,'security'),(3,'cloud computing');
+INSERT INTO `project` VALUES (1,'cloud computing'),(2,'network infrastructure'),(3,'intern hire'),(4,'fulltime hire'),(5,'domestic sale'),(6,'international sale'),(7,'N/A');
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +224,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('chen','123','china',2),('lin','123','abc',1),('tao','123','usa',0);
+INSERT INTO `user` VALUES ('aa111','123','2127876462',3),('bb222','123','9178782940',3),('cc333','123','7189896264',3),('cw597','123','6461827462',2),('dd444','123','8982726462',3),('ee555','123','1726462721',3),('ff666','123','8981234214',3),('ly232','123','6467839182',2),('root','root','root',0),('sy482','123','2128482819',2),('tl529','123','9177274929',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,6 +252,7 @@ CREATE TABLE `workat` (
 
 LOCK TABLES `workat` WRITE;
 /*!40000 ALTER TABLE `workat` DISABLE KEYS */;
+INSERT INTO `workat` VALUES ('tl529',1),('aa111',2),('bb222',2),('ly232',2),('cc333',3),('cw597',3),('dd444',3),('ee555',4),('ff666',4),('sy482',4);
 /*!40000 ALTER TABLE `workat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,6 +280,7 @@ CREATE TABLE `workon` (
 
 LOCK TABLES `workon` WRITE;
 /*!40000 ALTER TABLE `workon` DISABLE KEYS */;
+INSERT INTO `workon` VALUES ('aa111',1),('ly232',1),('bb222',2),('cc333',3),('cw597',3),('dd444',4),('ee555',5),('sy482',5),('ff666',6),('tl529',7);
 /*!40000 ALTER TABLE `workon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -288,4 +293,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-02-23 22:17:01
+-- Dump completed on 2012-03-02 18:25:15
