@@ -81,13 +81,13 @@ CREATE TABLE `friend` (
   `user1` varchar(20) NOT NULL,
   `user2` varchar(20) NOT NULL,
   `message` varchar(100) NOT NULL,
-  `msg_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`user1`,`user2`),
+  `msg_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`msg_id`,`user1`,`user2`),
   KEY `user1` (`user1`),
   KEY `user2` (`user2`),
   CONSTRAINT `user1` FOREIGN KEY (`user1`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `user2` FOREIGN KEY (`user2`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,6 +96,7 @@ CREATE TABLE `friend` (
 
 LOCK TABLES `friend` WRITE;
 /*!40000 ALTER TABLE `friend` DISABLE KEYS */;
+INSERT INTO `friend` VALUES ('cw597','ly232','ADD_FRIEND_ID',-1),('cw597','sy482','ADD_FRIEND_ID',-1),('cw597','tl529','ADD_FRIEND_ID',-1),('ly232','cw597','ADD_FRIEND_ID',-1),('ly232','sy482','ADD_FRIEND_ID',-1),('ly232','tl529','ADD_FRIEND_ID',-1),('sy482','cw597','ADD_FRIEND_ID',-1),('sy482','ly232','ADD_FRIEND_ID',-1),('tl529','cw597','ADD_FRIEND_ID',-1),('tl529','ly232','ADD_FRIEND_ID',-1),('sy482','ly232','Hi Yuan Shuai, this is Lin',1),('cw597','ly232','Hi Wang Chen, this is Lin',2),('tl529','ly232','Hi Tao Liu, this is Lin',3);
 /*!40000 ALTER TABLE `friend` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -293,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-03-02 18:25:15
+-- Dump completed on 2012-03-03  2:56:05
