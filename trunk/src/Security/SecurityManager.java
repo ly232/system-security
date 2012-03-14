@@ -1,14 +1,15 @@
 package Security;
 
-import sun.security.jca.GetInstance;
 
 public class SecurityManager {
 		private SecurityManager(){
 			
 		}
 		
-		public static   Object GetInstance(String mode){
+		public static   SecurityObject GetInstance(String mode){
 				return null;
 		}
+		
+		
 		
 }

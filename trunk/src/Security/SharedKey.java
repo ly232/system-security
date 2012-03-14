@@ -1,6 +1,6 @@
 package Security;
 
-public class SharedKey {
+public class SharedKey implements SecurityObject{
 			//TODO: just illustrate the idea
 			static SharedKey sKey;
 			private SharedKey(){}
@@ -11,19 +11,19 @@ public class SharedKey {
 				return sKey;
 			}
 			
-			public static String decrpty(byte[] data, byte[] key){
+			public  String decrpty(byte[] data, byte[] key){
 				return null;
 			}
 			
-			public static byte[] encrpty(String data, byte[] key){
+			public  byte[] encrpty(String data, byte[] key){
 				return null;
 			}
 			
-			public static byte[] generateRandomKey(){
+			public  byte[] generateRandomKey(){
 				return null;
 			}
 			
-			public static byte[] generateKeyWithPwd(String pwd){
+			public  byte[] generateKeyWithPwd(String pwd){
 				return null;
 			}
 }
