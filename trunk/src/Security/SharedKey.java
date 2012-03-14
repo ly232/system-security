@@ -11,11 +11,11 @@ public class SharedKey implements SecurityObject{
 				return sKey;
 			}
 			
-			public  String decrpty(byte[] data, byte[] key){
+			public  String decrypt(byte[] data, byte[] key){
 				return null;
 			}
 			
-			public  byte[] encrpty(String data, byte[] key){
+			public  byte[] encrypt(String data, byte[] key){
 				return null;
 			}
 			
