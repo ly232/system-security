@@ -3,6 +3,7 @@ package Security;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
@@ -19,7 +20,7 @@ public class SharedKey implements SecurityObject{
 			//TODO: just illustrate the idea
 			static SharedKey sKey;
 			private SharedKey(){}
-			static SharedKey getInstance(){
+			public static SharedKey getInstance(){
 				if (sKey == null) {
 					sKey = new SharedKey();
 				}
@@ -68,7 +69,7 @@ public class SharedKey implements SecurityObject{
 	            byte[] ciphertext = null;
 	            
 				try {
-					pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
+						pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");	
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				} catch (NoSuchPaddingException e) {
@@ -113,7 +114,9 @@ public class SharedKey implements SecurityObject{
 	            //convert the password into a SecretKey object, using a PBE key factory.
 		        PBEKeySpec pbeKeySpec = new PBEKeySpec(passwordChar);
 	            try {
-					keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+					
+						keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+					
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				}
