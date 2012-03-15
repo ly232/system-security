@@ -31,7 +31,7 @@ public class testShareKey {
 		
 		System.out.println("please enter password");
 		DataInputStream ins = new DataInputStream(System.in);
-		//char[] readPwd=System.console().readLine();
+		
 	    String PwdStr="";
 		InputStreamReader stdin = new InputStreamReader(System.in);
 		BufferedReader bfrdr = new BufferedReader(stdin);
@@ -43,6 +43,7 @@ public class testShareKey {
 			e.printStackTrace();
 		}
 	    MyKey MysecKey=sk.generateKeyWithPwd(PwdStr);
+	    
 	    System.out.println("Generated key is:"+ MysecKey);
 		
 	    
@@ -54,9 +55,8 @@ public class testShareKey {
 		try {
 			plainText = bfrdr.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}//=System.console().readLine();
+		}
 	    System.out.println("Before encrypt the plain text is:"+ plainText);
 	    
 	    byte [] encrptText=sk.encrypt(plainText, MysecKey);
@@ -65,6 +65,31 @@ public class testShareKey {
 	    String decrptText=sk.decrypt(encrptText, MysecKey);
 	    System.out.println("After decryot the plain text is:"+ decrptText);
         
+	    ///////////////////////////////////////////////////////////////////////
+	    
+	    MyPKI myPkiTest= MyPKI.getInstance();
+	    MyKey myKeyTest = myPkiTest.generateKeyPair();
+	    
+	    System.out.println("==============Key pair testing============");
+	    System.out.println("The public key is:"+ myKeyTest.pubKey);
+	    System.out.println("The public key is:"+ myKeyTest.privKey);
+	    
+	    System.out.println("please enter plaintext:");
+	    
+	    String plainText2="";
+		try {
+			plainText2 = bfrdr.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    System.out.println("Before encrypt the plain text is:"+ plainText2);
+	    
+	    byte [] encrptText2=myPkiTest.encrypt(plainText2, myKeyTest.pubKey);
+	    System.out.println("After encrypt the plain text is:"+ encrptText2.toString());
+	    
+	    String decrptText2=myPkiTest.decrypt(encrptText2, myKeyTest.privKey);
+	    System.out.println("After decryot the plain text is:"+ decrptText2);
+	    
 	}
 
 }
