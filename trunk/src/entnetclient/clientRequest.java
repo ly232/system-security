@@ -10,6 +10,8 @@ import java.util.*;
 import Constants.*;
 import XML.*;
 
+import Security.*;
+
 /**
  *
  * @author Lin
@@ -18,43 +20,17 @@ public class clientRequest {
     private HashMap<String,String> requestMsg;
     private String requestID;
     private String userID;
-    public clientRequest(String reqID, String uID, HashMap<String,String> reqMsg){
+    private String k_db;
+    public clientRequest(String reqID, String uID, HashMap<String,String> reqMsg, String kdb){
         this.requestID = reqID;
         this.requestMsg = reqMsg;
         this.userID = uID;
+        this.k_db = kdb;
     }
     
     
-    /*
-    public String generateXMLforRequest(){
-        String retXML="";
-        try{
-
-            //XML_creator_API xmlapi = new XML_creator_API();
-            if (this.requestID.equals(Constants.LOGIN_REQUEST_ID)){
-                retXML = clientRequestLogin();
-            }
-            else if (this.requestID.equals(Constants.REGIST_REQUEST_ID)){
-                retXML = clientRequestRegist();
-            }
-
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        finally{
-            return retXML;
-        }
-    }*/
-
-    
     
     public XMLRequest clientRequestLogin() {
-        /*String myQuery = "SELECT * FROM user WHERE user_id='"
-                +requestMsg.get("user_id")+"' AND user_pwd='"
-                +requestMsg.get("password") +"'";
-        */
         String myQuery = requestMsg.get("password");
         XMLRequest xmlapi = new XMLRequest(
                 Constants.LOGIN_REQUEST_ID,
@@ -64,21 +40,30 @@ public class clientRequest {
                 myQuery, //request detail...SQL statement to be excuted by server
                 "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
             );
-                
-
                return xmlapi;
      
     }
 
     public XMLRequest clientRequestRegist() {
 
+        
+        
+        /*
                     String myQuery = "INSERT INTO user VALUES ('" + requestMsg.get("user_id") 
                     + "', '" + requestMsg.get("password") 
                     //+ "', '" + requestMsg.get("person_name")
                     + "', '" + requestMsg.get("contact_info")
                     + "', " + requestMsg.get("role_id") + ");";
-    
-                
+    */
+        
+     
+        
+        String myQuery = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
+                + "AES_ENCRYPT('"+requestMsg.get("user_id")+"','"+k_db+"'), "
+                + "AES_ENCRYPT('"+requestMsg.get("password")+"','"+k_db+"'), "
+                + "AES_ENCRYPT('"+requestMsg.get("contact_info")+"','"+k_db+"'), "
+                + "AES_ENCRYPT('"+requestMsg.get("role_id")+"','"+k_db+"'));";
+       
             XMLRequest xmlapi = new XMLRequest(
                 Constants.REGIST_REQUEST_ID,
                 this.userID,
@@ -128,9 +113,23 @@ public class clientRequest {
     
     
     private XMLRequest getFriendList(String uid){
+        
+        /*
         String query = "SELECT F.user2 FROM friend F WHERE F.user1 = '" + uid + "'"
                 + "AND F.user1 in ("
                 + "SELECT F2.user2 FROM friend F2 WHERE F2.user1=F.user2);";
+        
+         */
+        
+        
+        //SELECT AES_DECRYPT(first_name, 'usa2010'), AES_DECRYPT(address, 'usa2010') from user;
+        
+        String query = "SELECT AES_DECRYPT(F.user2, '"+this.k_db+"') as F.user2 FROM friend F WHERE "
+                + "AES_DECRYPT(F.user1,'"+this.k_db+"') = '" + uid + "'"
+                + "AND AES_DECRYPT(F.user1,'"+this.k_db+"') in ("
+                + "SELECT AES_DECRYPT(F2.user2,'"+this.k_db+"') "
+                + "FROM friend F2 WHERE AES_DECRYPT(F2.user1,'"+this.k_db+"')=AES_DECRYPT(F.user2,'"+this.k_db+"'));";
+        
         
         XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
@@ -146,7 +145,14 @@ public class clientRequest {
     private XMLRequest getRegionInfo(String uid, String rid){
 
         if (rid.equals(Constants.REGION1)){
-            String query = "SELECT user_id, contact_info FROM user WHERE user_id = '" + uid + "';";
+            //String query = "SELECT user_id, contact_info FROM user WHERE user_id = '" + uid + "';";
+            
+            //SELECT AES_DECRYPT(first_name, 'usa2010'), AES_DECRYPT(address, 'usa2010') from user;
+            
+            String query = "SELECT AES_DECRYPT(user_id,'"+this.k_db+"') as user_id, "
+                    + "AES_DECRYPT(contact_info,'"+this.k_db+"') as contact_info "
+                    + "FROM user WHERE AES_DECRYPT(user_id,'"+this.k_db+"') = '" + uid + "';";
+            
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -158,8 +164,13 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION2)){
-            String query = "SELECT loc_name FROM currloc NATURAL JOIN location"
-                    + " WHERE user_id = '" + uid + "' AND currloc.loc_id = location.loc_id;";
+            //String query = "SELECT loc_name FROM currloc NATURAL JOIN location"
+            //        + " WHERE user_id = '" + uid + "' AND currloc.loc_id = location.loc_id;";
+            
+            String query = "SELECT AES_DECRYPT(loc_name,'"+this.k_db+"') as loc_name FROM currloc NATURAL JOIN location"
+                    + " WHERE AES_DECRYPT(user_id,'"+this.k_db+"') = '" 
+                    + uid + "' AND AES_DECRYPT(currloc.loc_id,'"+this.k_db+"') = AES_DECRYPT(location.loc_id,'"+this.k_db+"');";
+            
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -171,8 +182,13 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION3)){
-            String query = "SELECT proj_name FROM project NATURAL JOIN workon"
-                    + " WHERE uid = '" + uid + "' AND project.proj_id = workon.pid;";
+            //String query = "SELECT proj_name FROM project NATURAL JOIN workon"
+            //        + " WHERE uid = '" + uid + "' AND project.proj_id = workon.pid;";
+            
+            String query = "SELECT AES_DECRYPT(proj_name,'"+this.k_db+"') as proj_name FROM project NATURAL JOIN workon"
+                    + " WHERE AES_DECRYPT(uid,'"+this.k_db+"') = '" + uid 
+                    + "' AND AES_DECRYPT(project.proj_id,'"+this.k_db+"') = AES_DECRYPT(workon.pid,'"+this.k_db+"');";
+            
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -184,8 +200,15 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION4)){
-            String query = "SELECT msg_id, msg_content FROM postworkmessage"
-                    + " WHERE did = " + Constants.COMPANY_DID + ";";
+            //String query = "SELECT msg_id, msg_content FROM postworkmessage"
+            //        + " WHERE did = " + Constants.COMPANY_DID + ";";
+            
+            
+            String query = "SELECT AES_DECRYPT(msg_id,'"+this.k_db+"') as msg_id, "
+                    + "AES_DECRYPT(msg_content,'"+this.k_db+"') as msg_content FROM postworkmessage"
+                    + " WHERE AES_DECRYPT(did,'"+this.k_db+"') = " + Constants.COMPANY_DID + ";";
+            
+            
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -197,11 +220,23 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION5)){
+            /*
             String query = "SELECT msg_id, msg_content FROM postworkmessage NATURAL JOIN user "
                     + "NATURAL JOIN workat"
                     + " WHERE user.user_id = workat.userID_workat"
                     + " AND workat.deptID_workat = postworkmessage.did"
                     + " AND user.user_id = '" + uid + "';";
+             */
+            
+            
+            String query = "SELECT AES_DECRYPT(msg_id,'"+this.k_db+"') as msg_id, "
+                    + "AES_DECRYPT(msg_content,'"+this.k_db+"') as msg_content FROM postworkmessage NATURAL JOIN user "
+                    + "NATURAL JOIN workat"
+                    + " WHERE AES_DECRYPT(user.user_id,'"+this.k_db+"') = AES_DECRYPT(workat.userID_workat,'"+this.k_db+"')"
+                    + " AND AES_DECRYPT(workat.deptID_workat,'"+this.k_db+"') = AES_DECRYPT(postworkmessage.did,'"+this.k_db+"')"
+                    + " AND AES_DECRYPT(user.user_id,'"+this.k_db+"') = '" + uid + "';";
+            
+            
             XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
                 uid,
@@ -235,11 +270,6 @@ public class clientRequest {
 
     XMLRequest clientRequestUpdateRegion(String regionID, String newContent, String uIDsrc) {
         
-        /*
-            UPDATE table_name
-            SET column1=value, column2=value2,...
-            WHERE some_column=some_value
-         */
         String myQuery = "";
         if (regionID.equals(Constants.REGION1)){ //contact info
             myQuery = "UPDATE user SET contact_info = '" + newContent 
