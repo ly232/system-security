@@ -121,7 +121,8 @@ public class XMLRequest implements Serializable{
 		
 		
 		public void encrypt(){
-			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID)) {
+			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID) ||
+					this.requestID.equals(Constants.REGIST_REQUEST_ID)) {
 				MyPKI mp = MyPKI.getInstance();
 				sessionID = uid.toString();
 				PublicKey pKey = SerilizeKey.ReadPublicKey();
@@ -144,7 +145,8 @@ public class XMLRequest implements Serializable{
 		}
 		
 		public void decrypt(String pwd){
-			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID)) {
+			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID) || 
+					this.requestID.equals(Constants.REGIST_REQUEST_ID)) {
 				MyPKI mp = MyPKI.getInstance();
 				PrivateKey pKey = SerilizeKey.ReadPrivateKey(pwd);
 				this.userID = mp.decrypt(userID.getBytes(), pKey);
