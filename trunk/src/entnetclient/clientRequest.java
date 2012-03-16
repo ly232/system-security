@@ -97,12 +97,34 @@ public class clientRequest {
         //1. get all friends
         XMLRequest friendListXMLRequest = getFriendList(this.userID);
         retArrList.add(friendListXMLRequest);
+        XMLRequest myFriReqXMLreq = getFriendNotify(this.userID);
+        retArrList.add(myFriReqXMLreq);
         //2. update each region in seq.
         for (int i=1;i<=6;i++){
             retArrList.add(getRegionInfo(this.userID, "REGION"+i));            
         }
         return retArrList;
     }
+    
+    
+    private XMLRequest getFriendNotify(String uid){
+        String query = "SELECT F.user1 FROM friend F WHERE F.user2 = '" + uid + "'"
+                + "AND F.user1 not in " +
+                "(SELECT F2.user2 FROM friend F2 WHERE F2.user1 = '" + uid + "'"
+                + "AND F2.user1 in ("
+                + "SELECT F3.user2 FROM friend F3 WHERE F3.user1=F2.user2));";
+        
+        XMLRequest xmlapi = new XMLRequest(
+                Constants.READ_REGION_ID,
+                uid,
+                Constants.NOTIFYREGION, //region id
+                Constants.INVALID, //session id...not for 
+                query, //request detail...SQL statement to be excuted by server
+                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+        );
+        return xmlapi;
+    }
+    
     
     
     private XMLRequest getFriendList(String uid){
