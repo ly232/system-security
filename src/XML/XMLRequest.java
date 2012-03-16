@@ -126,6 +126,9 @@ public class XMLRequest implements Serializable{
 		
 		
 		public void encrypt(){
+				if (requestID == Constants.SESSION_KEY_EST) {
+					return;
+				}
 				SharedKey sk  = SharedKey.getInstance();
 				this.userID = new String(sk.encrypt(userID, sessionKey));
 				this.regionID = new String(sk.encrypt(regionID, sessionKey));
