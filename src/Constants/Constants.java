@@ -18,7 +18,7 @@ public abstract class Constants {
     public static final String ADD_FRIEND_ID = "ADD_FRIEND_ID";
     public static final String DELETE_FRIEND_ID = "DELETE_FRIEND_ID";
     public static final String QUIT_ID = "QUIT_ID";
-    
+    public static final String SESSION_KEY_EST = "SESSION_KEY_EST";
     
     //ACTION REFERENCE 
     public static final String SELECT = "SELECT";
@@ -26,6 +26,7 @@ public abstract class Constants {
     
     //REGION REFERENCE
     public static final String FRIENDLISTREGION = "FRIENDLISTREGION";
+    public static final String NOTIFYREGION = "NOTIFYREGION";
     public static final String REGION1 = "REGION1";
     public static final String REGION2 = "REGION2";
     public static final String REGION3 = "REGION3";
