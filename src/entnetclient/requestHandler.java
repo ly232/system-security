@@ -2,11 +2,13 @@ package entnetclient;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -30,6 +32,7 @@ public class requestHandler implements Runnable {
 	public boolean setXML = false;
 	private XMLRequest testRequest;
 	private static ObjectInput in;
+	private static ObjectOutputStream out;
 	public XMLRequest getTestRequest() {
 		return testRequest;
 	}
@@ -70,8 +73,11 @@ public class requestHandler implements Runnable {
 	public void run() {
 		synchronized (socket) {
 			try {
-				PrintWriter out = new PrintWriter(socket.getOutputStream(),
-						true);
+				//PrintWriter out = new PrintWriter(socket.getOutputStream(),
+				//		true);
+				if (out == null) {
+					 out = new ObjectOutputStream(socket.getOutputStream());
+				}
 				// autoflush
 				//BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				if (in == null) {
@@ -79,23 +85,16 @@ public class requestHandler implements Runnable {
 					in = new ObjectInputStream(o);
 				}
 
-				out.println(xmlRequest.generateXMLRequest());
+				//out.println(xmlRequest.generateXMLRequest());
+				xmlRequest.encrypt();
+				out.writeObject(xmlRequest);
+				
 				if (xmlRequest.getRequestID().equals(Constants.QUIT_ID)) {
 					return;
 				}
-				String resultString = new String();
-				String onelineString = new String();
-				while (!(onelineString = (String)in.readObject()).equals(Constants.INVALID)) {
-				}
-				while ((onelineString = (String)in.readObject())
-						.equals(Constants.END_STRING) == false) {
-						resultString += onelineString;
-				}
-				XMLRequest resultRequest = new XMLRequest(resultString);
+				XMLRequest resultRequest = (XMLRequest)in.readObject();
 				if (resultRequest.getRequestDetail().equals(
 						Constants.RETURN_RESULTSET)) {
-					while (!(onelineString = (String)in.readObject()).equals(Constants.RETURN_RESULTSET)) {
-					}
 					MyResultSet mrs = (MyResultSet) in.readObject();
 					resultRequest.setMyResultSet(mrs);
 				}
@@ -140,36 +139,25 @@ public class requestHandler implements Runnable {
                                 }
 				System.err.println("classNotFound");
 				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
-						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-                                try {
-                    try {
-                        handleClient.requestThreadCallBack(resultRequest);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                                } catch (SQLException ex) {
-                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-				System.err.println("Parse Problem");
-				e.printStackTrace();
-			} catch (SAXException e) {
-				System.err.println("Parse Problem");
-				XMLRequest resultRequest = new XMLRequest(Constants.INVALID, Constants.INVALID, Constants.INVALID, 
-						Constants.INVALID, Constants.INVALID, Constants.INVALID);
-                                try {
-                    try {
-                        handleClient.requestThreadCallBack(resultRequest);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                                } catch (SQLException ex) {
-                                    Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-				e.printStackTrace();
-			}
+			} 
 		}
 	}
 
 }
+
+/*
+String resultString = new String();
+String onelineString = new String();
+byte b[] = new byte[1000];
+//ObjectInputStream ois = new ObjectInputStream(bais);
+ByteArrayOutputStream baos = new ByteArrayOutputStream();
+ObjectOutputStream oos = new ObjectOutputStream(baos);
+oos.write(Constants.INVALID.getBytes());
+b = baos.toByteArray();
+ByteArrayInputStream bais = new ByteArrayInputStream(b);
+byte test[] = new byte[b.length];
+bais.read(test);
+ByteArrayInputStream transfer = new ByteArrayInputStream(test);
+ObjectInputStream ois = new ObjectInputStream(transfer);
+String string = (String)ois.readObject();
+*/
