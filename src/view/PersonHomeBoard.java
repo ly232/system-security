@@ -70,6 +70,7 @@ jButtonFM = new javax.swing.JButton();
 jButtonLogout = new javax.swing.JButton();
 jButtonReturn = new javax.swing.JButton();
 jButtonDeleteFriend = new javax.swing.JButton();
+jLabel9 = new javax.swing.JLabel();
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,12 +89,15 @@ jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	 MouseListener   mouseListener   =   new   MouseAdapter()   { 
        public   void   mouseClicked(MouseEvent   e)   { 
                        int   index   =   jList1.locationToIndex(e.getPoint()); 
-                       System.out.println( "Double   clicked   on   Item   "   +   index); 
+                       //System.out.println( "Double   clicked   on   Item   "   +   index); 
+                       try{
+						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.OTHER_TO_OTHER_VIEW);
+						   }catch(Exception execp){};
+
                  
        } 
 }; 
 jList1.addMouseListener(mouseListener);
-
 jScrollPane1.setViewportView(jList1);
 
 jPanel1.setBackground(new java.awt.Color(255, 255, 204));
@@ -133,7 +137,7 @@ jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel8)
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 .addComponent(jLabelContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addContainerGap(52, Short.MAX_VALUE))
+.addContainerGap(80, Short.MAX_VALUE))
 );
 
 jPanel2.setBackground(new java.awt.Color(255, 255, 204));
@@ -158,7 +162,7 @@ jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel2)
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 .addComponent(jLabelLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addContainerGap(72, Short.MAX_VALUE))
+.addContainerGap(107, Short.MAX_VALUE))
 );
 
 jPanel3.setBackground(new java.awt.Color(255, 255, 204));
@@ -183,7 +187,7 @@ jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel3)
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 .addComponent(jLabelProject, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addContainerGap(73, Short.MAX_VALUE))
+.addContainerGap(126, Short.MAX_VALUE))
 );
 
 jPanel4.setBackground(new java.awt.Color(255, 255, 204));
@@ -203,7 +207,7 @@ jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jScrollPaneCA, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addContainerGap(16, Short.MAX_VALUE))
+.addContainerGap(36, Short.MAX_VALUE))
 );
 jPanel4Layout.setVerticalGroup(
 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +216,7 @@ jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel4)
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 .addComponent(jScrollPaneCA, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addContainerGap(20, Short.MAX_VALUE))
+.addContainerGap(48, Short.MAX_VALUE))
 );
 
 jPanel5.setBackground(new java.awt.Color(255, 255, 204));
@@ -232,14 +236,14 @@ jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel5)
 .addComponent(jScrollPaneDA, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addContainerGap(24, Short.MAX_VALUE))
+.addContainerGap(44, Short.MAX_VALUE))
 );
 jPanel5Layout.setVerticalGroup(
 jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel5Layout.createSequentialGroup()
 .addContainerGap()
 .addComponent(jLabel5)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
 .addComponent(jScrollPaneDA, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
 );
 
@@ -263,9 +267,9 @@ jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jTextFieldMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addContainerGap(39, Short.MAX_VALUE))
+.addContainerGap(59, Short.MAX_VALUE))
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-.addContainerGap(118, Short.MAX_VALUE)
+.addContainerGap(138, Short.MAX_VALUE)
 .addComponent(jButtonFM)
 .addContainerGap())
 );
@@ -278,7 +282,7 @@ jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jTextFieldMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 .addGap(18, 18, 18)
 .addComponent(jButtonFM)
-.addContainerGap(36, Short.MAX_VALUE))
+.addContainerGap(89, Short.MAX_VALUE))
 );
 
 jButtonLogout.setText("Logout");
@@ -302,25 +306,28 @@ jButtonDeleteFriendActionPerformed(evt);
 }
 });
 
+jLabel9.setText("Friend List");
+
 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 getContentPane().setLayout(layout);
 layout.setHorizontalGroup(
 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(layout.createSequentialGroup()
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-.addGroup(layout.createSequentialGroup()
-.addGap(35, 35, 35)
-.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addComponent(jButtonReturn))
-.addGap(26, 26, 26))
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 .addComponent(jButtonDeleteFriend)
-.addGap(38, 38, 38)))
+.addGap(38, 38, 38))
+.addGroup(layout.createSequentialGroup()
+.addGap(35, 35, 35)
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-.addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+.addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+.addComponent(jButtonReturn))
+.addGap(26, 26, 26)))
+.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+.addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -339,15 +346,18 @@ layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jButtonLogout)
 .addGroup(layout.createSequentialGroup()
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-.addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
 .addGroup(layout.createSequentialGroup()
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jPanel4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-.addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-.addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+.addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+.addGroup(layout.createSequentialGroup()
+.addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)))
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 .addGroup(layout.createSequentialGroup()
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -357,7 +367,7 @@ layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(layout.createSequentialGroup()
 .addGap(24, 24, 24)
 .addComponent(jButtonDeleteFriend)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
 .addComponent(jButtonReturn)))))
 .addGap(26, 26, 26))
 );
@@ -386,40 +396,43 @@ pack();
 	public void dataRefresh(ArrayList a, String s) {
 		if (s.equals(Constants.FRIENDLISTREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
-			for (int i=0; i<a.size(); i++) {
-			    //model.add(i, a.get(i));
-                            //System.out.println("friend: "+a.get(i));
-                            //jScrollPane1.repaint();
-                            jList1.setListData(x);
-			}	
+			for (int i = 0; i < a.size(); i++) {
+				//model.add(i, a.get(i));
+				//System.out.println("friend: "+a.get(i));
+				//jScrollPane1.repaint();
+				jList1.setListData(x);
+			}
 		}
+		
+		
+		
 		if (s.equals(Constants.REGION1)) {
-                    //System.out.println(a);
+			//System.out.println(a);
 			jLabelID.setText(a.get(0).toString());
-                        jLabelContactInfo.setText(a.get(1).toString());
+			jLabelContactInfo.setText(a.get(1).toString());
 			jPanel1.repaint();
 		}
 		if (s.equals(Constants.REGION2)) {
 			jLabelLocation.setText(a.get(0).toString());
 			jPanel2.repaint();
 
-                }
+		}
 		if (s.equals(Constants.REGION3)) {
-                        jLabelProject.setText(a.get(0).toString());
+			jLabelProject.setText(a.get(0).toString());
 			jPanel3.repaint();
 		}
 		if (s.equals(Constants.REGION4)) {
-                    
-                    //System.out.println("company msg="+a.get(0));
-                    
-                    String[] x = (String[]) a.toArray(new String[a.size()]);
-                    String k = "";
-			for (int i=0; i<a.size(); i++) {
-                            k = "-"+x[i]+"\r\n";
-                        }
 
-                    jTextAreaCA.setText(k);
-                    
+			//System.out.println("company msg="+a.get(0));
+
+			String[] x = (String[]) a.toArray(new String[a.size()]);
+			String k = "";
+			for (int i = 0; i < a.size(); i++) {
+				k = "-" + x[i] + "\r\n";
+			}
+
+			jTextAreaCA.setText(k);
+
 			//jTextAreaCA.setText("");
 			jPanel4.repaint();
 		}
@@ -458,6 +471,7 @@ pack();
 	private javax.swing.JLabel jLabel6;
 	private javax.swing.JLabel jLabel7;
 	private javax.swing.JLabel jLabel8;
+	private javax.swing.JLabel jLabel9;
 	private javax.swing.JLabel jLabelContactInfo;
 	private javax.swing.JLabel jLabelID;
 	private javax.swing.JLabel jLabelLocation;
@@ -483,7 +497,5 @@ pack();
 	}
 
 	private String[] strArrFromClientLogic;
-
-
 
 }
