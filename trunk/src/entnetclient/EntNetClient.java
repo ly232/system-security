@@ -14,7 +14,7 @@ import java.util.*;
 import Constants.*;
 import XML.MyResultSet;
 import XML.XMLRequest;
-import com.sun.rowset.WebRowSetImpl;
+
 import java.nio.CharBuffer;
 import javax.sql.rowset.WebRowSet;
 import view.*;
@@ -63,20 +63,20 @@ public class EntNetClient {
         
         
         public void clientRegist(
-                String VerificationCode, 
+              //  String VerificationCode, 
                 String Username,
                 String Password,
-                String RealName,
+              //  String RealName,
                 String ContactInfo,
                 String Role_ID 
                         ) 
         {
 		HashMap<String, String> RegistCredential = new HashMap<String, String>();
 		try {
-                    RegistCredential.put("ver_code", VerificationCode);
+                  //  RegistCredential.put("ver_code", VerificationCode);
                     RegistCredential.put("user_id", Username);
                     RegistCredential.put("password", Password);
-                    RegistCredential.put("person_name", RealName);
+                  //  RegistCredential.put("person_name", RealName);
                     RegistCredential.put("contact_info", ContactInfo);
                     RegistCredential.put("role_id", Role_ID);
                 } catch (Exception e) {
@@ -150,10 +150,25 @@ public class EntNetClient {
         );
         return xmlapi;
     }
+     
         
-        
-        
-        
+        private XMLRequest getFriendNotify(String uid){
+            String query = "SELECT F.user1 FROM friend F WHERE F.user2 = '" + uid + "'"
+                    + "AND F.user1 not in " +
+                    "(SELECT F2.user2 FROM friend F2 WHERE F2.user1 = '" + uid + "'"
+                    + "AND F2.user1 in ("
+                    + "SELECT F3.user2 FROM friend F3 WHERE F3.user1=F2.user2));";
+            
+            XMLRequest xmlapi = new XMLRequest(
+                    Constants.READ_REGION_ID,
+                    uid,
+                    Constants.NOTIFYREGION, //region id
+                    Constants.INVALID, //session id...not for 
+                    query, //request detail...SQL statement to be excuted by server
+                    "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+            return xmlapi;
+        }
         
         public void clientLogin(String tmp_uid, String tmp_pwd)
 			throws IOException {
@@ -169,23 +184,6 @@ public class EntNetClient {
 	}
         
         
-        /*
-        public void  clientViewOtherPersonBoard(String otherPersonUid){
-                //kill the current view and goto another person's board...maybe not?
-            
-                HashMap<String, String> otherPersonBoardInfo = new HashMap<String, String>();
-		otherPersonBoardInfo.put("user_id", otherPersonUid); 
-		clientRequest viewOtherPersonBoardRequest = new clientRequest(
-				Constants.READ_REGION_ID, otherPersonUid, otherPersonBoardInfo);
-		ArrayList<XMLRequest> arr_xmlr= viewOtherPersonBoardRequest.clientRequestOtherPersonBoard(otherPersonUid);
-                //arr_xmlr contains an array of xml requests to read other person's board
-                //need to send each request to server ==> multiple threads
-                
-                for (int i=0;i<arr_xmlr.size();i++){
-                    invokeRequestThread(arr_xmlr.get(i));
-                }     
-        }*/
-        
         public void  clientViewOtherPersonBoard(String otherPersonUid, String switchBoardCode) throws IOException{
             
             //general logic: close current MainUI, then open a new MainUI populated based on the retXML
@@ -194,7 +192,9 @@ public class EntNetClient {
             
             XMLRequest myFriendListXMLreq = getFriendList(this.thisUserID);
             
+            
             otherPersonBoardInfoXML.set(0, myFriendListXMLreq); 
+
             
             //close the current ui, then open a new ui
             //there are 3 possible senarios to switch:
@@ -243,12 +243,14 @@ public class EntNetClient {
         
         
         private ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
-                 {
+        {
             HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
             //homeBoardRequestInfo.put("user_id",uid);
             clientRequest homeBoardRequest = new clientRequest(
 				Constants.READ_REGION_ID, uid, homeBoardRequestInfo); 
             ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
+            //XMLRequest myFriReqXMLreq = getFriendNotify(this.thisUserID);
+            //al_xmlr.add(myFriReqXMLreq);
             return al_xmlr;
         }
         
@@ -304,18 +306,11 @@ public class EntNetClient {
 
 					}
                     
-                    
-                    
-                    
                     //now we are in homepage...load home board content
                     for (int i=0;i<homeBoardInfoXML.size();i++){
                         invokeRequestThread(homeBoardInfoXML.get(i));
                     }
 
-
-
-
-                    
                     
                 }catch(Exception e){};
             }
@@ -336,7 +331,7 @@ public class EntNetClient {
                 //successful registration
                 //goto user's home page by asking server to send xml of user homeboard
                 try{
-                    ArrayList<XMLRequest> homeBoardInfoXML 
+                   /* ArrayList<XMLRequest> homeBoardInfoXML 
                             = clientHomeBoardRequest(xmlreq.getUserID());
                     //populate screen: close loginUI, open new UI
                     this.clientMain.LoginToHome();
@@ -345,13 +340,16 @@ public class EntNetClient {
                     for (int i=0;i<homeBoardInfoXML.size();i++){
                         invokeRequestThread(homeBoardInfoXML.get(i));
                     }
-                    
+                     */
+                	view.LoginUI.checkRegist(true);
+                return; 
                 }
                 catch(Exception e){
                 };
             }
             else{
                 //failed registration
+            	view.LoginUI.checkRegist(false);
                 return;
             }
         } //end of regist request threadCallBack
@@ -387,6 +385,22 @@ public class EntNetClient {
 
                 //this.clientMain.LoginToHome();
             }
+            
+            else if (regionID.equals(Constants.NOTIFYREGION)){
+                for (int i=0;i<myRS.getTable().size();i++){
+                    String friRequest = myRS.getStringValue(i, "user1");
+                    resultSetArrayList.add(friRequest);
+                    System.out.println("testing");
+                    System.out.println(friRequest);
+                }
+                if (commandline) {
+					//test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
+				} else {
+	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
+	                System.out.println("=======FRIENDNOTIFY TESTING======="+resultSetArrayList);
+				}
+            }
+            
             else if (regionID.equals(Constants.REGION1)){
                 String contact_info = myRS.getStringValue(0, "contact_info");
                 String uid = myRS.getStringValue(0,"user_id");
@@ -499,9 +513,6 @@ public class EntNetClient {
             
         }
     }
-
-
-    
 
     
 }
