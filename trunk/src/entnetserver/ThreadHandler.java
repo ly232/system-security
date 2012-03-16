@@ -6,6 +6,7 @@ package entnetserver;
 
 import java.io.*;
 import java.net.*;
+import java.security.PrivateKey;
 import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,6 +15,10 @@ import org.xml.sax.SAXException;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
+import Security.MyKey;
+import Security.MyPKI;
+import Security.SerilizeKey;
+import Security.SharedKey;
 import XML.*;
 
 import Constants.Constants;
@@ -44,8 +49,8 @@ class ThreadedHandler implements Runnable {
 	private InputStream inStream;
 	private OutputStream outStream;
 	private int threadCount = 0;
-	private ObjectOutputStream oos;
-	
+	private static ObjectOutputStream oos;
+	private static ObjectInputStream ois;
 	
 	public OutputStream getOutStream() {
 		return outStream;
@@ -72,12 +77,17 @@ class ThreadedHandler implements Runnable {
 	 *             from getInputStream();
 	 */
 	private void initializeServer() throws IOException {
-
 		inStream = incoming.getInputStream();
 		outStream = incoming.getOutputStream();
-		read = new Scanner(inStream);
+		//read = new Scanner(inStream);
 		//write = new PrintWriter(outStream, true); // true means autoflush
-		oos = new ObjectOutputStream(outStream);
+		if (oos == null) {
+			oos = new ObjectOutputStream(outStream);
+		}
+		if (ois == null) {
+			ois = new ObjectInputStream(inStream);
+		}
+
 	}
 
 	/**
@@ -88,7 +98,6 @@ class ThreadedHandler implements Runnable {
 	 */
 	public void callBackResult(XMLRequest rq) {
 		synchronized (oos) {
-			synchronized (read) {
 				try {
 					oos.writeObject(rq);
 					if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
@@ -98,7 +107,6 @@ class ThreadedHandler implements Runnable {
 						System.err.println("err for writeobject");
 						e.printStackTrace();
 					}
-				}
 		}	
 		}
 
@@ -115,7 +123,6 @@ class ThreadedHandler implements Runnable {
 		while (true) {
 			try {
 			System.out.println("ready to serve");
-			ObjectInputStream ois = new ObjectInputStream(incoming.getInputStream());
 			
 			XMLRequest request = (XMLRequest)ois.readObject();
 			//System.out.println(request.generateXMLRequest());
@@ -144,10 +151,20 @@ class ThreadedHandler implements Runnable {
 						Thread t = new Thread(uServlet);
 						t.start();
 						threadCount++;
+					}else if (request.getActionID().equals(Constants.SESSION_KEY_EST)) {
+						String sessionString = request.getRequestDetail();
+						MyPKI mPki = MyPKI.getInstance();
+						PrivateKey pKey= SerilizeKey.ReadPrivateKey(null);
+						String seed = mPki.decrypt(sessionString.getBytes(), pKey);
+						SharedKey skKey = SharedKey.getInstance();
+					    XMLRequest.sessionKey = skKey.generateKeyWithPwd(seed);
+					    request.setRequestDetail(Constants.TRUE);
+					    callBackResult(request);
 					}
 				}
 			} catch (IOException e) {
 				System.err.println("xml parse failed");
+				System.err.println(e.getLocalizedMessage());
 				//write.println(Constants.END_STRING);
 				e.printStackTrace();
 			} catch (Exception e) {
