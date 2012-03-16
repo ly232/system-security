@@ -1,12 +1,28 @@
 package XML;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.server.UID;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-public class XMLRequest {
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
+import Security.MyKey;
+import Security.MyPKI;
+import Security.SharedKey;
+
+import Constants.Constants;
+
+import Security.*;
+
+public class XMLRequest implements Serializable{
+		static UID uid = new UID();
+		static MyKey sessionKey;
 		String requestID;
 		String userID;
 		String regionID;
@@ -94,7 +110,58 @@ public class XMLRequest {
 			this.sessionID = sessionID;//for the later use
 			this.requestDetail = requestDetail;
 			this.actionID = ActionID;
+			//TODO: generate a sessionKey
+			if (uid == null) {
+				//get a sessionKey
+				SharedKey sk = SharedKey.getInstance();
+				sessionKey = sk.generateKeyWithPwd(uid.toString());
+			}
+			//encrypt();
 		}
+		
+		
+		public void encrypt(){
+			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID)) {
+				MyPKI mp = MyPKI.getInstance();
+				sessionID = uid.toString();
+				PublicKey pKey = SerilizeKey.ReadPublicKey();
+				this.userID = new String(mp.encrypt(userID, pKey));
+				this.regionID = new String(mp.encrypt(regionID, pKey));
+				this.sessionID = new String(mp.encrypt(sessionID, pKey));//for the later use
+				this.requestDetail = new String(mp.encrypt(requestDetail, pKey));
+				this.actionID = new String(mp.encrypt(actionID, pKey));
+			}else {
+				SharedKey sk  = SharedKey.getInstance();
+				this.userID = new String(sk.encrypt(userID, sessionKey));
+				this.regionID = new String(sk.encrypt(regionID, sessionKey));
+				this.sessionID = new String(sk.encrypt(sessionID, sessionKey));//for the later use
+				this.requestDetail = new String(sk.encrypt(requestDetail, sessionKey));
+				this.actionID = new String(sk.encrypt(actionID, sessionKey));
+			}
+		}
+		
+		public void decrypt(String pwd){
+			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID)) {
+				MyPKI mp = MyPKI.getInstance();
+				PrivateKey pKey = SerilizeKey.ReadPrivateKey(pwd);
+				this.userID = mp.decrypt(userID.getBytes(), pKey);
+				this.regionID = mp.decrypt(regionID.getBytes(), pKey);
+				this.sessionID = mp.decrypt(sessionID.getBytes(), pKey);//for the later use
+				this.requestDetail = mp.decrypt(requestDetail.getBytes(), pKey);
+				this.actionID = mp.decrypt(actionID.getBytes(), pKey);
+				SharedKey sk = SharedKey.getInstance();
+				sessionKey = sk.generateKeyWithPwd(sessionID);
+			}else {
+				SharedKey sk  = SharedKey.getInstance();
+				//String  = sk.decrypt(requestID.getBytes(),sessionKey);
+				this.userID = sk.decrypt(userID.getBytes(), sessionKey);
+				this.regionID = sk.decrypt(regionID.getBytes(), sessionKey);
+				this.sessionID = sk.decrypt(sessionID.getBytes(), sessionKey);//for the later use
+				this.requestDetail = sk.decrypt(requestDetail.getBytes(), sessionKey);
+				this.actionID = sk.decrypt(actionID.getBytes(), sessionKey);
+			}
+		}
+		
 		
 	   /**
 	    * initialize using a xml file
@@ -105,6 +172,11 @@ public class XMLRequest {
 	 */
 	public XMLRequest(String xmlString) throws ParserConfigurationException, SAXException, IOException {
 		   this.ParseXML(xmlString);
+			if (sessionKey == null) {
+				SharedKey sk = SharedKey.getInstance();
+				sessionKey = sk.generateKeyWithPwd(uid.toString());
+			}
+			//encrypt();
 		}
 		
 		/**
@@ -135,6 +207,5 @@ public class XMLRequest {
 				//this.sessionID = sessionID;//for the later use
 				requestDetail = xmlNewApi.getTagValue("requestDetail");
 				actionID = xmlNewApi.getTagValue("actionID");
-
 		}
 }
