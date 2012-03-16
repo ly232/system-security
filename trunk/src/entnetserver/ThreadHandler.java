@@ -46,6 +46,7 @@ class ThreadedHandler implements Runnable {
 	private int threadCount = 0;
 	private ObjectOutputStream oos;
 	
+	
 	public OutputStream getOutStream() {
 		return outStream;
 	}
@@ -89,27 +90,16 @@ class ThreadedHandler implements Runnable {
 		synchronized (oos) {
 			synchronized (read) {
 				try {
-			oos.writeObject(new String("flush"));
-			oos.writeObject(new String(Constants.INVALID));
-			oos.writeObject(new String(rq.generateXMLRequest()));
-			oos.writeObject(new String(Constants.END_STRING));
-			//write.println(Constants.INVALID);
-			//write.println(rq.generateXMLRequest());
-			//write.println(Constants.END_STRING);
-			if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
-
-					    oos.writeObject(new String(Constants.RETURN_RESULTSET));
+					oos.writeObject(rq);
+					if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
 						oos.writeObject(rq.getMyResultSet());
-				} 
-				}catch (IOException e) {
-					System.err.println("err for writeobject");
-					//oos.writeObject(new String(Constants.END_STRING));
-					e.printStackTrace();
+					} 
+					}catch (IOException e) {
+						System.err.println("err for writeobject");
+						e.printStackTrace();
+					}
 				}
-				// write.println(rq.getMyResultSeStringt());
-				// write.println(Constants.END_STRING);
-			}
-		}
+		}	
 		}
 
 	
@@ -125,15 +115,14 @@ class ThreadedHandler implements Runnable {
 		while (true) {
 			try {
 			System.out.println("ready to serve");
-			String xml = new String();
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					incoming.getInputStream()));
-			while ((xml = in.readLine()) == null) {
-			}
-			System.out.println("request formart : \n" + xml);
-			XMLRequest request;
-				request = new XMLRequest(xml);
-				if (request.getRequestID().equals(Constants.QUIT_ID)) {
+			ObjectInputStream ois = new ObjectInputStream(incoming.getInputStream());
+			
+			XMLRequest request = (XMLRequest)ois.readObject();
+			//System.out.println(request.generateXMLRequest());
+			
+			request.decrypt(null);
+			//System.out.println(request.generateXMLRequest());
+			if (request.getRequestID().equals(Constants.QUIT_ID)) {
 					return;
 				}
 				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
@@ -161,22 +150,13 @@ class ThreadedHandler implements Runnable {
 				System.err.println("xml parse failed");
 				//write.println(Constants.END_STRING);
 				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				System.err.println("xml parse failed");
-				//write.println(Constants.END_STRING);
-				e.printStackTrace();
-			} catch (SAXException e) {
-				System.err.println("xml parse failed");
-				//write.println(Constants.END_STRING);
-				e.printStackTrace();
 			} catch (Exception e) {
 				System.err.println("ThreadHandle failed");
+				System.err.println(e.getLocalizedMessage());
 				//write.println(Constants.END_STRING);
 				e.printStackTrace();
 			}
-
 		}
-		// }
 	}
 
 }
