@@ -21,7 +21,7 @@ import Constants.Constants;
 import Security.*;
 
 public class XMLRequest implements Serializable{
-		static UID uid = new UID();
+		static UID uid;
 		static MyKey sessionKey;
 		String requestID;
 		String userID;
@@ -88,6 +88,15 @@ public class XMLRequest implements Serializable{
 			this.actionID = actionID;
 		}
 		
+		void generateSessionKey(){
+			if (uid == null) {
+				//get a sessionKey
+				uid = new UID();
+				SharedKey sk = SharedKey.getInstance();
+				sessionKey = sk.generateKeyWithPwd(uid.toString());
+			}
+		}
+		
 		/**
 		 * @param requestID string in Constants
 		 * @param userID string
@@ -111,11 +120,7 @@ public class XMLRequest implements Serializable{
 			this.requestDetail = requestDetail;
 			this.actionID = ActionID;
 			//TODO: generate a sessionKey
-			if (uid == null) {
-				//get a sessionKey
-				SharedKey sk = SharedKey.getInstance();
-				sessionKey = sk.generateKeyWithPwd(uid.toString());
-			}
+			generateSessionKey();
 			//encrypt();
 		}
 		
@@ -133,9 +138,7 @@ public class XMLRequest implements Serializable{
 				this.actionID = new String(mp.encrypt(actionID, pKey));
 			}else {
 				SharedKey sk  = SharedKey.getInstance();
-				if (sessionKey == null) {
-					sessionKey = sk.generateKeyWithPwd(uid.toString());
-				}
+				generateSessionKey();
 				this.userID = new String(sk.encrypt(userID, sessionKey));
 				this.regionID = new String(sk.encrypt(regionID, sessionKey));
 				this.sessionID = new String(sk.encrypt(sessionID, sessionKey));//for the later use
@@ -177,10 +180,7 @@ public class XMLRequest implements Serializable{
 	 */
 	public XMLRequest(String xmlString) throws ParserConfigurationException, SAXException, IOException {
 		   this.ParseXML(xmlString);
-			if (sessionKey == null) {
-				SharedKey sk = SharedKey.getInstance();
-				sessionKey = sk.generateKeyWithPwd(uid.toString());
-			}
+		   generateSessionKey();
 			//encrypt();
 		}
 		
