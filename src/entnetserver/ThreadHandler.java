@@ -127,6 +127,18 @@ class ThreadedHandler implements Runnable {
 			XMLRequest request = (XMLRequest)ois.readObject();
 			//System.out.println(request.generateXMLRequest());
 			
+			 if (request.getRequestID().equals(Constants.SESSION_KEY_EST)) {
+				 String sessionString = request.getRequestDetail();
+				 MyPKI mPki = MyPKI.getInstance();
+				 PrivateKey pKey= SerilizeKey.ReadPrivateKey(null);
+				 String seed = mPki.decrypt(sessionString.getBytes(), pKey);
+				 SharedKey skKey = SharedKey.getInstance();
+				 XMLRequest.sessionKey = skKey.generateKeyWithPwd(seed);
+				 request.setRequestDetail(Constants.TRUE);
+				 callBackResult(request);
+				 continue;
+			}
+			
 			request.decrypt(null);
 			//System.out.println(request.generateXMLRequest());
 			if (request.getRequestID().equals(Constants.QUIT_ID)) {
@@ -151,15 +163,6 @@ class ThreadedHandler implements Runnable {
 						Thread t = new Thread(uServlet);
 						t.start();
 						threadCount++;
-					}else if (request.getActionID().equals(Constants.SESSION_KEY_EST)) {
-						String sessionString = request.getRequestDetail();
-						MyPKI mPki = MyPKI.getInstance();
-						PrivateKey pKey= SerilizeKey.ReadPrivateKey(null);
-						String seed = mPki.decrypt(sessionString.getBytes(), pKey);
-						SharedKey skKey = SharedKey.getInstance();
-					    XMLRequest.sessionKey = skKey.generateKeyWithPwd(seed);
-					    request.setRequestDetail(Constants.TRUE);
-					    callBackResult(request);
 					}
 				}
 			} catch (IOException e) {
