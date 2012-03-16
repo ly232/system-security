@@ -132,6 +132,9 @@ public class XMLRequest implements Serializable{
 				this.actionID = new String(mp.encrypt(actionID, pKey));
 			}else {
 				SharedKey sk  = SharedKey.getInstance();
+				if (sessionKey == null) {
+					sessionKey = sk.generateKeyWithPwd(uid.toString());
+				}
 				this.userID = new String(sk.encrypt(userID, sessionKey));
 				this.regionID = new String(sk.encrypt(regionID, sessionKey));
 				this.sessionID = new String(sk.encrypt(sessionID, sessionKey));//for the later use
