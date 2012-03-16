@@ -1,5 +1,9 @@
 package Security;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import com.mysql.jdbc.log.Slf4JLogger;
 import com.sun.corba.se.spi.ior.Writeable;
 
 public class SerilizeKey {
@@ -58,6 +63,32 @@ public class SerilizeKey {
 					oos.writeObject(key);
 					oos.flush();
 					oos.close();
+					/*
+					FileOutputStream fos = new FileOutputStream("privateKey.data");
+					DataOutputStream dos = new DataOutputStream(fos);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(baos);
+					oos.writeObject(key);
+					oos.flush();
+					oos.close();
+					byte[] temp = baos.toByteArray();
+					String storeString = new String(temp);
+					SharedKey sk = SharedKey.getInstance();
+					MyKey DBkey = sk.generateKeyWithPwd(pwd);
+					System.out.println(DBkey);
+					byte[] newtemp =  sk.encrypt(storeString, DBkey);
+					
+					dos.writeInt(newtemp.length);
+					System.out.println(newtemp.length);
+					System.out.println(newtemp);
+					//dos.write(temp,0,temp.length);
+					for (int i = 0; i < newtemp.length; i++) {
+							dos.writeByte(newtemp[i]);
+					}
+					dos.flush();
+					dos.close();
+					fos.close();*/
+					
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -67,7 +98,7 @@ public class SerilizeKey {
 				}
 			}
 			
-			public static PrivateKey ReadPrivateKey(){
+			public static PrivateKey ReadPrivateKey(String pwd){
 				try {
 					FileInputStream fis;
 					fis = new FileInputStream("privateKey.data");
@@ -75,6 +106,29 @@ public class SerilizeKey {
 					PrivateKey pKey = (PrivateKey)ois.readObject();
 					ois.close();
 					return pKey;
+					
+					/*
+					SharedKey sk = SharedKey.getInstance();
+					MyKey DBkey = sk.generateKeyWithPwd(pwd);
+					System.out.println(DBkey);
+					FileInputStream fis = new FileInputStream("privateKey.data");
+					DataInputStream dis = new DataInputStream(fis);
+					int length = dis.readInt();
+					System.out.println(length);
+					byte[] temp = new byte[length];
+					for (int i = 0; i < temp.length; i++) {
+						temp[i] = dis.readByte();
+					}
+					System.out.println(temp);
+					//dis.readByte();
+					//fis.read(temp);
+					//dis.readFully(temp);
+					String getback = sk.decrypt(temp, DBkey);
+					ByteArrayInputStream bais = new ByteArrayInputStream(getback.getBytes());
+					ObjectInputStream ois = new ObjectInputStream(bais);
+					PrivateKey pKey = (PrivateKey)ois.readObject();
+					ois.close();
+					return pKey;*/
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
