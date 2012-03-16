@@ -52,6 +52,7 @@ public class SerilizeKey {
 			
 			public static void WritePrivateKey(PrivateKey key, String pwd){
 				try {
+                                    
 					FileOutputStream fos = new FileOutputStream("privateKey.data");
 					ObjectOutputStream oos = new ObjectOutputStream(fos);
 					oos.writeObject(key);
