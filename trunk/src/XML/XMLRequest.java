@@ -22,7 +22,7 @@ import Security.*;
 
 public class XMLRequest implements Serializable{
 		static UID uid;
-		static MyKey sessionKey;
+		public static MyKey sessionKey;
 		String requestID;
 		String userID;
 		String regionID;
@@ -126,40 +126,15 @@ public class XMLRequest implements Serializable{
 		
 		
 		public void encrypt(){
-			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID) ||
-					this.requestID.equals(Constants.REGIST_REQUEST_ID)) {
-				MyPKI mp = MyPKI.getInstance();
-				sessionID = uid.toString();
-				PublicKey pKey = SerilizeKey.ReadPublicKey();
-				this.userID = new String(mp.encrypt(userID, pKey));
-				this.regionID = new String(mp.encrypt(regionID, pKey));
-				this.sessionID = new String(mp.encrypt(sessionID, pKey));//for the later use
-				this.requestDetail = new String(mp.encrypt(requestDetail, pKey));
-				this.actionID = new String(mp.encrypt(actionID, pKey));
-			}else {
 				SharedKey sk  = SharedKey.getInstance();
-				generateSessionKey();
 				this.userID = new String(sk.encrypt(userID, sessionKey));
 				this.regionID = new String(sk.encrypt(regionID, sessionKey));
 				this.sessionID = new String(sk.encrypt(sessionID, sessionKey));//for the later use
 				this.requestDetail = new String(sk.encrypt(requestDetail, sessionKey));
 				this.actionID = new String(sk.encrypt(actionID, sessionKey));
-			}
 		}
 		
 		public void decrypt(String pwd){
-			if (this.requestID.equals(Constants.LOGIN_REQUEST_ID) || 
-					this.requestID.equals(Constants.REGIST_REQUEST_ID)) {
-				MyPKI mp = MyPKI.getInstance();
-				PrivateKey pKey = SerilizeKey.ReadPrivateKey(pwd);
-				this.userID = mp.decrypt(userID.getBytes(), pKey);
-				this.regionID = mp.decrypt(regionID.getBytes(), pKey);
-				this.sessionID = mp.decrypt(sessionID.getBytes(), pKey);//for the later use
-				this.requestDetail = mp.decrypt(requestDetail.getBytes(), pKey);
-				this.actionID = mp.decrypt(actionID.getBytes(), pKey);
-				SharedKey sk = SharedKey.getInstance();
-				sessionKey = sk.generateKeyWithPwd(sessionID);
-			}else {
 				SharedKey sk  = SharedKey.getInstance();
 				//String  = sk.decrypt(requestID.getBytes(),sessionKey);
 				this.userID = sk.decrypt(userID.getBytes(), sessionKey);
@@ -167,7 +142,6 @@ public class XMLRequest implements Serializable{
 				this.sessionID = sk.decrypt(sessionID.getBytes(), sessionKey);//for the later use
 				this.requestDetail = sk.decrypt(requestDetail.getBytes(), sessionKey);
 				this.actionID = sk.decrypt(actionID.getBytes(), sessionKey);
-			}
 		}
 		
 		
