@@ -1,24 +1,30 @@
 package Security;
 
+import java.rmi.server.UID;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Random;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 public class SharedKey implements SecurityObject{
 			//TODO: just illustrate the idea
 			static SharedKey sKey;
+			MyKey mk = new MyKey();
+			
 			private SharedKey(){}
 			public static SharedKey getInstance(){
 				if (sKey == null) {
@@ -29,7 +35,8 @@ public class SharedKey implements SecurityObject{
 			
 			public  String decrypt(byte[] data, MyKey mk){
 				byte[] resultArray;
-				String result=null;
+				String result = "";
+				
 				// Create PBE Cipher
 	            Cipher pbeCipher=null;
 				try {
@@ -51,6 +58,11 @@ public class SharedKey implements SecurityObject{
 				
 	            try {
 					resultArray= pbeCipher.doFinal(data);
+					/*
+					for (int i = 0; i < resultArray.length; i++) {
+						result += Integer.toHexString((0x000000ff & resultArray[i]) | 0xffffff00).substring(6);
+					}
+					*/
 					result= new String(resultArray);
 					
 				} catch (IllegalBlockSizeException e) {
@@ -85,6 +97,8 @@ public class SharedKey implements SecurityObject{
 					e1.printStackTrace();
 				}
 
+	            
+	            
 	            byte[] cleartext = data.getBytes();
 
 	            // Encrypt the cleartext
@@ -99,8 +113,9 @@ public class SharedKey implements SecurityObject{
 				
 				return ciphertext;
 			}
+	
 			
-
+		
 			
 			public  MyKey generateKeyWithPwd(String pwd){
 				 
@@ -126,14 +141,13 @@ public class SharedKey implements SecurityObject{
 					e.printStackTrace();
 				}
 	            
-	            MyKey mk = new MyKey();
+	            
 	            mk.skey = pbeKey;
 	            mk.pps= generatePBEParaSpec();
 	            
 				return mk;
 			}
 			
-
 			
 			public PBEParameterSpec generatePBEParaSpec(){
 			
@@ -147,12 +161,55 @@ public class SharedKey implements SecurityObject{
 	         PBEParameterSpec pbeParamSpec = new PBEParameterSpec(salt, count);
 	         
 	         return pbeParamSpec;
-		}	
+		}
 			
-			
-			public  byte[] generateRandomKey(){
-				return null;
+		
+			public MyKey generateRandomKey(){
+				UID uid= new UID();
+				return this.generateKeyWithPwd(uid.toString());
+				
 			}
+			
+			
+			
+	/*		
+	
+	public MyKey generateRandomKey(){
+				
+				KeyGenerator generator=null;
+				try {
+					generator = KeyGenerator.getInstance("DES");
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+				generator.init(new SecureRandom());
+				SecretKey randomKey = generator.generateKey();
+				
+				mk.skey = randomKey;
+				mk.ips=generateIvParaSpec();
+	            
+				return mk;
+				//Random pswNum= new Random();
+				//return this.generateKeyWithPwd(pswNum.toString());
+				
+			}
+
+			public IvParameterSpec generateIvParaSpec(){
+				
+				SecureRandom iv = new SecureRandom();
+		         byte[] salt = new byte[8];
+		         //parameter is the array to be filled in with random bytes
+		        iv.nextBytes(salt);
+		        
+				IvParameterSpec ips = new IvParameterSpec(salt);
+		        return ips;
+			}	
+	
+	*/	
+			
+			
+			
+			
 			@Override
 			public String decrypt(byte[] data, byte[] key) {
 				// TODO Auto-generated method stub

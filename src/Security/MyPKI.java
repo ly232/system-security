@@ -8,14 +8,23 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.SignatureException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 
-class MyPKI implements SecurityObject{
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+
+
+//import sun.crypto.provider.*;
+
+
+public class MyPKI implements SecurityObject{
 	
 	static MyPKI pKey;
 	
@@ -25,7 +34,12 @@ class MyPKI implements SecurityObject{
 	PrivateKey privKey;
 	Signature sig;
 	
-	private MyPKI(){}
+        String xform = "RSA/NONE/PKCS1Padding";
+        
+	private MyPKI(){
+            Security.addProvider(new BouncyCastleProvider());
+        
+        }
 	
 	public static MyPKI getInstance(){
 		if (pKey == null) {
@@ -43,7 +57,7 @@ class MyPKI implements SecurityObject{
 		sr.nextBytes(salt);
 		
 		try {
-			kpg=KeyPairGenerator.getInstance("DSA");
+			kpg=KeyPairGenerator.getInstance("RSA");
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
@@ -71,7 +85,7 @@ class MyPKI implements SecurityObject{
 		Cipher cipher=null;
 		
 		try {
-			cipher= Cipher.getInstance("DSA");
+			cipher= Cipher.getInstance(xform);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
@@ -83,7 +97,9 @@ class MyPKI implements SecurityObject{
 			e.printStackTrace();
 		}
 	    try {
-			plainText=cipher.doFinal(cryptedText).toString();
+			//plainText=cipher.doFinal(cryptedText).toString();
+                        byte[] test = cipher.doFinal(cryptedText);
+                        plainText = new String(test);
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
@@ -91,7 +107,7 @@ class MyPKI implements SecurityObject{
 		}
 		
 		
-		return null;
+		return plainText;
 	}
 	
 	public  byte[] encrypt(String data, PublicKey pubKey){
@@ -100,7 +116,7 @@ class MyPKI implements SecurityObject{
 		
 		Cipher cipher=null;
 		try {
-			cipher = Cipher.getInstance("DSA");
+			cipher = Cipher.getInstance(xform);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {

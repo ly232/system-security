@@ -36,6 +36,7 @@ public class testShareKey {
 		InputStreamReader stdin = new InputStreamReader(System.in);
 		BufferedReader bfrdr = new BufferedReader(stdin);
 		
+
 		try {
 			PwdStr = bfrdr.readLine();
 		} catch (IOException e) {
@@ -63,10 +64,38 @@ public class testShareKey {
 	    System.out.println("After encrypt the plain text is:"+ encrptText.toString());
 	    
 	    String decrptText=sk.decrypt(encrptText, MysecKey);
-	    System.out.println("After decryot the plain text is:"+ decrptText);
-        
+	    System.out.println("After decrypt the plain text is:"+ decrptText);
+    
 	    ///////////////////////////////////////////////////////////////////////
+	    System.out.println("==============random key testing============");
 	    
+	    MyKey randomKey=sk.generateRandomKey();
+	    String str = "lin";
+	    sk.encrypt(str, randomKey);
+	    String result = sk.decrypt(sk.encrypt(str, randomKey), randomKey);
+	    System.out.println(result);
+	    
+	    System.out.println("Generated key is:"+ randomKey);
+	    
+	    
+	    System.out.println("please enter plaintext:");
+	    
+	    String plainText3="";
+		try {
+			plainText3 = bfrdr.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    System.out.println("Before encrypt the plain text is:"+ plainText3);
+	    byte [] encrptText3=sk.encrypt(plainText3, randomKey);
+	    System.out.println("After encrypt the plain text is:"+ encrptText3.toString());
+	    
+	    String decrptText3=sk.decrypt(encrptText3, randomKey);
+	    System.out.println("After decrypt the plain text is:"+ decrptText3);
+	    
+	    
+	    
+	    //////////////////////////////////////////////////////////////////////
 	    MyPKI myPkiTest= MyPKI.getInstance();
 	    MyKey myKeyTest = myPkiTest.generateKeyPair();
 	    
@@ -88,6 +117,34 @@ public class testShareKey {
 	    System.out.println("After encrypt the plain text is:"+ encrptText2.toString());
 	    
 	    String decrptText2=myPkiTest.decrypt(encrptText2, myKeyTest.privKey);
+	    System.out.println("After decrypt the plain text is:"+ decrptText2);
+	    
+	    
+	 
+	    
+	    ///////////////////////////////////////////////////////////////////////
+	    
+	    //MyPKI myPkiTest= MyPKI.getInstance();
+	    //MyKey myKeyTest = myPkiTest.generateKeyPair();
+	    
+	    System.out.println("==============Key pair testing============");
+	    System.out.println("The public key is:"+ myKeyTest.pubKey);
+	    System.out.println("The public key is:"+ myKeyTest.privKey);
+	    
+	    System.out.println("please enter plaintext:");
+	    
+	    //String plainText2="";
+		try {
+			plainText2 = bfrdr.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    System.out.println("Before encrypt the plain text is:"+ plainText2);
+	    
+	    encrptText2=myPkiTest.encrypt(plainText2, myKeyTest.pubKey);
+	    System.out.println("After encrypt the plain text is:"+ encrptText2.toString());
+	    
+	    decrptText2=myPkiTest.decrypt(encrptText2, myKeyTest.privKey);
 	    System.out.println("After decryot the plain text is:"+ decrptText2);
 	    
 	}
