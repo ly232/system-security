@@ -87,7 +87,6 @@ public class requestHandler implements Runnable {
 
 				//out.println(xmlRequest.generateXMLRequest());
 				xmlRequest.encrypt();
-				xmlRequest.decrypt(null);
 				out.writeObject(xmlRequest);
 				
 				if (xmlRequest.getRequestID().equals(Constants.QUIT_ID)) {
