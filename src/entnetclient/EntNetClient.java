@@ -79,13 +79,15 @@ public class EntNetClient {
             byte[] salt = new byte [8];
             r.nextBytes(salt);
             SharedKey sk = SharedKey.getInstance();
-            MyKey sessionKey = sk.generateKeyWithPwd(salt.toString());
+            sessionKey = sk.generateKeyWithPwd(new String(salt));
 
             
             MyPKI mypki = MyPKI.getInstance();
             PublicKey pubkey = SerilizeKey.ReadPublicKey();
                         
-            String sessionkeyencrypted = new String(mypki.encrypt(salt.toString(), pubkey));
+            String sessionkeyencrypted = new String(mypki.encrypt(new String(salt), pubkey));
+            
+            System.out.println("sessionkeyencrypted="+sessionkeyencrypted.length());
             
             XMLRequest xmlreq = new XMLRequest(Constants.SESSION_KEY_EST,
                     Constants.INVALID,
@@ -372,7 +374,7 @@ public class EntNetClient {
             if (SessionKeyEstStat==Constants.TRUE){
                 XMLRequest.sessionKey = this.sessionKey;
                 
-                System.out.println("session key successfully established");
+                System.out.println("session key successf");
             }
             else{
                 return;
