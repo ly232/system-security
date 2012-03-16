@@ -16,8 +16,15 @@ import XML.MyResultSet;
 import XML.XMLRequest;
 
 import java.nio.CharBuffer;
+import java.rmi.server.UID;
 import javax.sql.rowset.WebRowSet;
 import view.*;
+
+
+import Security.*;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import javax.crypto.SecretKey;
 //import view.MainUI;
 /**
  * 
@@ -38,12 +45,17 @@ public class EntNetClient {
         private CommandLineClientTest test;
         private boolean commandline = false;
         
+        private String k_db; //database passwrod used to perform encryption/decyption
+        
         public String getThisUserID(){
             return thisUserID;
         }
         
         private EntNetClient(ClientMain cm){
             clientMain = cm;
+            //TODO: change this to server's replied k_db:
+            k_db = "DATABASEPASSWORD";
+            establishSessionKey();
         }
         
         public EntNetClient(CommandLineClientTest t){
@@ -60,6 +72,32 @@ public class EntNetClient {
         
         
         ///////////////////////////////////
+
+        public static MyKey sessionKey;
+        public void establishSessionKey(){
+            SecureRandom r = new SecureRandom();
+            byte[] salt = new byte [8];
+            r.nextBytes(salt);
+            SharedKey sk = SharedKey.getInstance();
+            MyKey sessionKey = sk.generateKeyWithPwd(salt.toString());
+
+            
+            MyPKI mypki = MyPKI.getInstance();
+            PublicKey pubkey = SerilizeKey.ReadPublicKey();
+                        
+            String sessionkeyencrypted = new String(mypki.encrypt(salt.toString(), pubkey));
+            
+            XMLRequest xmlreq = new XMLRequest(Constants.SESSION_KEY_EST,
+                    Constants.INVALID,
+                    Constants.INVALID,
+                    Constants.INVALID,
+                    sessionkeyencrypted,
+                    Constants.INVALID);
+
+            invokeRequestThread(xmlreq);
+           
+            
+        }
         
         
         public void clientRegist(
@@ -84,7 +122,7 @@ public class EntNetClient {
 		;
 
 		clientRequest registRequest = new clientRequest(
-				Constants.REGIST_REQUEST_ID, Username, RegistCredential);
+				Constants.REGIST_REQUEST_ID, Username, RegistCredential, this.k_db);
 		//String retXML = registRequest.generateXMLforRequest();
 		XMLRequest xmlr = registRequest.clientRequestRegist();
                         
@@ -150,7 +188,7 @@ public class EntNetClient {
         );
         return xmlapi;
     }
-     
+
         
         private XMLRequest getFriendNotify(String uid){
             String query = "SELECT F.user1 FROM friend F WHERE F.user2 = '" + uid + "'"
@@ -169,7 +207,7 @@ public class EntNetClient {
             );
             return xmlapi;
         }
-        
+
         public void clientLogin(String tmp_uid, String tmp_pwd)
 			throws IOException {
                         
@@ -177,9 +215,13 @@ public class EntNetClient {
 		loginCredential.put("user_id", tmp_uid); 
 		loginCredential.put("password", tmp_pwd); 
 		clientRequest loginRequest = new clientRequest(
-				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential);
+				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential, this.k_db);
 		XMLRequest xmlr= loginRequest.clientRequestLogin();
+                
+                
                 invokeRequestThread(xmlr);
+                
+                
 
 	}
         
@@ -235,7 +277,7 @@ public class EntNetClient {
 		updateCredential.put("regionID", regionID); 
 		updateCredential.put("newContent", newContent); 
 		clientRequest updateRegionRequest = new clientRequest(
-				Constants.UPDATE_REGION_ID, this.thisUserID, updateCredential);
+				Constants.UPDATE_REGION_ID, this.thisUserID, updateCredential, this.k_db);
 		XMLRequest xmlr= updateRegionRequest.clientRequestUpdateRegion(regionID, newContent, this.thisUserID);
                 invokeRequestThread(xmlr);
         }
@@ -247,7 +289,7 @@ public class EntNetClient {
             HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
             //homeBoardRequestInfo.put("user_id",uid);
             clientRequest homeBoardRequest = new clientRequest(
-				Constants.READ_REGION_ID, uid, homeBoardRequestInfo); 
+				Constants.READ_REGION_ID, uid, homeBoardRequestInfo, this.k_db); 
             ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
             //XMLRequest myFriReqXMLreq = getFriendNotify(this.thisUserID);
             //al_xmlr.add(myFriReqXMLreq);
@@ -324,6 +366,20 @@ public class EntNetClient {
             }
         } //end of login request threadCallBack
                 
+        
+        else if (xmlreq.getRequestID().equals(Constants.SESSION_KEY_EST)){
+            String SessionKeyEstStat = xmlreq.getRequestDetail();
+            if (SessionKeyEstStat==Constants.TRUE){
+                XMLRequest.sessionKey = this.sessionKey;
+                
+                System.out.println("session key successfully established");
+            }
+            else{
+                return;
+            }
+        }
+        
+        
         else if (xmlreq.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
             //check if the login is successful
             String rowAffected = xmlreq.getRequestDetail();
