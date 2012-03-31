@@ -6,9 +6,16 @@ package entnetserver;
 
 import java.io.*;
 import java.net.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.*;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -103,6 +110,9 @@ class ThreadedHandler implements Runnable {
 					if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
 						oos.writeObject(rq.getMyResultSet());
 					} 
+					if (rq.getRequestID() == Constants.SESSION_KEY_EST) {
+						
+					}
 					}catch (IOException e) {
 						System.err.println("err for writeobject");
 						e.printStackTrace();
@@ -115,27 +125,54 @@ class ThreadedHandler implements Runnable {
 	public void run() {
 		try {
 			initializeServer();
+
 		} catch (IOException e) {
 			System.err.println("initial server fail");
 			e.printStackTrace();
 			return;
-		}
+		} 
 		while (true) {
 			try {
 			System.out.println("ready to serve");
-			
+				
 			XMLRequest request = (XMLRequest)ois.readObject();
 			//System.out.println(request.generateXMLRequest());
 			
 			 if (request.getRequestID().equals(Constants.SESSION_KEY_EST)) {
+				 //XMLRequest.sessionKey = (MyKey)ois.readObject();
+				 ServerSocket s = new ServerSocket(12345);
+				 //oos.writeBoolean(true);
+				 oos.writeObject(Constants.TRUE);
+				 Socket sessionSocket = s.accept();
+				 
+				 PrivateKey privateKey = SerilizeKey.ReadPrivateKey(null);
+				 MyPKI mypki = MyPKI.getInstance();
+				 Cipher desCipher = Cipher.getInstance(MyPKI.xform);
+				    desCipher.init(Cipher.DECRYPT_MODE, privateKey);
+				    // Create stream
+				    BufferedInputStream bis = new BufferedInputStream(sessionSocket.getInputStream());
+				    CipherInputStream cis = new CipherInputStream(bis, desCipher);
+				    ObjectInputStream sessionObjectInput = new ObjectInputStream(cis);
+
+				    // Read objects
+				    MyKey sessionKey = new MyKey();
+				    //String temp = (String)sessionObjectInput.readObject();
+				    sessionKey.skey = (SecretKey)sessionObjectInput.readObject();
+				    XMLRequest.sessionKey = sessionKey;
+				    sessionObjectInput.close();
+				 
+				 /*
 				 String sessionString = request.getRequestDetail();
 				 MyPKI mPki = MyPKI.getInstance();
 				 PrivateKey pKey= SerilizeKey.ReadPrivateKey(null);
 				 String seed = mPki.decrypt(sessionString.getBytes(), pKey);
 				 SharedKey skKey = SharedKey.getInstance();
-				 XMLRequest.sessionKey = skKey.generateKeyWithPwd(seed);
+//				 XMLRequest.sessionKey = skKey.generateKeyWithPwd("1");
+				 XMLRequest.sessionKey = skKey.generateKeyWithPwd("lin");
 				 request.setRequestDetail(Constants.TRUE);
+				 XMLRequest.sessionKey = skKey.generateKeyWithPwd(seed);
 				 callBackResult(request);
+				 */
 				 continue;
 			}
 			
