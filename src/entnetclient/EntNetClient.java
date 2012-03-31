@@ -23,8 +23,12 @@ import view.*;
 
 import Security.*;
 
+import java.security.PrivateKey;
+
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
 import java.security.PublicKey;
 import java.security.SecureRandom;
 
@@ -86,53 +90,27 @@ public class EntNetClient {
             byte[] salt = new byte [8];
             //r.nextBytes(salt);
             int s = r.nextInt()%100;
+            for (int i=0;i<salt.length;i++){
+                salt[i] = (byte) ((int)salt[i] + 256);
+            }
+            String result = null;
+            for (int i = 0; i < salt.length; i++) {
+		result += Integer.toHexString((0x000000ff & salt[i]) | 0xffffff00).substring(6);
+            }
+
             SharedKey sk = SharedKey.getInstance();
+
             sessionKey = sk.generateKeyWithPwd("lin");
             XMLRequest.sessionKey = sessionKey;
-            /*
-            MyPKI mypki = MyPKI.getInstance();
-            PublicKey pubkey = SerilizeKey.ReadPublicKey();
-             //send the session key to the server
-            try {
-				Socket socket = new Socket("localhost", 8189);
-				// Create Cipher
-			    Cipher desCipher = Cipher.getInstance(MyPKI.xform);
-			    desCipher.init(Cipher.ENCRYPT_MODE, pubkey);
 
-			    // Create stream
-			    BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
-			    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
-			    ObjectOutputStream oos = new ObjectOutputStream(cos);
-
-			    // Write objects
-			    oos.writeChars(Constants.SESSION_KEY_EST);
-			    oos.writeObject(sessionKey.skey);
-			    oos.flush();
-			    oos.close();
-
-			    socket.close();
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchPaddingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            */
-            
+         
             //String sessionkeyencrypted = new String(mypki.encrypt("lin", pubkey));
+
             
+
             //System.out.println("sessionkeyencrypted="+sessionkeyencrypted.length());
             
+
             XMLRequest xmlreq = new XMLRequest(Constants.SESSION_KEY_EST,
                     Constants.INVALID,
                     Constants.INVALID,
@@ -262,6 +240,8 @@ public class EntNetClient {
 				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential, this.k_db);
 		XMLRequest xmlr= loginRequest.clientRequestLogin();
                 
+                
+                System.out.println("client session key: "+xmlr.sessionKey.skey);
                 
                 invokeRequestThread(xmlr);
                 

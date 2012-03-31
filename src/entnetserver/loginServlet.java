@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import sun.nio.cs.ext.DBCS_IBM_EBCDIC_Decoder;
+//import sun.nio.cs.ext.DBCS_IBM_EBCDIC_Decoder;
 import Constants.Constants;
 import JDBC.DataBase;
 import XML.XMLRequest;
@@ -19,9 +19,18 @@ public class loginServlet extends Servelet implements Runnable{
 
 	@Override
 	public void run() {
-		String sqlQuery = "select * from entnetdb_v2.user U where U.user_id = \"" + xmlRequest.getUserID() + 
-				"\" AND U.user_pwd = \"" + xmlRequest.getRequestDetail() + "\";";
-		
+		String sqlQuery = "select aes_decrypt(user_id, 'cornell'),"
+                        + "aes_decrypt(user_pwd,'cornell'),"
+                        + "aes_decrypt(contact_info,'cornell'),"
+                        + "aes_decrypt(role_id,'cornell')"
+                        + " from user where aes_decrypt(user_id, 'cornell') = \"" + xmlRequest.getUserID() + 
+				"\" and aes_decrypt(user_pwd,'cornell') = \"" + xmlRequest.getRequestDetail() + "\";";
+		//String k_db_str = this.handle.getKdb().skey.toString();
+                
+                System.out.println(sqlQuery);
+                
+                //String sqlQuery = "select AES_DECRYPT(user_id, k_db_str) from user U where U.";
+            
 		DataBase dB =  handle.getSysDB();
 		ResultSet rSet = dB.DoQuery(sqlQuery);
 		try {

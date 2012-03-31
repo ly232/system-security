@@ -16,9 +16,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -109,6 +111,8 @@ public class requestHandler implements Runnable {
 					if (tempString.equals(Constants.TRUE)) {
 						MyPKI mypki = MyPKI.getInstance();
 			            PublicKey pubkey = SerilizeKey.ReadPublicKey();
+                                    
+                                    
 			             //send the session key to the server
 							Socket sessionSocket = new Socket("localhost", 12345);
 							// Create Cipher
@@ -119,6 +123,7 @@ public class requestHandler implements Runnable {
 						    BufferedOutputStream bos = new BufferedOutputStream(sessionSocket.getOutputStream());
 						    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
 						    ObjectOutputStream sessionOos = new ObjectOutputStream(cos);
+
 						    
 						    
 						    byte[] keys = xmlRequest.sessionKey.skey.getEncoded();
@@ -126,11 +131,14 @@ public class requestHandler implements Runnable {
 						    sessionOos.writeInt(keys.length);
 						    sessionOos.write(keys);
 						    sessionOos.writeObject(algorithm);
+                                                    
+                                                    //salt:
 				            byte[] s = new byte[8];
 				            for (int i = 0; i < s.length; i++) {
 								s[i] = (byte) i;
 							}
 				            sessionOos.write(s);
+
 						    sessionOos.flush();
 						    sessionOos.close();
 						    sessionSocket.close();
@@ -139,14 +147,13 @@ public class requestHandler implements Runnable {
 					}
 					    return;
 				}
-				//out.println(xmlRequest.generateXMLRequest());
+                                
+                                
+                                
+				//write out encrypted xml request to server:
 				xmlRequest.encrypt();
 				out.writeObject(xmlRequest);
 				
-				if (xmlRequest.getRequestID() == Constants.SESSION_KEY_EST) {
-					//out.writeObject()
-					//out.writeObject(XMLRequest.sessionKey);
-				}
 				
 				if (xmlRequest.getRequestID().equals(Constants.QUIT_ID)) {
 					return;

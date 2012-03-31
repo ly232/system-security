@@ -479,12 +479,14 @@ pack();
 	public void dataRefresh(ArrayList a, String s) {
 		if (s.equals(Constants.FRIENDLISTREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
+
 			for (int i = 0; i < a.size(); i++) {
 				//model.add(i, a.get(i));
 				//System.out.println("friend: "+a.get(i));
 				//jScrollPane1.repaint();
 				jList1.setListData(x);
 			}
+
 		}
 		
 		if (s.equals(Constants.NOTIFYREGION)){

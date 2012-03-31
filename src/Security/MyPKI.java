@@ -34,7 +34,9 @@ public class MyPKI implements SecurityObject{
 	PrivateKey privKey;
 	Signature sig;
 	
+
     public static String xform = "RSA/NONE/PKCS1Padding";
+
         
 	private MyPKI(){
             Security.addProvider(new BouncyCastleProvider());
@@ -62,7 +64,7 @@ public class MyPKI implements SecurityObject{
 			e.printStackTrace();
 		}
 		
-		kpg.initialize(512, sr);
+		kpg.initialize(1024, sr);
 		kp=kpg.generateKeyPair();
 		
 		pubKey=kp.getPublic();

@@ -18,16 +18,26 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
+
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 
 import sun.print.PeekGraphics;
 
-import com.mysql.jdbc.log.Slf4JLogger;
+
+
 import com.sun.corba.se.spi.ior.Writeable;
-import com.sun.tools.corba.se.idl.toJavaPortable.Skeleton;
 
 public class SerilizeKey {
+    
+    public static void main(String[] args){
+        MyPKI mypki = MyPKI.getInstance();
+        MyKey mk = mypki.generateKeyPair();
+        WritePublicKey(mk.pubKey);
+        WritePrivateKey(mk.privKey, "");//TODO: add password as second argument
+        
+    }
+    
 			public static void WritePublicKey(PublicKey key){
 				try {
 					FileOutputStream fos = new FileOutputStream("publicKey.data");

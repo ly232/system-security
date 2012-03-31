@@ -76,7 +76,9 @@ public class CommandLineClientTest {
 			String friend_id = Gets();
 			controller.deleteFriend(friend_id);
 		}else if (request.equals("Show My Region")) {
+
 			controller.returnUserHomePage();
+
 		}else if (request.equals("Post Messege")) {
 			Put("input the friend ID");
 			String friend_id = Gets();

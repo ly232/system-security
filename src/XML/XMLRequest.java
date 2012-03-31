@@ -137,7 +137,7 @@ public class XMLRequest implements Serializable{
 				this.actionID = new String(sk.encrypt(actionID, sessionKey));
 		}
 		
-		public void decrypt(String pwd){
+		public void decrypt(){
 				SharedKey sk  = SharedKey.getInstance();
 				//String  = sk.decrypt(requestID.getBytes(),sessionKey);
 				this.userID = sk.decrypt(userID.getBytes(), sessionKey);
