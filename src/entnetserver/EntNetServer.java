@@ -28,10 +28,7 @@ public class EntNetServer {
     static private String db_pwd;
     
     public static void main(String[] args) {
-        if (args[0]==null){
-            System.err.println("please enter a password for server in run configuration.");
-            System.exit(1);
-        }
+
         
         //static SharedKey k_db 
         try{
@@ -40,12 +37,11 @@ public class EntNetServer {
             //symmKeyCryptoAPI = SharedKey.getInstance();
             //MyKey k_db = symmKeyCryptoAPI.generateKeyWithPwd(args[0]); //everything in db will be encrypted by k_db
             //sys admin must provide the same pwd to generate the same k_db for enc/dec
-            db_pwd = args[0];
             
             DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
 
                                             "root",
-                                            "mysql");
+                                            "");
             sysDB.initialize();
             
   		  InputStreamReader stdin = new  InputStreamReader(System.in);
