@@ -96,6 +96,7 @@ CREATE TABLE `friend` (
 
 LOCK TABLES `friend` WRITE;
 /*!40000 ALTER TABLE `friend` DISABLE KEYS */;
+INSERT INTO `friend` VALUES ('“Uh	v@ð5 T','b(ªžá¬½´cVçÀ\'ÙÌ','ðI‘ç˜éBÐº²òÈ¦ú','¦ „¦ÜåsàÀ·…yéŠ'),('b(ªžá¬½´cVçÀ\'ÙÌ','“Uh	v@ð5 T','ðI‘ç˜éBÐº²òÈ¦ú','×»äÐa³š¬ŽH¢/Ö2×\r');
 /*!40000 ALTER TABLE `friend` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -293,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-03-31  5:03:44
+-- Dump completed on 2012-03-31  9:20:33
