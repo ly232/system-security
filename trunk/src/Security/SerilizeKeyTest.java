@@ -23,8 +23,8 @@ public class SerilizeKeyTest extends TestCase {
 		SerilizeKey.WritePublicKey(pKey);
 		PublicKey testPublicKey = SerilizeKey.ReadPublicKey();
 		assertEquals(pKey, testPublicKey);
-		SerilizeKey.WritePrivateKey(prKey,"123");
-		PrivateKey testPrKey = SerilizeKey.ReadPrivateKey("123");
+		SerilizeKey.WritePrivateKey(prKey,"cs5300cornell");
+		PrivateKey testPrKey = SerilizeKey.ReadPrivateKey("cs5300cornell");
 		assertEquals(prKey, testPrKey);
 		//fail("Not yet implemented");
 	}

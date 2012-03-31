@@ -147,7 +147,7 @@ class ThreadedHandler implements Runnable {
 				 oos.writeObject(Constants.TRUE);
 				 Socket sessionSocket = s.accept();
 				 
-				 PrivateKey privateKey = SerilizeKey.ReadPrivateKey(null);
+				 PrivateKey privateKey = SerilizeKey.ReadPrivateKey(EntNetServer.pwd);
 				 MyPKI mypki = MyPKI.getInstance();
 				 Cipher desCipher = Cipher.getInstance(MyPKI.xform);
 				    desCipher.init(Cipher.DECRYPT_MODE, privateKey);

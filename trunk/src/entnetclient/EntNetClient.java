@@ -50,7 +50,7 @@ public class EntNetClient {
         private ClientMain clientMain;
         private String thisUserID;
         private CommandLineClientTest test;
-        private boolean commandline = false;
+        private boolean commandline = true;
         
         private String k_db; //database passwrod used to perform encryption/decyption
         

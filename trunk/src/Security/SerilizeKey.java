@@ -1,5 +1,7 @@
 package Security;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -10,11 +12,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.*;
+import javax.crypto.spec.DESKeySpec;
+
+import sun.print.PeekGraphics;
 
 import com.mysql.jdbc.log.Slf4JLogger;
 import com.sun.corba.se.spi.ior.Writeable;
+import com.sun.tools.corba.se.idl.toJavaPortable.Skeleton;
 
 public class SerilizeKey {
 			public static void WritePublicKey(PublicKey key){
@@ -55,15 +66,35 @@ public class SerilizeKey {
 				return null;
 			}
 			
-			public static void WritePrivateKey(PrivateKey key, String pwd){
+			public static void WritePrivateKey(PrivateKey keys, String pwd){
 				try {
-                                    
+					// Create Key
+				    byte key[] = pwd.getBytes();
+				    DESKeySpec desKeySpec = new DESKeySpec(key);
+				    SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+				    SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
+
+				    // Create Cipher
+				    Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+				    desCipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+				    // Create stream
+				    FileOutputStream fos = new FileOutputStream("privateKey.data");
+				    BufferedOutputStream bos = new BufferedOutputStream(fos);
+				    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
+				    ObjectOutputStream oos = new ObjectOutputStream(cos);
+
+				    // Write objects
+				    oos.writeObject(keys);
+				    oos.flush();
+				    oos.close();
+				    /*
 					FileOutputStream fos = new FileOutputStream("privateKey.data");
 					ObjectOutputStream oos = new ObjectOutputStream(fos);
 					oos.writeObject(key);
 					oos.flush();
 					oos.close();
-					/*
+					
 					FileOutputStream fos = new FileOutputStream("privateKey.data");
 					DataOutputStream dos = new DataOutputStream(fos);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -95,11 +126,44 @@ public class SerilizeKey {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (InvalidKeyException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchPaddingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			
 			public static PrivateKey ReadPrivateKey(String pwd){
 				try {
+					// Create Key
+				    byte key[] = pwd.getBytes();
+				    DESKeySpec desKeySpec = new DESKeySpec(key);
+				    SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+				    SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
+
+				    // Create Cipher
+				    Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+				    desCipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+				    // Create stream
+				    FileInputStream fis = new FileInputStream("privateKey.data");
+				    BufferedInputStream bis = new BufferedInputStream(fis);
+				    CipherInputStream cis = new CipherInputStream(bis, desCipher);
+				    ObjectInputStream ois = new ObjectInputStream(cis);
+
+				    // Read objects
+				    PrivateKey pKey = (PrivateKey)ois.readObject();
+				    ois.close();
+				    return pKey;
+					/*
 					FileInputStream fis;
 					fis = new FileInputStream("privateKey.data");
 					ObjectInputStream ois = new ObjectInputStream(fis);
@@ -129,6 +193,8 @@ public class SerilizeKey {
 					PrivateKey pKey = (PrivateKey)ois.readObject();
 					ois.close();
 					return pKey;*/
+					
+					
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -136,6 +202,18 @@ public class SerilizeKey {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidKeyException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchPaddingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
