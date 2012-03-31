@@ -66,7 +66,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','Üx^R\\d·„vŸê¯ ','“Uh	v@ğ5 T');
+INSERT INTO `department` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','Üx^R\\d·„vŸê¯ ','“Uh	v@ğ5 T'),('Í5ÉÊİ—\04Êvfû)','úZÙ0V§$BB?K','b(ªá¬½´cVçÀ\'ÙÌ'),('×»äĞa³š¬H¢/Ö2×\r','æùÖHøGoQw.Á	\"Ã[f',' \0—µJ©’»öL.^·');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,6 +147,7 @@ CREATE TABLE `manage` (
 
 LOCK TABLES `manage` WRITE;
 /*!40000 ALTER TABLE `manage` DISABLE KEYS */;
+INSERT INTO `manage` VALUES ('“Uh	v@ğ5 T','p=\0®µGœkÛ¦?V');
 /*!40000 ALTER TABLE `manage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,6 +174,7 @@ CREATE TABLE `postworkmessage` (
 
 LOCK TABLES `postworkmessage` WRITE;
 /*!40000 ALTER TABLE `postworkmessage` DISABLE KEYS */;
+INSERT INTO `postworkmessage` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','¦ „¦ÜåsàÀ·…yéŠ','%ÂG˜İÅşøİñÓÁÃİÈ.<‚QÖ©\"QÀk`…dÑ');
 /*!40000 ALTER TABLE `postworkmessage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,6 +198,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
+INSERT INTO `project` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','`×¦ß§#*Äe\'W%Û'),('Í5ÉÊİ—\04Êvfû)','Zæv—}œx7Jùçİ\nCı'),('×»äĞa³š¬H¢/Ö2×\r','eàı·ëÈë]3«¼¬\'İ™\'');
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,6 +252,7 @@ CREATE TABLE `workat` (
 
 LOCK TABLES `workat` WRITE;
 /*!40000 ALTER TABLE `workat` DISABLE KEYS */;
+INSERT INTO `workat` VALUES ('p=\0®µGœkÛ¦?V','¦ „¦ÜåsàÀ·…yéŠ'),('“Uh	v@ğ5 T','¦ „¦ÜåsàÀ·…yéŠ'),('b(ªá¬½´cVçÀ\'ÙÌ','Í5ÉÊİ—\04Êvfû)'),(' \0—µJ©’»öL.^·','×»äĞa³š¬H¢/Ö2×\r');
 /*!40000 ALTER TABLE `workat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,6 +280,7 @@ CREATE TABLE `workon` (
 
 LOCK TABLES `workon` WRITE;
 /*!40000 ALTER TABLE `workon` DISABLE KEYS */;
+INSERT INTO `workon` VALUES ('p=\0®µGœkÛ¦?V','¦ „¦ÜåsàÀ·…yéŠ'),('“Uh	v@ğ5 T','¦ „¦ÜåsàÀ·…yéŠ'),('b(ªá¬½´cVçÀ\'ÙÌ','Í5ÉÊİ—\04Êvfû)'),(' \0—µJ©’»öL.^·','×»äĞa³š¬H¢/Ö2×\r');
 /*!40000 ALTER TABLE `workon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -288,4 +293,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-03-31  4:41:50
+-- Dump completed on 2012-03-31  5:03:44
