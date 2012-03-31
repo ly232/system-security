@@ -19,17 +19,24 @@ import java.sql.*;
  */
 public class EntNetServer {
 
+	public static String pwd;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try{
             
-            DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v2",
+            DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
                                             "root",
                                             "");
             sysDB.initialize();
             
+  		  InputStreamReader stdin = new  InputStreamReader(System.in);
+		   BufferedReader bReader = new BufferedReader(stdin);
+		   System.out.println("Please input the DataAdministration PWD");
+		    pwd = bReader.readLine();
+
+		  
             
             
             /*--------------------
