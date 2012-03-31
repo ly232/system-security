@@ -20,6 +20,8 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -112,15 +114,23 @@ public class requestHandler implements Runnable {
 							// Create Cipher
 						    Cipher desCipher = Cipher.getInstance(MyPKI.xform);
 						    desCipher.init(Cipher.ENCRYPT_MODE, pubkey);
-
+						    
 						    // Create stream
 						    BufferedOutputStream bos = new BufferedOutputStream(sessionSocket.getOutputStream());
 						    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
 						    ObjectOutputStream sessionOos = new ObjectOutputStream(cos);
-
-						    // Write objects
-						   sessionOos.writeObject(Constants.SESSION_KEY_EST);
-						    //sessionOos.writeObject(XMLRequest.sessionKey.skey);
+						    
+						    
+						    byte[] keys = xmlRequest.sessionKey.skey.getEncoded();
+						    String algorithm = xmlRequest.sessionKey.skey.getAlgorithm();
+						    sessionOos.writeInt(keys.length);
+						    sessionOos.write(keys);
+						    sessionOos.writeObject(algorithm);
+				            byte[] s = new byte[8];
+				            for (int i = 0; i < s.length; i++) {
+								s[i] = (byte) i;
+							}
+				            sessionOos.write(s);
 						    sessionOos.flush();
 						    sessionOos.close();
 						    sessionSocket.close();

@@ -52,10 +52,12 @@ public class SharedKey implements SecurityObject{
 
 	            // Initialize PBE Cipher with key and parameters
 	            try {
-					pbeCipher.init(Cipher.DECRYPT_MODE, mk.skey);
+					pbeCipher.init(Cipher.DECRYPT_MODE, mk.skey, mk.pps);
 				} catch (InvalidKeyException e1) {
 					e1.printStackTrace();
-				} 
+				} catch (InvalidAlgorithmParameterException e1) {
+					e1.printStackTrace();
+				}
 				
 	            try {
 					resultArray= pbeCipher.doFinal(data);
@@ -74,46 +76,13 @@ public class SharedKey implements SecurityObject{
 	            return result;
 			}
 			
-			public  byte[] encrypt(byte[] data, MyKey mk){
-				// Create PBE Cipher
-	            Cipher pbeCipher=null;
-	            byte[] ciphertext = null;
-				try {
-						pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");	
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
-				} catch (NoSuchPaddingException e) {
-					e.printStackTrace();
-				}
 
-	            // Initialize PBE Cipher with key and parameters
-	            try {
-					pbeCipher.init(Cipher.ENCRYPT_MODE, mk.skey);
-				} catch (InvalidKeyException e1) {
-					e1.printStackTrace();
-				}
-
-	            
-	            
-	            byte[] cleartext = data;
-
-	            // Encrypt the cleartext
-	            try {
-					//byte[] ciphertext = null;
-					ciphertext=pbeCipher.doFinal(cleartext);
-				} catch (IllegalBlockSizeException e) {
-					e.printStackTrace();
-				} catch (BadPaddingException e) {
-					e.printStackTrace();
-				}
-				
-				return ciphertext;
-			}
 			
 			public  byte[] encrypt(String data, MyKey mk){
 				// Create PBE Cipher
 	            Cipher pbeCipher=null;
 	            byte[] ciphertext = null;
+	            
 				try {
 						pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");	
 				} catch (NoSuchAlgorithmException e) {
@@ -124,8 +93,10 @@ public class SharedKey implements SecurityObject{
 
 	            // Initialize PBE Cipher with key and parameters
 	            try {
-					pbeCipher.init(Cipher.ENCRYPT_MODE, mk.skey);
+					pbeCipher.init(Cipher.ENCRYPT_MODE, mk.skey, mk.pps);
 				} catch (InvalidKeyException e1) {
+					e1.printStackTrace();
+				} catch (InvalidAlgorithmParameterException e1) {
 					e1.printStackTrace();
 				}
 
@@ -146,6 +117,8 @@ public class SharedKey implements SecurityObject{
 				return ciphertext;
 			}
 	
+			
+		
 			
 			public  MyKey generateKeyWithPwd(String pwd){
 				 
@@ -184,6 +157,8 @@ public class SharedKey implements SecurityObject{
 				return mk;
 			}
 			
+			
+			
 			public SecretKey generateWithInt(int gene){
 				try {
 					KeyGenerator generator;
@@ -199,8 +174,8 @@ public class SharedKey implements SecurityObject{
 
 			}
 			
-			
-			private byte[] encrypt(String message,SecretKey key) {
+			/*
+			private String encrypt(String message,SecretKey key) {
 		// Get a cipher object.
 					Cipher cipher;
 					try {
@@ -209,20 +184,23 @@ public class SharedKey implements SecurityObject{
 						 
 						// Gets the raw bytes to encrypt, UTF8 is needed for
 						// having a standard character set
-						byte[] stringBytes = message.getBytes();
+						byte[] stringBytes = message.getBytes("UTF8");
 					 
 						// encrypt using the cypher
 						byte[] raw = cipher.doFinal(stringBytes);
 					 
 						// converts to base64 for easier display.
-						//BASE64Encoder encoder = new BASE64Encoder();
-						//String base64 = encoder.encode(raw);
+						BASE64Encoder encoder = new BASE64Encoder();
+						String base64 = encoder.encode(raw);
 					 
-						return raw;
+						return base64;
 					} catch (NoSuchAlgorithmException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (NoSuchPaddingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (InvalidKeyException e) {
@@ -239,7 +217,7 @@ public class SharedKey implements SecurityObject{
 	}
 
 			
-			/*			
+			
 			public PBEParameterSpec generatePBEParaSpec(){
 			
 			 SecureRandom r = new SecureRandom();
@@ -260,10 +238,10 @@ public class SharedKey implements SecurityObject{
 				return this.generateKeyWithPwd(uid.toString());
 				
 			}
+			*/
 			
 			
-			
-		
+	/*		
 	
 	public MyKey generateRandomKey(){
 				
