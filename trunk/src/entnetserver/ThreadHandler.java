@@ -16,6 +16,8 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.PBEParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -157,8 +159,16 @@ class ThreadedHandler implements Runnable {
 				    // Read objects
 				    MyKey sessionKey = new MyKey();
 				    //String temp = (String)sessionObjectInput.readObject();
-				    sessionKey.skey = (SecretKey)sessionObjectInput.readObject();
+				    int length = sessionObjectInput.readInt();
+				    byte[] keys = new byte[length];
+				    sessionObjectInput.read(keys);
+				    String algorithm = (String)sessionObjectInput.readObject();
+				    byte[] salt = new byte[8];
+				    sessionObjectInput.read(salt);
+				    sessionKey.pps =  new PBEParameterSpec(salt, 8);
+				    sessionKey.skey = new SecretKeySpec(keys,algorithm);
 				    XMLRequest.sessionKey = sessionKey;
+				    //sessionKey.skey = (SecretKey)sessionObjectInput.readObject();
 				    sessionObjectInput.close();
 				 
 				 /*
