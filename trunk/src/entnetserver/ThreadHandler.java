@@ -32,6 +32,7 @@ import XML.*;
 
 import Constants.Constants;
 import JDBC.DataBase;
+import Security.*;
 
 class ThreadedHandler implements Runnable {
 
@@ -41,18 +42,25 @@ class ThreadedHandler implements Runnable {
 	 * @param db
 	 *            the mysql database
 	 */
-	public ThreadedHandler(Socket i, DataBase db) {
+	public ThreadedHandler(Socket i, DataBase db, String dbpwd) {
 		incoming = i;
 		sysDB = db;
+                db_pwd = dbpwd;
+                symmKeyCryptoAPI = SharedKey.getInstance();
 	}
 
 	// ThreadHandler private variables:
+        private SharedKey symmKeyCryptoAPI;
+        private String db_pwd;
+        public String getDBpwd(){
+            return this.db_pwd;
+        }
 	private Socket incoming;
 	private final int MAX_LOGIN_TRAIL = 5;
 	private String user_id = ""; // each thread serves a single user only. we
 									// need to keep track of who the thread is
 									// serving
-	private String VERIFICATION_CODE = "cornell"; // used for user registration
+	//private String VERIFICATION_CODE = "cornell"; // used for user registration
 	private Scanner read;
 	//private PrintWriter write;
 	private InputStream inStream;
@@ -159,6 +167,7 @@ class ThreadedHandler implements Runnable {
 				    // Read objects
 				    MyKey sessionKey = new MyKey();
 				    //String temp = (String)sessionObjectInput.readObject();
+
 				    int length = sessionObjectInput.readInt();
 				    byte[] keys = new byte[length];
 				    sessionObjectInput.read(keys);
@@ -167,6 +176,8 @@ class ThreadedHandler implements Runnable {
 				    sessionObjectInput.read(salt);
 				    sessionKey.pps =  new PBEParameterSpec(salt, 8);
 				    sessionKey.skey = new SecretKeySpec(keys,algorithm);
+
+                                    
 				    XMLRequest.sessionKey = sessionKey;
 				    //sessionKey.skey = (SecretKey)sessionObjectInput.readObject();
 				    sessionObjectInput.close();
@@ -175,7 +186,10 @@ class ThreadedHandler implements Runnable {
 				 String sessionString = request.getRequestDetail();
 				 MyPKI mPki = MyPKI.getInstance();
 				 PrivateKey pKey= SerilizeKey.ReadPrivateKey(null);
-				 String seed = mPki.decrypt(sessionString.getBytes(), pKey);
+                                 
+                                 System.out.println("sessionString len="+sessionString);
+                                 
+				 String seed = mPki.decrypt(sessionString.getBytes("US-ASCII"), pKey);
 				 SharedKey skKey = SharedKey.getInstance();
 //				 XMLRequest.sessionKey = skKey.generateKeyWithPwd("1");
 				 XMLRequest.sessionKey = skKey.generateKeyWithPwd("lin");
@@ -186,12 +200,29 @@ class ThreadedHandler implements Runnable {
 				 continue;
 			}
 			
-			request.decrypt(null);
-			//System.out.println(request.generateXMLRequest());
+                         System.out.println("loginreq from server: "+request);
+                         
+			request.decrypt();
+                         
+                        
+                        
+                        
 			if (request.getRequestID().equals(Constants.QUIT_ID)) {
 					return;
 				}
+                        
+                       
+                        
+                        //System.out.println("server session key: " + request.sessionKey.skey);
+
+                        
+                        
+                        
+                        
+                        
+                        
 				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
+                                    
 					user_id = request.getUserID();
 					loginServlet lServlet = new loginServlet(request, this);
 					Thread t = new Thread(lServlet);

@@ -27,7 +27,7 @@ public class SharedKey implements SecurityObject{
 			//TODO: just illustrate the idea
 			static SharedKey sKey;
 			MyKey mk = new MyKey();
-			
+			static final String xform = "PBEWithMD5AndDES";
 			private SharedKey(){}
 			public static SharedKey getInstance(){
 				if (sKey == null) {
@@ -43,7 +43,7 @@ public class SharedKey implements SecurityObject{
 				// Create PBE Cipher
 	            Cipher pbeCipher=null;
 				try {
-					pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
+					pbeCipher = Cipher.getInstance(xform);
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				} catch (NoSuchPaddingException e) {
@@ -60,6 +60,9 @@ public class SharedKey implements SecurityObject{
 				}
 				
 	            try {
+                        //int remainder = data.length % 8;
+                        
+                        
 					resultArray= pbeCipher.doFinal(data);
 					/*
 					for (int i = 0; i < resultArray.length; i++) {
@@ -84,7 +87,7 @@ public class SharedKey implements SecurityObject{
 	            byte[] ciphertext = null;
 	            
 				try {
-						pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");	
+						pbeCipher = Cipher.getInstance(xform);	
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				} catch (NoSuchPaddingException e) {
@@ -146,6 +149,7 @@ public class SharedKey implements SecurityObject{
 	            
 	            
 	            mk.skey = pbeKey;
+
 	            byte[] salt = pwd.getBytes();
 	            byte[] s = new byte[8];
 	            for (int i = 0; i < s.length; i++) {
@@ -154,6 +158,7 @@ public class SharedKey implements SecurityObject{
 	            //int count = salt.length;
 	            mk.pps = new PBEParameterSpec(s, 8);
 	            
+
 				return mk;
 			}
 			

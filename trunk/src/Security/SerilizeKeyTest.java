@@ -7,6 +7,20 @@ import junit.framework.TestCase;
 
 public class SerilizeKeyTest extends TestCase {
 
+    public static void main(String[] args){
+                MyPKI mp = MyPKI.getInstance();
+		MyKey myKey = mp.generateKeyPair();
+		PublicKey pKey = myKey.pubKey;
+		PrivateKey prKey = myKey.privKey;
+		SerilizeKey.WritePublicKey(pKey);
+		PublicKey testPublicKey = SerilizeKey.ReadPublicKey();
+		assertEquals(pKey, testPublicKey);
+		SerilizeKey.WritePrivateKey(prKey,"cs5300cornell");
+		PrivateKey testPrKey = SerilizeKey.ReadPrivateKey("cs5300cornell");
+		//assertEquals(prKey, testPrKey);
+        
+    }
+    
 	protected void setUp() throws Exception {
 		super.setUp();
 	}

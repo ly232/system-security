@@ -12,6 +12,7 @@ import JDBC.DataBase;
 
 import com.mysql.jdbc.Driver;
 import java.sql.*;
+import Security.*;
 
 /**
  *
@@ -23,12 +24,28 @@ public class EntNetServer {
     /**
      * @param args the command line arguments
      */
+    static private SharedKey symmKeyCryptoAPI;
+    static private String db_pwd;
+    
     public static void main(String[] args) {
+        if (args[0]==null){
+            System.err.println("please enter a password for server in run configuration.");
+            System.exit(1);
+        }
+        
+        //static SharedKey k_db 
         try{
             
+
+            //symmKeyCryptoAPI = SharedKey.getInstance();
+            //MyKey k_db = symmKeyCryptoAPI.generateKeyWithPwd(args[0]); //everything in db will be encrypted by k_db
+            //sys admin must provide the same pwd to generate the same k_db for enc/dec
+            db_pwd = args[0];
+            
             DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
+
                                             "root",
-                                            "");
+                                            "mysql");
             sysDB.initialize();
             
   		  InputStreamReader stdin = new  InputStreamReader(System.in);
@@ -66,7 +83,7 @@ public class EntNetServer {
             while(true){
                 Socket incoming = s.accept();
                 System.out.println("Spawning thread "+i);
-                Runnable r = new ThreadedHandler(incoming, sysDB);
+                Runnable r = new ThreadedHandler(incoming, sysDB, db_pwd);
                 Thread t = new Thread(r);
                 t.start();
                 i++;
