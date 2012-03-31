@@ -55,6 +55,7 @@ public class EntNetServer {
             
             int i=1;
             ServerSocket s = new ServerSocket(8189);
+            //ServerSocket sessionSocket = new ServerSocket(12345);
             while(true){
                 Socket incoming = s.accept();
                 System.out.println("Spawning thread "+i);

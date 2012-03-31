@@ -1,8 +1,11 @@
 package entnetclient;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,14 +16,26 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
 import Constants.Constants;
+import Security.MyPKI;
+import Security.SerilizeKey;
 import XML.MyResultSet;
 import XML.XMLRequest;
+
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.sql.SQLException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,10 +99,44 @@ public class requestHandler implements Runnable {
 					InputStream o = socket.getInputStream();
 					in = new ObjectInputStream(o);
 				}
+				//exchange the session key with the server
+				if (xmlRequest.getRequestID().equals(Constants.SESSION_KEY_EST)) {
+					xmlRequest.encrypt();
+					out.writeObject(xmlRequest);
+					String tempString = (String)in.readObject();
+					if (tempString.equals(Constants.TRUE)) {
+						MyPKI mypki = MyPKI.getInstance();
+			            PublicKey pubkey = SerilizeKey.ReadPublicKey();
+			             //send the session key to the server
+							Socket sessionSocket = new Socket("localhost", 12345);
+							// Create Cipher
+						    Cipher desCipher = Cipher.getInstance(MyPKI.xform);
+						    desCipher.init(Cipher.ENCRYPT_MODE, pubkey);
 
+						    // Create stream
+						    BufferedOutputStream bos = new BufferedOutputStream(sessionSocket.getOutputStream());
+						    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
+						    ObjectOutputStream sessionOos = new ObjectOutputStream(cos);
+
+						    // Write objects
+						   sessionOos.writeObject(Constants.SESSION_KEY_EST);
+						    //sessionOos.writeObject(XMLRequest.sessionKey.skey);
+						    sessionOos.flush();
+						    sessionOos.close();
+						    sessionSocket.close();
+					}else {
+						System.out.print("error");
+					}
+					    return;
+				}
 				//out.println(xmlRequest.generateXMLRequest());
 				xmlRequest.encrypt();
 				out.writeObject(xmlRequest);
+				
+				if (xmlRequest.getRequestID() == Constants.SESSION_KEY_EST) {
+					//out.writeObject()
+					//out.writeObject(XMLRequest.sessionKey);
+				}
 				
 				if (xmlRequest.getRequestID().equals(Constants.QUIT_ID)) {
 					return;
@@ -138,6 +187,15 @@ public class requestHandler implements Runnable {
                                     Logger.getLogger(requestHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
 				System.err.println("classNotFound");
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 		}

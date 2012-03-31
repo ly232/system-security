@@ -22,8 +22,15 @@ import view.*;
 
 
 import Security.*;
+
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 //import view.MainUI;
 /**
@@ -77,28 +84,63 @@ public class EntNetClient {
         public void establishSessionKey(){
             SecureRandom r = new SecureRandom();
             byte[] salt = new byte [8];
-            r.nextBytes(salt);
+            //r.nextBytes(salt);
+            int s = r.nextInt()%100;
             SharedKey sk = SharedKey.getInstance();
-            sessionKey = sk.generateKeyWithPwd(new String(salt));
-
-            
+            sessionKey = sk.generateKeyWithPwd("lin");
+            XMLRequest.sessionKey = sessionKey;
+            /*
             MyPKI mypki = MyPKI.getInstance();
             PublicKey pubkey = SerilizeKey.ReadPublicKey();
-                        
-            String sessionkeyencrypted = new String(mypki.encrypt(new String(salt), pubkey));
+             //send the session key to the server
+            try {
+				Socket socket = new Socket("localhost", 8189);
+				// Create Cipher
+			    Cipher desCipher = Cipher.getInstance(MyPKI.xform);
+			    desCipher.init(Cipher.ENCRYPT_MODE, pubkey);
+
+			    // Create stream
+			    BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+			    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
+			    ObjectOutputStream oos = new ObjectOutputStream(cos);
+
+			    // Write objects
+			    oos.writeChars(Constants.SESSION_KEY_EST);
+			    oos.writeObject(sessionKey.skey);
+			    oos.flush();
+			    oos.close();
+
+			    socket.close();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            */
             
-            System.out.println("sessionkeyencrypted="+sessionkeyencrypted.length());
+            //String sessionkeyencrypted = new String(mypki.encrypt("lin", pubkey));
+            
+            //System.out.println("sessionkeyencrypted="+sessionkeyencrypted.length());
             
             XMLRequest xmlreq = new XMLRequest(Constants.SESSION_KEY_EST,
                     Constants.INVALID,
                     Constants.INVALID,
                     Constants.INVALID,
-                    sessionkeyencrypted,
+                    Constants.SESSION_KEY_EST,
                     Constants.INVALID);
 
             invokeRequestThread(xmlreq);
-           
-            
         }
         
         
