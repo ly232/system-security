@@ -34,7 +34,7 @@ public class MyPKI implements SecurityObject{
 	PrivateKey privKey;
 	Signature sig;
 	
-        String xform = "RSA/NONE/PKCS1Padding";
+    public static String xform = "RSA/NONE/PKCS1Padding";
         
 	private MyPKI(){
             Security.addProvider(new BouncyCastleProvider());
@@ -105,7 +105,6 @@ public class MyPKI implements SecurityObject{
 		} catch (BadPaddingException e) {
 			e.printStackTrace();
 		}
-		
 		
 		return plainText;
 	}

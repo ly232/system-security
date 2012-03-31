@@ -1,5 +1,6 @@
 package Security;
 
+import java.io.UnsupportedEncodingException;
 import java.rmi.server.UID;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -19,6 +20,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+
+import sun.misc.BASE64Encoder;
 
 public class SharedKey implements SecurityObject{
 			//TODO: just illustrate the idea
@@ -49,12 +52,10 @@ public class SharedKey implements SecurityObject{
 
 	            // Initialize PBE Cipher with key and parameters
 	            try {
-					pbeCipher.init(Cipher.DECRYPT_MODE, mk.skey, mk.pps);
+					pbeCipher.init(Cipher.DECRYPT_MODE, mk.skey);
 				} catch (InvalidKeyException e1) {
 					e1.printStackTrace();
-				} catch (InvalidAlgorithmParameterException e1) {
-					e1.printStackTrace();
-				}
+				} 
 				
 	            try {
 					resultArray= pbeCipher.doFinal(data);
@@ -73,13 +74,10 @@ public class SharedKey implements SecurityObject{
 	            return result;
 			}
 			
-
-			
-			public  byte[] encrypt(String data, MyKey mk){
+			public  byte[] encrypt(byte[] data, MyKey mk){
 				// Create PBE Cipher
 	            Cipher pbeCipher=null;
 	            byte[] ciphertext = null;
-	            
 				try {
 						pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");	
 				} catch (NoSuchAlgorithmException e) {
@@ -90,10 +88,44 @@ public class SharedKey implements SecurityObject{
 
 	            // Initialize PBE Cipher with key and parameters
 	            try {
-					pbeCipher.init(Cipher.ENCRYPT_MODE, mk.skey, mk.pps);
+					pbeCipher.init(Cipher.ENCRYPT_MODE, mk.skey);
 				} catch (InvalidKeyException e1) {
 					e1.printStackTrace();
-				} catch (InvalidAlgorithmParameterException e1) {
+				}
+
+	            
+	            
+	            byte[] cleartext = data;
+
+	            // Encrypt the cleartext
+	            try {
+					//byte[] ciphertext = null;
+					ciphertext=pbeCipher.doFinal(cleartext);
+				} catch (IllegalBlockSizeException e) {
+					e.printStackTrace();
+				} catch (BadPaddingException e) {
+					e.printStackTrace();
+				}
+				
+				return ciphertext;
+			}
+			
+			public  byte[] encrypt(String data, MyKey mk){
+				// Create PBE Cipher
+	            Cipher pbeCipher=null;
+	            byte[] ciphertext = null;
+				try {
+						pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");	
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				} catch (NoSuchPaddingException e) {
+					e.printStackTrace();
+				}
+
+	            // Initialize PBE Cipher with key and parameters
+	            try {
+					pbeCipher.init(Cipher.ENCRYPT_MODE, mk.skey);
+				} catch (InvalidKeyException e1) {
 					e1.printStackTrace();
 				}
 
@@ -114,8 +146,6 @@ public class SharedKey implements SecurityObject{
 				return ciphertext;
 			}
 	
-			
-		
 			
 			public  MyKey generateKeyWithPwd(String pwd){
 				 
@@ -143,12 +173,73 @@ public class SharedKey implements SecurityObject{
 	            
 	            
 	            mk.skey = pbeKey;
-	            mk.pps= generatePBEParaSpec();
+	            byte[] salt = pwd.getBytes();
+	            byte[] s = new byte[8];
+	            for (int i = 0; i < s.length; i++) {
+					s[i] = (byte) i;
+				}
+	            //int count = salt.length;
+	            mk.pps = new PBEParameterSpec(s, 8);
 	            
 				return mk;
 			}
 			
+			public SecretKey generateWithInt(int gene){
+				try {
+					KeyGenerator generator;
+					generator = KeyGenerator.getInstance("DES");
+					generator.init(gene);
+					SecretKey key = generator.generateKey();
+					return key;
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+
+			}
 			
+			
+			private byte[] encrypt(String message,SecretKey key) {
+		// Get a cipher object.
+					Cipher cipher;
+					try {
+						cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+						cipher.init(Cipher.ENCRYPT_MODE, key);
+						 
+						// Gets the raw bytes to encrypt, UTF8 is needed for
+						// having a standard character set
+						byte[] stringBytes = message.getBytes();
+					 
+						// encrypt using the cypher
+						byte[] raw = cipher.doFinal(stringBytes);
+					 
+						// converts to base64 for easier display.
+						//BASE64Encoder encoder = new BASE64Encoder();
+						//String base64 = encoder.encode(raw);
+					 
+						return raw;
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NoSuchPaddingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvalidKeyException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalBlockSizeException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (BadPaddingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				return null;
+	}
+
+			
+			/*			
 			public PBEParameterSpec generatePBEParaSpec(){
 			
 			 SecureRandom r = new SecureRandom();
@@ -172,7 +263,7 @@ public class SharedKey implements SecurityObject{
 			
 			
 			
-	/*		
+		
 	
 	public MyKey generateRandomKey(){
 				
