@@ -120,7 +120,7 @@ public class XMLRequest implements Serializable{
 			this.requestDetail = requestDetail;
 			this.actionID = ActionID;
 			//TODO: generate a sessionKey
-			generateSessionKey();
+			//generateSessionKey();
 			//encrypt();
 		}
 		
@@ -157,7 +157,7 @@ public class XMLRequest implements Serializable{
 	 */
 	public XMLRequest(String xmlString) throws ParserConfigurationException, SAXException, IOException {
 		   this.ParseXML(xmlString);
-		   generateSessionKey();
+		   //generateSessionKey();
 			//encrypt();
 		}
 		
