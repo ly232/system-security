@@ -37,6 +37,9 @@ public class SharedKey implements SecurityObject{
 			}
 			
 			public  String decrypt(byte[] data, MyKey mk){
+				if (data == null) {
+					return null;
+				}
 				byte[] resultArray;
 				String result = "";
 				
@@ -82,6 +85,9 @@ public class SharedKey implements SecurityObject{
 
 			
 			public  byte[] encrypt(String data, MyKey mk){
+				if (data == null) {
+					return null;
+				}
 				// Create PBE Cipher
 	            Cipher pbeCipher=null;
 	            byte[] ciphertext = null;
@@ -103,9 +109,13 @@ public class SharedKey implements SecurityObject{
 					e1.printStackTrace();
 				}
 
+	            byte[] cleartext;
+	            if (data == null) {
+	            	  cleartext = null;
+				}else {
+					 cleartext = data.getBytes();
+				}
 	            
-	            
-	            byte[] cleartext = data.getBytes();
 
 	            // Encrypt the cleartext
 	            try {

@@ -93,11 +93,13 @@ public class clientRequest {
     
     
     private XMLRequest getFriendNotify(String uid){
-        String query = "SELECT F.user1 FROM friend F WHERE F.user2 = '" + uid + "'"
-                + "AND F.user1 not in " +
-                "(SELECT F2.user2 FROM friend F2 WHERE F2.user1 = '" + uid + "'"
-                + "AND F2.user1 in ("
-                + "SELECT F3.user2 FROM friend F3 WHERE F3.user1=F2.user2));";
+        String query = "SELECT aes_decrypt(F.user1,'cornell') FROM friend F WHERE aes_decrypt(F.user2,'cornell') = '" + uid + "'"
+                + " AND aes_decrypt(F.user1,'cornell') not in " +
+                "(SELECT aes_decrypt(F2.user2,'cornell') FROM friend F2 WHERE aes_decrypt(F2.user1,'cornell') = '" + uid + "' "
+                + "AND aes_decrypt(F2.user1,'cornell') in ("
+                + "SELECT aes_decrypt(F3.user2,'cornell') FROM friend F3 WHERE aes_decrypt(F3.user1,'cornell')=aes_decrypt(F2.user2,'cornell')));";
+        
+        System.out.println("aerata"+query);
         
         XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
@@ -124,11 +126,13 @@ public class clientRequest {
         
         //SELECT AES_DECRYPT(first_name, 'usa2010'), AES_DECRYPT(address, 'usa2010') from user;
         
-        String query = "SELECT AES_DECRYPT(F.user2, '"+this.k_db+"') as F.user2 FROM friend F WHERE "
-                + "AES_DECRYPT(F.user1,'"+this.k_db+"') = '" + uid + "'"
+        String query = "SELECT AES_DECRYPT(F.user2, '"+this.k_db+"') FROM friend F WHERE "
+                + "AES_DECRYPT(F.user1,'"+this.k_db+"') = '" + uid + "' "
                 + "AND AES_DECRYPT(F.user1,'"+this.k_db+"') in ("
                 + "SELECT AES_DECRYPT(F2.user2,'"+this.k_db+"') "
                 + "FROM friend F2 WHERE AES_DECRYPT(F2.user1,'"+this.k_db+"')=AES_DECRYPT(F.user2,'"+this.k_db+"'));";
+        
+       // System.out.println("aesraer"+query);
         
         
         XMLRequest xmlapi = new XMLRequest(
@@ -248,7 +252,7 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION6)){
-            String query = "SELECT * FROM friend WHERE user1 = '" + uid + "';";
+            String query = "SELECT aes_decrypt(user1,'cornell'), aes_decrypt(user2,'cornell'), aes_decrypt(message,'cornell'), aes_decrypt(msg_id,'cornell') FROM friend WHERE aes_decrypt(user1,'cornell') = '" + uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                     Constants.READ_REGION_ID,
                     uid,
