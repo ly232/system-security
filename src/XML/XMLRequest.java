@@ -132,8 +132,16 @@ public class XMLRequest implements Serializable{
 				SharedKey sk  = SharedKey.getInstance();
 				this.userID = new String(sk.encrypt(userID, sessionKey));
 				this.regionID = new String(sk.encrypt(regionID, sessionKey));
-				this.sessionID = new String(sk.encrypt(sessionID, sessionKey));//for the later use
-				this.requestDetail = new String(sk.encrypt(requestDetail, sessionKey));
+				if (sessionID == null) {
+					this.sessionID = Constants.INVALID;
+				}else {
+					this.sessionID = new String(sk.encrypt(sessionID, sessionKey));//for the later use
+				}
+				if (requestDetail == null) {
+					this.requestDetail = Constants.INVALID;
+				}else {
+					this.requestDetail = new String(sk.encrypt(requestDetail, sessionKey));
+				}
 				this.actionID = new String(sk.encrypt(actionID, sessionKey));
 		}
 		
@@ -142,8 +150,12 @@ public class XMLRequest implements Serializable{
 				//String  = sk.decrypt(requestID.getBytes(),sessionKey);
 				this.userID = sk.decrypt(userID.getBytes(), sessionKey);
 				this.regionID = sk.decrypt(regionID.getBytes(), sessionKey);
-				this.sessionID = sk.decrypt(sessionID.getBytes(), sessionKey);//for the later use
-				this.requestDetail = sk.decrypt(requestDetail.getBytes(), sessionKey);
+				if (!this.sessionID.equals(Constants.INVALID)) {
+					this.sessionID = sk.decrypt(sessionID.getBytes(), sessionKey);//for the later use
+				}
+				if (!this.requestDetail.equals(Constants.INVALID)) {
+					this.requestDetail = sk.decrypt(requestDetail.getBytes(), sessionKey);
+				}
 				this.actionID = sk.decrypt(actionID.getBytes(), sessionKey);
 		}
 		

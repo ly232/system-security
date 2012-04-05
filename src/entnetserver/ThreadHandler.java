@@ -143,8 +143,7 @@ class ThreadedHandler implements Runnable {
 		} 
 		while (true) {
 			try {
-			System.out.println("ready to serve");
-				
+			System.out.println("ready to serve");	
 			XMLRequest request = (XMLRequest)ois.readObject();
 			//System.out.println(request.generateXMLRequest());
 			

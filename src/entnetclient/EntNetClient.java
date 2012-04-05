@@ -36,6 +36,8 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;
 //import view.MainUI;
 /**
  * 
@@ -65,7 +67,7 @@ public class EntNetClient {
         private EntNetClient(ClientMain cm){
             clientMain = cm;
             //TODO: change this to server's replied k_db:
-            k_db = "DATABASEPASSWORD";
+            k_db = "cornell";
             establishSessionKey();
         }
         
@@ -164,16 +166,18 @@ public class EntNetClient {
         }
 	
         public void deleteFriend(String friend_id){
-        	String sqlQueryString = "DELETE FROM friend where user1 = \"" + thisUserID + 
-        													"\" AND user2 = \"" + friend_id + "\";";
+        	String sqlQueryString = "DELETE FROM friend where aes_decrypt(user1,'cornell') = \"" + thisUserID + 
+        													"\" AND aes_decrypt(user2,'cornell') = \"" + friend_id + "\";";
           	XMLRequest xmlRequest = new XMLRequest(Constants.DELETE_FRIEND_ID, 
           				thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
           		invokeRequestThread(xmlRequest);
         }
         
+        static int index = 1; 
+        
         public void friendRequest(String friend_id){
-      	  String sqlQueryString = "insert into friend values(\"" + thisUserID + "\",\"" + friend_id + 
-      			  									"\",\"" + Constants.ADD_FRIEND_ID + "\",null);";
+        
+      	  String sqlQueryString = "insert into friend (user1, user2, message, msg_id) values(aes_enctypr("+thisUserID+",'cornell'), aes_enctypr("+friend_id+",'cornell') , aes_enctypr("+Constants.ADD_FRIEND_ID+",'cornell'),  null);";
       	  XMLRequest xmlRequest = new XMLRequest(Constants.ADD_FRIEND_ID, 
       			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
       	  invokeRequestThread(xmlRequest);
@@ -195,10 +199,13 @@ public class EntNetClient {
           	  invokeRequestThread(xmlRequest);
         }*/
         
+        //TODO
         private XMLRequest getFriendList(String uid){
-        String query = "SELECT F.user2 FROM friend F WHERE F.user1 = '" + uid + "'"
-                + "AND F.user1 in ("
-                + "SELECT F2.user2 FROM friend F2 WHERE F2.user1=F.user2);";
+        String query = "SELECT aes_decrypt(F.user2,'cornell') FROM friend F WHERE aes_decrypt(F.user1,'cornell') = '" + uid + "' "
+                + "AND aes_decrypt(F.user1,'cornell') in ("
+                + "SELECT aes_decrypt(F2.user2,'cornell') FROM friend F2 WHERE aes_decrypt(F2.user1,'cornell')=aes_decrypt(F.user2,'cornell'));";
+        
+        System.out.println("aeraeat"+query);
         
         XMLRequest xmlapi = new XMLRequest(
                 Constants.READ_REGION_ID,
@@ -213,11 +220,13 @@ public class EntNetClient {
 
         
         private XMLRequest getFriendNotify(String uid){
-            String query = "SELECT F.user1 FROM friend F WHERE F.user2 = '" + uid + "'"
+            String query = "SELECT aes_decrypt(F.user1,'cornell') FROM friend F WHERE F.user2 = '" + uid + "'"
                     + "AND F.user1 not in " +
                     "(SELECT F2.user2 FROM friend F2 WHERE F2.user1 = '" + uid + "'"
                     + "AND F2.user1 in ("
                     + "SELECT F3.user2 FROM friend F3 WHERE F3.user1=F2.user2));";
+            System.out.println("hadiheiat"+query);
+            
             
             XMLRequest xmlapi = new XMLRequest(
                     Constants.READ_REGION_ID,
