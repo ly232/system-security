@@ -47,15 +47,6 @@ public class clientRequest {
     public XMLRequest clientRequestRegist() {
 
         
-        
-        /*
-                    String myQuery = "INSERT INTO user VALUES ('" + requestMsg.get("user_id") 
-                    + "', '" + requestMsg.get("password") 
-                    //+ "', '" + requestMsg.get("person_name")
-                    + "', '" + requestMsg.get("contact_info")
-                    + "', " + requestMsg.get("role_id") + ");";
-    */
-        
      
         
         String myQuery = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
@@ -132,6 +123,10 @@ public class clientRequest {
                 + "SELECT AES_DECRYPT(F2.user2,'"+this.k_db+"') "
                 + "FROM friend F2 WHERE AES_DECRYPT(F2.user1,'"+this.k_db+"')=AES_DECRYPT(F.user2,'"+this.k_db+"'));";
         
+        
+        
+
+        
        // System.out.println("aesraer"+query);
         
         
@@ -153,8 +148,8 @@ public class clientRequest {
             
             //SELECT AES_DECRYPT(first_name, 'usa2010'), AES_DECRYPT(address, 'usa2010') from user;
             
-            String query = "SELECT AES_DECRYPT(user_id,'"+this.k_db+"') as user_id, "
-                    + "AES_DECRYPT(contact_info,'"+this.k_db+"') as contact_info "
+            String query = "SELECT AES_DECRYPT(user_id,'"+this.k_db+"'), "
+                    + "AES_DECRYPT(contact_info,'"+this.k_db+"') "
                     + "FROM user WHERE AES_DECRYPT(user_id,'"+this.k_db+"') = '" + uid + "';";
             
             XMLRequest xmlapi = new XMLRequest(
@@ -171,7 +166,7 @@ public class clientRequest {
             //String query = "SELECT loc_name FROM currloc NATURAL JOIN location"
             //        + " WHERE user_id = '" + uid + "' AND currloc.loc_id = location.loc_id;";
             
-            String query = "SELECT AES_DECRYPT(loc_name,'"+this.k_db+"') as loc_name FROM currloc NATURAL JOIN location"
+            String query = "SELECT AES_DECRYPT(loc_name,'"+this.k_db+"') FROM currloc NATURAL JOIN location"
                     + " WHERE AES_DECRYPT(user_id,'"+this.k_db+"') = '" 
                     + uid + "' AND AES_DECRYPT(currloc.loc_id,'"+this.k_db+"') = AES_DECRYPT(location.loc_id,'"+this.k_db+"');";
             
@@ -252,7 +247,14 @@ public class clientRequest {
             return xmlapi;
         }
         else if (rid.equals(Constants.REGION6)){
-            String query = "SELECT aes_decrypt(user1,'cornell'), aes_decrypt(user2,'cornell'), aes_decrypt(message,'cornell'), aes_decrypt(msg_id,'cornell') FROM friend WHERE aes_decrypt(user1,'cornell') = '" + uid + "';";
+            String query = 
+            	"SELECT aes_decrypt(user1,'"+k_db
+            	+"') as user1, aes_decrypt(user2,'"
+            	+k_db+"') as user2, aes_decrypt(message,'"
+            	+k_db+"') as message, aes_decrypt(msg_id,'"
+            	+k_db+"') as msg_id FROM friend WHERE aes_decrypt(user1,'"
+            	+k_db+"') = '" 
+            	+ uid + "';";
             XMLRequest xmlapi = new XMLRequest(
                     Constants.READ_REGION_ID,
                     uid,

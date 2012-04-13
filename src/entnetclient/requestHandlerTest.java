@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import javax.sql.rowset.WebRowSet;
 
-import com.sun.rowset.WebRowSetImpl;
+//import com.sun.rowset.WebRowSetImpl;
 
 import entnetserver.EntNetServer;
 import entnetserver.loginServlet;

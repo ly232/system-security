@@ -5,12 +5,13 @@ import java.io.Serializable;
 import java.rmi.server.UID;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
+//import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import Security.MyKey;
 import Security.MyPKI;
@@ -30,6 +31,10 @@ public class XMLRequest implements Serializable{
 		String requestDetail;
 		String actionID;
 		MyResultSet myResultSet;
+		
+		public byte[] cipher_sessionKey;
+		
+		public HashMap<String, byte[]> requestData;
 
 		public MyResultSet getMyResultSet() {
 			return myResultSet;
@@ -122,11 +127,18 @@ public class XMLRequest implements Serializable{
 			//TODO: generate a sessionKey
 			//generateSessionKey();
 			//encrypt();
+			
+			//4/12/12
+			this.requestData = new HashMap<String, byte[]>();
 		}
 		
 		
 		public void encrypt(){
 				if (requestID == Constants.SESSION_KEY_EST) {
+					//encrypt requestDetail with server's public key
+					
+					
+					
 					return;
 				}
 				SharedKey sk  = SharedKey.getInstance();
@@ -149,7 +161,9 @@ public class XMLRequest implements Serializable{
 				SharedKey sk  = SharedKey.getInstance();
 				//String  = sk.decrypt(requestID.getBytes(),sessionKey);
 				this.userID = sk.decrypt(userID.getBytes(), sessionKey);
+				//System.out.println("DECRYPTED USERID="+userID);
 				this.regionID = sk.decrypt(regionID.getBytes(), sessionKey);
+				//System.out.println("DECRYPTED regionID="+regionID);
 				if (!this.sessionID.equals(Constants.INVALID)) {
 					this.sessionID = sk.decrypt(sessionID.getBytes(), sessionKey);//for the later use
 				}

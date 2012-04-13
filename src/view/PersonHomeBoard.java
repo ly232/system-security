@@ -10,9 +10,16 @@ import entnetclient.EntNetClient;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
@@ -254,7 +261,30 @@ jLabel6.setText("Friend Messages");
 jButtonFM.setText("Post");
 jButtonFM.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonFMActionPerformed(evt);
+try {
+	jButtonFMActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -302,7 +332,30 @@ jButtonReturnActionPerformed(evt);
 jButtonDeleteFriend.setText("Delete Friend");
 jButtonDeleteFriend.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonDeleteFriendActionPerformed(evt);
+try {
+	jButtonDeleteFriendActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -377,7 +430,7 @@ pack();
 
 	//GEN-END:initComponents
 	private void jButtonDeleteFriendActionPerformed(
-			java.awt.event.ActionEvent evt) {
+			java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		controller.deleteFriend(jLabelID.getText());
 	}
 
@@ -389,7 +442,7 @@ pack();
 		controller.quitClient();
 	}
 
-	private void jButtonFMActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonFMActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		controller.postMessage(jLabelID.getText(), jTextFieldMessage.getText());
 	}
 

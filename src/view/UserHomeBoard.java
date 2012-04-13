@@ -10,9 +10,16 @@ import entnetclient.EntNetClient;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import Constants.Constants;
 
@@ -120,7 +127,30 @@ jTextField1ActionPerformed(evt);
 jButtonCon.setText("Update");
 jButtonCon.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonConActionPerformed(evt);
+try {
+	jButtonConActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -337,7 +367,30 @@ jButtonLogoutActionPerformed(evt);
 jButtonAdd.setText("Add Friend");
 jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonAddActionPerformed(evt);
+try {
+	jButtonAddActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -456,8 +509,16 @@ pack();
 		// TODO add your handling code here:
 	}
 
-	private void jButtonConActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonConActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		// TODO add your handling code here:
+		String new_contact_info = jTextField1.getText();
+		if (new_contact_info.length()==0){
+			System.out.println("cannot update new contact info to null");
+		}
+		else{
+			controller.clientUpdateRegion(Constants.REGION1, new_contact_info);
+		}
+		//System.out.println("button clicked!!!");
 	}
 
 	private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -468,7 +529,7 @@ pack();
 		// TODO add your handling code here:
 	}
 
-	private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		controller.friendRequest(jTextFieldAF.getText());
 	}
 

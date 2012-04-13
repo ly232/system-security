@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
 import java.util.*;
+
 import Constants.*;
 import XML.MyResultSet;
 import XML.XMLRequest;
@@ -26,39 +27,39 @@ import Security.*;
 import java.security.PrivateKey;
 
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;
-//import view.MainUI;
-/**
- * 
- * @author Lin
- */
-
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 
 public class EntNetClient {
-
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
 
         private static EntNetClient instance;    
         private ClientMain clientMain;
         private String thisUserID;
         private CommandLineClientTest test;
         private boolean commandline = false;
+        public static MyKey sessionKey;
         
         private String k_db; //database passwrod used to perform encryption/decyption
+        
+        //Lin-4/11/12
+        public PublicKey K_server;
+        public String k_session;
+        
         
         public String getThisUserID(){
             return thisUserID;
@@ -66,9 +67,7 @@ public class EntNetClient {
         
         private EntNetClient(ClientMain cm){
             clientMain = cm;
-            //TODO: change this to server's replied k_db:
             k_db = "cornell";
-            establishSessionKey();
         }
         
         public EntNetClient(CommandLineClientTest t){
@@ -76,42 +75,143 @@ public class EntNetClient {
         }
 
         public static EntNetClient getInstance(ClientMain cm) {
-            if (instance==null)
+        	
+        	if (instance==null)
                 return new EntNetClient(cm);
             else
                 return instance;
         }
         
+        public void getServerPublicKey(){
+        	System.out.println("getting server's public key...");
+        	
+        	XMLRequest xmlreq = new XMLRequest(Constants.REQ_SERVER_PUBKEY,
+                    Constants.INVALID,
+                    Constants.INVALID,
+                    Constants.INVALID,
+                    Constants.REQ_SERVER_PUBKEY,
+                    Constants.INVALID);
+        	invokeRequestThread(xmlreq);
+        }
+        
+        public void establishSessionKey() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        	SecureRandom r = new SecureRandom();
+        	Integer s = r.nextInt();
+        	k_session = s.toString();
+        	System.out.println("client: k_session = "+k_session);
+        	//SharedKey sk = SharedKey.getInstance();
+        	//k_session = sk.generateSessionKeyWithPassword(sessionKeyGenStr);
+        	//now send encrypted sessionKeyGenStr and cipher to server
+        	MyPKI mypki = MyPKI.getInstance();
+        	byte[] cipher_sessionKeyGenStr = mypki.rsaEncrypt(K_server, k_session.getBytes());
+        	XMLRequest xmlreq = new XMLRequest(Constants.SESSION_KEY_EST,
+                    Constants.INVALID,
+                    Constants.INVALID,
+                    Constants.INVALID,
+                    Constants.SESSION_KEY_EST,
+                    Constants.INVALID);
+        	xmlreq.cipher_sessionKey = cipher_sessionKeyGenStr;
+        	invokeRequestThread(xmlreq);
+        }
         
         
-        ///////////////////////////////////
+        
+        
+        public void clientRegist(String uname, String pwd, String contactinfo, String roleID) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        	XMLRequest xmlr = new XMLRequest(
+        			Constants.REGIST_REQUEST_ID,
+        			this.thisUserID,
+        			Constants.INVALID, //region id
+        			Constants.INVALID, //session id
+        			Constants.INVALID, //request detail
+        			"UPDATE");
+        	SharedKey sk = SharedKey.getInstance();
+        	xmlr.requestData.put("user_id", sk.sessionKeyEncrypt(this.k_session, uname));
+        	xmlr.requestData.put("password", sk.sessionKeyEncrypt(this.k_session, pwd));
+        	xmlr.requestData.put("contact_info", sk.sessionKeyEncrypt(this.k_session, contactinfo));
+        	xmlr.requestData.put("role_id", sk.sessionKeyEncrypt(this.k_session, roleID));
+        	invokeRequestThread(xmlr);
+        }
+        
+        public void clientLogin(String tmp_uid, String tmp_pwd) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        	XMLRequest xmlr = new XMLRequest(
+        			Constants.LOGIN_REQUEST_ID,
+        			this.thisUserID,
+        			Constants.INVALID, //region id
+        			Constants.INVALID, //session id
+        			Constants.INVALID, //request detail
+        			"SELECT");
+        	SharedKey sk = SharedKey.getInstance();
+        	//System.out.println("k_session="+k_session);
+        	xmlr.requestData.put("user_id", sk.sessionKeyEncrypt(this.k_session, tmp_uid));
+        	xmlr.requestData.put("password", sk.sessionKeyEncrypt(this.k_session, tmp_pwd));
+        	invokeRequestThread(xmlr);
+        }
+        
+        private ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
+        {
+        	ArrayList<XMLRequest> retArrList = new ArrayList<XMLRequest>();
+        	//get list of current friends:
 
-        public static MyKey sessionKey;
-        public void establishSessionKey(){
+        	XMLRequest friendListXMLRequest = getFriendList(uid);
+        	retArrList.add(friendListXMLRequest);
+        	//get friend requests:
+        	XMLRequest myFriReqXMLreq = new XMLRequest(
+                    Constants.READ_REGION_ID,
+                    uid,
+                    Constants.NOTIFYREGION, //region id
+                    Constants.INVALID, //session id...not for 
+                    Constants.INVALID, //request detail...SQL statement to be excuted by server
+                    "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+            );
+        	retArrList.add(myFriReqXMLreq);
+        	//load each of the rest 6 regions:
+            for (int i=1;i<=6;i++){
+            	XMLRequest xmlr = new XMLRequest(
+                        Constants.READ_REGION_ID,
+                        uid,
+                        "REGION"+i, //region id
+                        Constants.INVALID, //session id...no longer used
+                        Constants.INVALID,
+                        "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+                    );
+            	
+                retArrList.add(xmlr);            
+            }
+            return retArrList;
+        }
+        
+/*
+        public void clientLogin_old(String tmp_uid, String tmp_pwd)
+			throws IOException {
+                        
+				HashMap<String, String> loginCredential = new HashMap<String, String>();
+				loginCredential.put("user_id", tmp_uid); 
+				loginCredential.put("password", tmp_pwd); 
+				clientRequest loginRequest = new clientRequest(
+						Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential, this.k_db);
+				XMLRequest xmlr= loginRequest.clientRequestLogin();
+                //System.out.println("client session key: "+xmlr.sessionKey.skey);
+                invokeRequestThread(xmlr);
+        }
+        
+        public void establishSessionKey_old(){
+
             SecureRandom r = new SecureRandom();
             byte[] salt = new byte [8];
-            //r.nextBytes(salt);
-            int s = r.nextInt()%100;
+            //int s = r.nextInt()%100;
             for (int i=0;i<salt.length;i++){
                 salt[i] = (byte) ((int)salt[i] + 256);
             }
             String result = null;
             for (int i = 0; i < salt.length; i++) {
-		result += Integer.toHexString((0x000000ff & salt[i]) | 0xffffff00).substring(6);
+            	result += Integer.toHexString((0x000000ff & salt[i]) | 0xffffff00).substring(6);
             }
-
+            
             SharedKey sk = SharedKey.getInstance();
-
-            sessionKey = sk.generateKeyWithPwd("lin");
-            XMLRequest.sessionKey = sessionKey;
-
-         
-            //String sessionkeyencrypted = new String(mypki.encrypt("lin", pubkey));
-
             
-
-            //System.out.println("sessionkeyencrypted="+sessionkeyencrypted.length());
-            
+            this.sessionKey = sk.generateKeyWithPwd(result);
+            XMLRequest.sessionKey = this.sessionKey;
 
             XMLRequest xmlreq = new XMLRequest(Constants.SESSION_KEY_EST,
                     Constants.INVALID,
@@ -120,44 +220,52 @@ public class EntNetClient {
                     Constants.SESSION_KEY_EST,
                     Constants.INVALID);
 
+            
+            System.out.println("===sessionKey===");
+            
+            //TODO: encrypt XMLRequest.sessionKey with public key of server
+            //but first need to get server's public key...
+            //that means we need server to reply pub key back to client first...
+            
+            
+            
             invokeRequestThread(xmlreq);
         }
+
         
-        
-        public void clientRegist(
-              //  String VerificationCode, 
+        public void clientRegist_old(
                 String Username,
                 String Password,
-              //  String RealName,
                 String ContactInfo,
                 String Role_ID 
                         ) 
         {
-		HashMap<String, String> RegistCredential = new HashMap<String, String>();
-		try {
-                  //  RegistCredential.put("ver_code", VerificationCode);
-                    RegistCredential.put("user_id", Username);
-                    RegistCredential.put("password", Password);
-                  //  RegistCredential.put("person_name", RealName);
-                    RegistCredential.put("contact_info", ContactInfo);
-                    RegistCredential.put("role_id", Role_ID);
-                } catch (Exception e) {
-		}
-		;
-
-		clientRequest registRequest = new clientRequest(
-				Constants.REGIST_REQUEST_ID, Username, RegistCredential, this.k_db);
-		//String retXML = registRequest.generateXMLforRequest();
-		XMLRequest xmlr = registRequest.clientRequestRegist();
-                        
-                invokeRequestThread(xmlr);
-	}
+			HashMap<String, String> RegistCredential = new HashMap<String, String>();
+			try {
+	                    RegistCredential.put("user_id", Username);
+	                    RegistCredential.put("password", Password);
+	                    RegistCredential.put("contact_info", ContactInfo);
+	                    RegistCredential.put("role_id", Role_ID);
+	        }catch (Exception e) {};
+			clientRequest registRequest = new clientRequest(
+					Constants.REGIST_REQUEST_ID, Username, RegistCredential, this.k_db);
+			XMLRequest xmlr = registRequest.clientRequestRegist();
+	        invokeRequestThread(xmlr);
+        }
+        
+        */
+        
         
         public void quitClient(){
-        	XMLRequest xmlRequest = new XMLRequest(Constants.QUIT_ID, 
-        			  thisUserID,Constants.FRIENDLISTREGION, null, Constants.QUIT_ID, Constants.UPDATE);
+        	XMLRequest xmlRequest = new XMLRequest(
+        			Constants.QUIT_ID, 
+        			thisUserID,
+        			Constants.INVALID, 
+        			Constants.INVALID, 
+        			Constants.INVALID, 
+        			Constants.INVALID
+        			);
         	  invokeRequestThread(xmlRequest);
-                  //System.exit(0);
         	  if (commandline) {
 				
 			} else {
@@ -165,109 +273,76 @@ public class EntNetClient {
 			}
         }
 	
-        public void deleteFriend(String friend_id){
-        	String sqlQueryString = "DELETE FROM friend where aes_decrypt(user1,'cornell') = \"" + thisUserID + 
-        													"\" AND aes_decrypt(user2,'cornell') = \"" + friend_id + "\";";
-          	XMLRequest xmlRequest = new XMLRequest(Constants.DELETE_FRIEND_ID, 
-          				thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
+        public void deleteFriend(String friend_id) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+          		XMLRequest xmlRequest = new XMLRequest(
+          				Constants.DELETE_FRIEND_ID, 
+          				thisUserID,
+          				Constants.FRIENDLISTREGION, 
+          				Constants.INVALID, 
+          				Constants.INVALID, 
+          				Constants.UPDATE);
+          		SharedKey sk = SharedKey.getInstance();
+          		xmlRequest.requestData.put("deleteFriendID", sk.sessionKeyEncrypt(this.k_session, friend_id));
+          		
           		invokeRequestThread(xmlRequest);
         }
         
-        static int index = 1; 
+        //static int index = 1; 
         
-        public void friendRequest(String friend_id){
-        
-      	  String sqlQueryString = "insert into friend (user1, user2, message, msg_id) values(aes_enctypr("+thisUserID+",'cornell'), aes_enctypr("+friend_id+",'cornell') , aes_enctypr("+Constants.ADD_FRIEND_ID+",'cornell'),  null);";
-      	  XMLRequest xmlRequest = new XMLRequest(Constants.ADD_FRIEND_ID, 
-      			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
+        public void friendRequest(String friend_id) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+      	  XMLRequest xmlRequest = new XMLRequest(
+      			  Constants.ADD_FRIEND_ID, 
+      			  thisUserID,
+      			  Constants.NOTIFYREGION, 
+      			  Constants.INVALID, 
+      			  Constants.INVALID, 
+      			  Constants.UPDATE);
+      	  SharedKey sk = SharedKey.getInstance();
+      	  xmlRequest.requestData.put("requestFriendID", 
+      			  sk.sessionKeyEncrypt(this.k_session, friend_id));
       	  invokeRequestThread(xmlRequest);
         }
         
-        public void postMessage(String friend_id, String messageString){
-        	  String sqlQueryString = "insert into friend values(\"" + friend_id + "\",\"" + thisUserID + 
+        public void postMessage(String friend_id, String messageString) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        	/*  
+        	String sqlQueryString = "insert into friend values(\"" + friend_id + "\",\"" + thisUserID + 
 							"\",\"" + messageString + "\",null);";
-        	  XMLRequest xmlRequest = new XMLRequest(Constants.UPDATE_REGION_ID, 
-        			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.UPDATE);
+        	  */
+        	  XMLRequest xmlRequest = new XMLRequest(
+        			  Constants.UPDATE_REGION_ID, 
+        			  thisUserID,
+        			  Constants.REGION6, 
+        			  Constants.INVALID, 
+        			  Constants.POST_FRIEND_MESSAGE, 
+        			  Constants.UPDATE);
+        	  SharedKey sk = SharedKey.getInstance();
+        	  xmlRequest.requestData.put("postedFriendID", 
+          			  sk.sessionKeyEncrypt(this.k_session, friend_id));
+        	  xmlRequest.requestData.put("postedFriendMessage", 
+          			  sk.sessionKeyEncrypt(this.k_session, messageString));
         	  invokeRequestThread(xmlRequest);
         }
-        
-        /*
-        public void getFriendList(){
-        	  String sqlQueryString = null;//"insert into friend values("tao","lin","hello",null);";
-        	  XMLRequest xmlRequest = new XMLRequest(Constants.READ_REGION_ID, 
-        			  thisUserID,Constants.FRIENDLISTREGION, null, sqlQueryString, Constants.SELECT);
-          	  invokeRequestThread(xmlRequest);
-        }*/
-        
-        //TODO
-        private XMLRequest getFriendList(String uid){
-        String query = "SELECT aes_decrypt(F.user2,'cornell') FROM friend F WHERE aes_decrypt(F.user1,'cornell') = '" + uid + "' "
-                + "AND aes_decrypt(F.user1,'cornell') in ("
-                + "SELECT aes_decrypt(F2.user2,'cornell') FROM friend F2 WHERE aes_decrypt(F2.user1,'cornell')=aes_decrypt(F.user2,'cornell'));";
-        
-        System.out.println("aeraeat"+query);
-        
-        XMLRequest xmlapi = new XMLRequest(
-                Constants.READ_REGION_ID,
-                uid,
-                Constants.FRIENDLISTREGION, //region id
-                Constants.INVALID, //session id...not for 
-                query, //request detail...SQL statement to be excuted by server
-                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
-        );
-        return xmlapi;
-    }
 
-        
-        private XMLRequest getFriendNotify(String uid){
-            String query = "SELECT aes_decrypt(F.user1,'cornell') FROM friend F WHERE F.user2 = '" + uid + "'"
-                    + "AND F.user1 not in " +
-                    "(SELECT F2.user2 FROM friend F2 WHERE F2.user1 = '" + uid + "'"
-                    + "AND F2.user1 in ("
-                    + "SELECT F3.user2 FROM friend F3 WHERE F3.user1=F2.user2));";
-            System.out.println("hadiheiat"+query);
-            
-            
-            XMLRequest xmlapi = new XMLRequest(
-                    Constants.READ_REGION_ID,
-                    uid,
-                    Constants.NOTIFYREGION, //region id
-                    Constants.INVALID, //session id...not for 
-                    query, //request detail...SQL statement to be excuted by server
-                    "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
-            );
-            return xmlapi;
+        private XMLRequest getFriendList(String uid){
+	        XMLRequest xmlapi = new XMLRequest(
+	                Constants.READ_REGION_ID,
+	                uid,
+	                Constants.FRIENDLISTREGION, //region id
+	                Constants.INVALID, //session id...not for 
+	                Constants.INVALID, //request detail...SQL statement to be excuted by server
+	                "SELECT" //action id...can either be SELECT or UPDATE...see Constants package
+	        );
+	        return xmlapi;
         }
 
-        public void clientLogin(String tmp_uid, String tmp_pwd)
-			throws IOException {
-                        
-		HashMap<String, String> loginCredential = new HashMap<String, String>();
-		loginCredential.put("user_id", tmp_uid); 
-		loginCredential.put("password", tmp_pwd); 
-		clientRequest loginRequest = new clientRequest(
-				Constants.LOGIN_REQUEST_ID, tmp_uid, loginCredential, this.k_db);
-		XMLRequest xmlr= loginRequest.clientRequestLogin();
-                
-                
-                System.out.println("client session key: "+xmlr.sessionKey.skey);
-                
-                invokeRequestThread(xmlr);
-                
-                
-
-	}
-        
-        
         public void  clientViewOtherPersonBoard(String otherPersonUid, String switchBoardCode) throws IOException{
             
             //general logic: close current MainUI, then open a new MainUI populated based on the retXML
-            
+
             ArrayList<XMLRequest> otherPersonBoardInfoXML = clientHomeBoardRequest(otherPersonUid);
             
             XMLRequest myFriendListXMLreq = getFriendList(this.thisUserID);
-            
-            
+
             otherPersonBoardInfoXML.set(0, myFriendListXMLreq); 
 
             
@@ -295,9 +370,7 @@ public class EntNetClient {
 	                return;
 	            }
 			}
-            
-            
-            
+
             for (int i=0;i<otherPersonBoardInfoXML.size();i++){
                 invokeRequestThread(otherPersonBoardInfoXML.get(i));
             }
@@ -305,32 +378,33 @@ public class EntNetClient {
         }
        
         
-        public void clientUpdateRegion(String regionID, String newContent){
-                HashMap<String, String> updateCredential = new HashMap<String, String>();
-		updateCredential.put("regionID", regionID); 
-		updateCredential.put("newContent", newContent); 
-		clientRequest updateRegionRequest = new clientRequest(
-				Constants.UPDATE_REGION_ID, this.thisUserID, updateCredential, this.k_db);
-		XMLRequest xmlr= updateRegionRequest.clientRequestUpdateRegion(regionID, newContent, this.thisUserID);
-                invokeRequestThread(xmlr);
+        public void clientUpdateRegion(String regionID, String newContent) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+            
+        	XMLRequest xmlr = new XMLRequest(
+        			Constants.UPDATE_REGION_ID,
+        			this.thisUserID,
+        			regionID,
+        			Constants.INVALID,
+        			regionID,
+        			"UPDATE"
+        	);
+        	SharedKey sk = SharedKey.getInstance();
+        	xmlr.requestData.put("newContent", 
+        			sk.sessionKeyEncrypt(this.k_session, newContent));
+        	invokeRequestThread(xmlr);
+        	/*
+        	HashMap<String, String> updateCredential = new HashMap<String, String>();
+			updateCredential.put("regionID", regionID); 
+			updateCredential.put("newContent", newContent); 
+			clientRequest updateRegionRequest = new clientRequest(
+					Constants.UPDATE_REGION_ID, this.thisUserID, updateCredential, this.k_db);
+			XMLRequest xmlr= updateRegionRequest.clientRequestUpdateRegion(regionID, newContent, this.thisUserID);
+	                invokeRequestThread(xmlr);*/
         }
-        
-        
-        
-        private ArrayList<XMLRequest> clientHomeBoardRequest(String uid)
-        {
-            HashMap<String, String> homeBoardRequestInfo = new HashMap<String, String>();
-            //homeBoardRequestInfo.put("user_id",uid);
-            clientRequest homeBoardRequest = new clientRequest(
-				Constants.READ_REGION_ID, uid, homeBoardRequestInfo, this.k_db); 
-            ArrayList<XMLRequest> al_xmlr= homeBoardRequest.clientRequestHomeBoard();
-            //XMLRequest myFriReqXMLreq = getFriendNotify(this.thisUserID);
-            //al_xmlr.add(myFriReqXMLreq);
-            return al_xmlr;
-        }
+
+
         
         public void returnUserHomePage() {
-                
 
                 if (commandline) {
 					
@@ -345,7 +419,6 @@ public class EntNetClient {
 
         }
     
-        
 
     private void invokeRequestThread(XMLRequest xmlr) {
     	if (commandline) {
@@ -359,55 +432,48 @@ public class EntNetClient {
     }
     
 
-    
-    
-    public void requestThreadCallBack(XMLRequest xmlreq) throws SQLException, InterruptedException{
+    public void requestThreadCallBack(XMLRequest xmlreq) throws SQLException, InterruptedException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
         if (xmlreq.getRequestID().equals(Constants.LOGIN_REQUEST_ID)){
-            //check if the login is successful
             String LoginStat = xmlreq.getRequestDetail();
             if (LoginStat.equals(Constants.TRUE)){
-                //successful login
-                //goto user's home page by asking server to send xml of user homeboard
                 try{
+                	this.thisUserID = xmlreq.getUserID();
                     ArrayList<XMLRequest> homeBoardInfoXML 
-                            = clientHomeBoardRequest(xmlreq.getUserID());
-                    this.thisUserID = xmlreq.getUserID();
-
+                            = clientHomeBoardRequest(this.thisUserID);
+                    
                     //populate screen: close loginUI, open new UI
                     if (commandline) {
 						test.LoginCallBack(xmlreq);
 					}else {
-                    this.clientMain.LoginToHome();
-
+						this.clientMain.LoginToHome();
 					}
                     
                     //now we are in homepage...load home board content
                     for (int i=0;i<homeBoardInfoXML.size();i++){
                         invokeRequestThread(homeBoardInfoXML.get(i));
                     }
-
                     
                 }catch(Exception e){};
             }
             else{
+            	//login failed
             	if (commandline) {
 					test.LoginCallBack(xmlreq);
 				} else {
-
+					System.out.println("requestThreadCallBack: login failed");
 				}
-                     return;           
+                return;           
             }
         } //end of login request threadCallBack
                 
-        
         else if (xmlreq.getRequestID().equals(Constants.SESSION_KEY_EST)){
             String SessionKeyEstStat = xmlreq.getRequestDetail();
             if (SessionKeyEstStat==Constants.TRUE){
                 XMLRequest.sessionKey = this.sessionKey;
-                
-                System.out.println("session key successf");
+                System.out.println("in requestThreadCallback, session key successfully established");
             }
             else{
+            	System.out.println("in requestThreadCallback, failed to establish session key");
                 return;
             }
         }
@@ -459,12 +525,18 @@ public class EntNetClient {
             }
             
             if (regionID.equals(Constants.FRIENDLISTREGION)){
+            	
+            	//System.out.println("Constants.FRIENDLISTREGION in callback");
+            	//System.out.println(xmlreq.getMyResultSet());
+            	
                 for (int i=0;i<myRS.getTable().size();i++){
-
-                    String friendUID = myRS.getStringValue(i, "user2");
+                	SharedKey sk = SharedKey.getInstance();
+                	//System.out.println("received cipher = " + myRS.getCipherValue(i, "user2"));
+                    String friendUID = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "user2")));
                     resultSetArrayList.add(friendUID);
                 }
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 
                 if (commandline) {
 					//test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
@@ -477,22 +549,36 @@ public class EntNetClient {
             
             else if (regionID.equals(Constants.NOTIFYREGION)){
                 for (int i=0;i<myRS.getTable().size();i++){
-                    String friRequest = myRS.getStringValue(i, "user1");
-                    resultSetArrayList.add(friRequest);
-                    System.out.println("testing");
-                    System.out.println(friRequest);
+                	SharedKey sk = SharedKey.getInstance();
+                    String friendUID = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "user1")));
+                    resultSetArrayList.add(friendUID);
+                	
+                	//String friRequest = myRS.getStringValue(i, "user1");
+                    //resultSetArrayList.add(friRequest);
+                    //System.out.println("testing");
+                    //System.out.println(friRequest);
                 }
                 if (commandline) {
 					//test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
-	                System.out.println("=======FRIENDNOTIFY TESTING======="+resultSetArrayList);
+	                //System.out.println("=======FRIENDNOTIFY TESTING======="+resultSetArrayList);
 				}
             }
             
             else if (regionID.equals(Constants.REGION1)){
-                String contact_info = myRS.getStringValue(0, "contact_info");
-                String uid = myRS.getStringValue(0,"user_id");
+            	SharedKey sk = SharedKey.getInstance();
+            	String contact_info = 
+                	new String(sk.sessionKeyDecrypt(this.k_session, 
+                			myRS.getCipherValue(0, "contact_info")));
+            	String uid = 
+                	new String(sk.sessionKeyDecrypt(this.k_session, 
+                			myRS.getCipherValue(0, "user_id")));
+            	
+                //String contact_info = myRS.getStringValue(0, "contact_info");
+                //String uid = myRS.getStringValue(0,"user_id");
                 resultSetArrayList.add(uid);
                 resultSetArrayList.add(contact_info);
                 if (commandline) {
@@ -503,7 +589,11 @@ public class EntNetClient {
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION2)){
-                String currLocName = myRS.getStringValue(0, "loc_name");
+            	SharedKey sk = SharedKey.getInstance();
+            	String currLocName = 
+                	new String(sk.sessionKeyDecrypt(this.k_session, 
+                			myRS.getCipherValue(0, "loc_name")));
+                //String currLocName = myRS.getStringValue(0, "loc_name");
                 resultSetArrayList.add(currLocName);
                 //resultSetHashMap.put("loc_name", currLocName);
                 if (commandline) {
@@ -514,7 +604,12 @@ public class EntNetClient {
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION3)){
-                String currProj = myRS.getStringValue(0, "proj_name");
+            	SharedKey sk = SharedKey.getInstance();
+            	String currProj = 
+                	new String(sk.sessionKeyDecrypt(this.k_session, 
+                			myRS.getCipherValue(0, "proj_name")));
+            	
+                //String currProj = myRS.getStringValue(0, "proj_name");
                 resultSetArrayList.add(currProj);
                 //resultSetHashMap.put("proj_name", currProj);
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
@@ -527,10 +622,13 @@ public class EntNetClient {
             }
             else if (regionID.equals(Constants.REGION4)){
                 for (int i=0;i<myRS.getTable().size();i++){
-                    //String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
-                    String msg_content = myRS.getStringValue(i, "msg_content");
+                	SharedKey sk = SharedKey.getInstance();
+                    String msg_content = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "msg_content")));
+                    //String msg_content = myRS.getStringValue(i, "msg_content");
                     resultSetArrayList.add(msg_content);
-                    System.out.println("company msg = "+msg_content);
+                    //System.out.println("company msg = "+msg_content);
                     //resultSetHashMap.put(msg_id, msg_content);
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
@@ -542,10 +640,12 @@ public class EntNetClient {
             }
             else if (regionID.equals(Constants.REGION5)){
                 for (int i=0;i<myRS.getTable().size();i++){
-                    String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
-                    String msg_content = myRS.getStringValue(i, "msg_content");
+                	SharedKey sk = SharedKey.getInstance();
+                    String msg_content = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "msg_content")));
+                    //String msg_content = myRS.getStringValue(i, "msg_content");
                     resultSetArrayList.add(msg_content);
-                    //resultSetHashMap.put(msg_id, msg_content);
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
@@ -557,9 +657,16 @@ public class EntNetClient {
             }
             else if (regionID.equals(Constants.REGION6)){
                 for (int i=0;i<myRS.getTable().size();i++){
-                    String msg_id = myRS.getStringValue(i, "msg_id"); //msg_id, msg_content
-                    String msg_content = myRS.getStringValue(i, "message");
-                    resultSetArrayList.add(msg_content);
+                	SharedKey sk = SharedKey.getInstance();
+                    String msg_content = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "message")));
+                    String msg_sender = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "user2")));
+                    
+                    //String msg_content = myRS.getStringValue(i, "message");
+                    resultSetArrayList.add(msg_content+" (FROM: "+msg_sender+")");
                     //resultSetHashMap.put(msg_id, msg_content);
                 }
                 //TODO: send resultSetHashMap to GUI--waiting for shuai's api
@@ -590,12 +697,9 @@ public class EntNetClient {
         else if (xmlreq.getRequestID().equals(Constants.UPDATE_REGION_ID)){
             String rowAffected = xmlreq.getRequestDetail();
             if (rowAffected.equals("1")){
-                //update successful. do nothing
                 System.out.println("update region successful");
-                
             }
             else{
-                //failed registration
                 System.err.println("ERROR: requestThreadCallBack cannot update region");
                 return;
             }

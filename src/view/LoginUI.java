@@ -8,7 +8,14 @@ package view;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.JOptionPane;
 
 import entnetclient.*;
@@ -82,7 +89,30 @@ public class LoginUI extends javax.swing.JFrame {
 		jButtonReg.setText("Regist");
 		jButtonReg.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButtonRegActionPerformed(evt);
+				try {
+					jButtonRegActionPerformed(evt);
+				} catch (InvalidKeyException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchPaddingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidAlgorithmParameterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalBlockSizeException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BadPaddingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -307,7 +337,7 @@ public class LoginUI extends javax.swing.JFrame {
 		// TODO add your handling code here:
 	}
 
-	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		if(jTextFieldRegid.getText().equals("")||jTextFieldRegrole.getText().equals("")||jTextFieldRegpwd.getText().equals("")||jTextFieldRegcontact.getText().equals(""))
 			JOptionPane.showMessageDialog(null, "Please fill in all the four reg sections!");
 		else{
