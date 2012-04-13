@@ -24,6 +24,7 @@ public class ClientMain {
     
     public ClientMain(){
         controller = EntNetClient.getInstance(this);
+        controller.getServerPublicKey();
         currUI = "LoginUI";
     }
     

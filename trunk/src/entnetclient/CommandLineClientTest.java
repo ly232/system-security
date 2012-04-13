@@ -3,8 +3,16 @@ package entnetclient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import Constants.Constants;
 
@@ -15,7 +23,7 @@ public class CommandLineClientTest {
 	  public EntNetClient controller;
 	  private BufferedReader bReader;
 	  private String userid;
-	public static void main(String[] args){
+	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
 		 CommandLineClientTest mainTest = new CommandLineClientTest();
 		 mainTest.start();
 	}
@@ -28,7 +36,7 @@ public class CommandLineClientTest {
 		   bReader = new BufferedReader(stdin);
 	}
 	
-	public void start(){
+	public void start() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
 	      Put("=== Client ===");
 	    	  login();
 	         // bReader.readLine();
@@ -61,7 +69,7 @@ public class CommandLineClientTest {
 		}
 	}
 	
-	public boolean parseRequest(String request){
+	public boolean parseRequest(String request) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
 		if (request.equals("Add Friend")) {
 			Put("Input the friend ID");
 			String friend_id = Gets();
@@ -103,7 +111,7 @@ public class CommandLineClientTest {
 	}
 	
 	
-	public void LoginCallBack(XMLRequest rq) {
+	public void LoginCallBack(XMLRequest rq) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		if( rq.getRequestDetail().equals(Constants.TRUE)){
 			PersonalPanel();
 			Put("Login Success");
@@ -134,7 +142,7 @@ public class CommandLineClientTest {
 		System.out.println( str);
 	}
 	
-	public void login(){
+	public void login() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
 		    try {
 		    	Put("input the user name");
 				String user_id = bReader.readLine();

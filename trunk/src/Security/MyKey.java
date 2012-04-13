@@ -40,7 +40,14 @@ public class MyKey implements Serializable{
 	
 
 	public MyKey(){};
-        
+	
+
+	//Lin-4/11/12
+	public byte[] getPublicKeyEncoded(){
+		return this.pubKey.getEncoded();
+	}
+	
+	
         public byte[] getSecretKeyByteArr(){
             try {
                 Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding", "BC");
@@ -49,7 +56,7 @@ public class MyKey implements Serializable{
                 Key wrapKey = (Key) keyGen.generateKey();
                 cipher.init(Cipher.ENCRYPT_MODE, wrapKey);
                 byte[] wrappedKey = cipher.doFinal(skey.getEncoded());
-                
+
                 return wrappedKey;
 
 

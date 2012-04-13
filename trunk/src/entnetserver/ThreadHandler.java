@@ -7,9 +7,13 @@ package entnetserver;
 import java.io.*;
 import java.net.*;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.*;
 
 import javax.crypto.Cipher;
@@ -22,7 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
+//import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import Security.MyKey;
 import Security.MyPKI;
@@ -35,57 +39,57 @@ import JDBC.DataBase;
 import Security.*;
 
 class ThreadedHandler implements Runnable {
+   
+	private SharedKey symmKeyCryptoAPI = null;
+    public static String db_pwd = null;
+    private Socket incoming = null;
+	private final int MAX_LOGIN_TRAIL = 5;
+	private String user_id = ""; // keep track of the assocated user with respect to this thread
+	private Scanner read = null;
+	private InputStream inStream = null;
+	private OutputStream outStream = null;
+	private int threadCount = 0;
+	private static ObjectOutputStream oos;
+	private static ObjectInputStream ois;
+	private DataBase sysDB;
+	
+	public static PrivateKey k_server;
+	public static PublicKey K_server;
+	public static String k_session;
 
+	
 	/**
 	 * @param i
 	 *            Socket with client
 	 * @param db
 	 *            the mysql database
 	 */
-	public ThreadedHandler(Socket i, DataBase db, String dbpwd) {
+	public ThreadedHandler(Socket i, DataBase db, String dbpwd, PrivateKey k_server, PublicKey K_server) {
 		incoming = i;
 		sysDB = db;
-                db_pwd = dbpwd;
-                symmKeyCryptoAPI = SharedKey.getInstance();
+        db_pwd = dbpwd;
+        symmKeyCryptoAPI = SharedKey.getInstance();
+        this.k_server = k_server;
+        this.K_server = K_server;
+        
 	}
-
-	// ThreadHandler private variables:
-        private SharedKey symmKeyCryptoAPI;
-        private String db_pwd;
-        public String getDBpwd(){
+    public String getDBpwd(){
             return this.db_pwd;
-        }
-	private Socket incoming;
-	private final int MAX_LOGIN_TRAIL = 5;
-	private String user_id = ""; // each thread serves a single user only. we
-									// need to keep track of who the thread is
-									// serving
-	//private String VERIFICATION_CODE = "cornell"; // used for user registration
-	private Scanner read;
-	//private PrintWriter write;
-	private InputStream inStream;
-	private OutputStream outStream;
-	private int threadCount = 0;
-	private static ObjectOutputStream oos;
-	private static ObjectInputStream ois;
-	
+    }
 	public OutputStream getOutStream() {
 		return outStream;
 	}
-
 	public void setOutStream(OutputStream outStream) {
 		this.outStream = outStream;
 	}
-
 	public DataBase getSysDB() {
 		return sysDB;
 	}
-
 	public void setSysDB(DataBase sysDB) {
 		this.sysDB = sysDB;
 	}
 
-	private DataBase sysDB;
+	
 
 	/**
 	 * @param no
@@ -96,15 +100,12 @@ class ThreadedHandler implements Runnable {
 	private void initializeServer() throws IOException {
 		inStream = incoming.getInputStream();
 		outStream = incoming.getOutputStream();
-		//read = new Scanner(inStream);
-		//write = new PrintWriter(outStream, true); // true means autoflush
 		if (oos == null) {
 			oos = new ObjectOutputStream(outStream);
 		}
 		if (ois == null) {
 			ois = new ObjectInputStream(inStream);
 		}
-
 	}
 
 	/**
@@ -127,14 +128,13 @@ class ThreadedHandler implements Runnable {
 						System.err.println("err for writeobject");
 						e.printStackTrace();
 					}
-		}	
 		}
-
-	
+	}
 
 	public void run() {
 		try {
-			initializeServer();
+			initializeServer(); //sets up input/out streams
+			System.out.println("ThreadHandler: ready to serve client "+this.user_id);
 
 		} catch (IOException e) {
 			System.err.println("initial server fail");
@@ -143,30 +143,26 @@ class ThreadedHandler implements Runnable {
 		} 
 		while (true) {
 			try {
-			System.out.println("ready to serve");	
-			XMLRequest request = (XMLRequest)ois.readObject();
-			//System.out.println(request.generateXMLRequest());
-			
+			 	
+			 XMLRequest request = (XMLRequest)ois.readObject();
+			 
+			 
+			 /*
+			 //old session key establishment thread handling stuff...
 			 if (request.getRequestID().equals(Constants.SESSION_KEY_EST)) {
-				 //XMLRequest.sessionKey = (MyKey)ois.readObject();
-				 ServerSocket s = new ServerSocket(12345);
-				 //oos.writeBoolean(true);
-				 oos.writeObject(Constants.TRUE);
-				 Socket sessionSocket = s.accept();
-				 
-				 PrivateKey privateKey = SerilizeKey.ReadPrivateKey(EntNetServer.pwd);
-				 MyPKI mypki = MyPKI.getInstance();
-				 Cipher desCipher = Cipher.getInstance(MyPKI.xform);
+					 //XMLRequest.sessionKey = (MyKey)ois.readObject();
+					 ServerSocket s = new ServerSocket(12345);
+					 oos.writeObject(Constants.TRUE);
+					 Socket sessionSocket = s.accept();
+					 PrivateKey privateKey = SerilizeKey.ReadPrivateKey(EntNetServer.pwd);
+					 MyPKI mypki = MyPKI.getInstance();
+					 Cipher desCipher = Cipher.getInstance(MyPKI.xform);
 				    desCipher.init(Cipher.DECRYPT_MODE, privateKey);
 				    // Create stream
 				    BufferedInputStream bis = new BufferedInputStream(sessionSocket.getInputStream());
 				    CipherInputStream cis = new CipherInputStream(bis, desCipher);
 				    ObjectInputStream sessionObjectInput = new ObjectInputStream(cis);
-
-				    // Read objects
 				    MyKey sessionKey = new MyKey();
-				    //String temp = (String)sessionObjectInput.readObject();
-
 				    int length = sessionObjectInput.readInt();
 				    byte[] keys = new byte[length];
 				    sessionObjectInput.read(keys);
@@ -174,72 +170,65 @@ class ThreadedHandler implements Runnable {
 				    byte[] salt = new byte[8];
 				    sessionObjectInput.read(salt);
 				    sessionKey.pps =  new PBEParameterSpec(salt, 8);
-				    sessionKey.skey = new SecretKeySpec(keys,algorithm);
-
-                                    
+				    sessionKey.skey = new SecretKeySpec(keys,algorithm);           
 				    XMLRequest.sessionKey = sessionKey;
 				    //sessionKey.skey = (SecretKey)sessionObjectInput.readObject();
 				    sessionObjectInput.close();
-				 
-				 /*
-				 String sessionString = request.getRequestDetail();
-				 MyPKI mPki = MyPKI.getInstance();
-				 PrivateKey pKey= SerilizeKey.ReadPrivateKey(null);
-                                 
-                                 System.out.println("sessionString len="+sessionString);
-                                 
-				 String seed = mPki.decrypt(sessionString.getBytes("US-ASCII"), pKey);
-				 SharedKey skKey = SharedKey.getInstance();
-//				 XMLRequest.sessionKey = skKey.generateKeyWithPwd("1");
-				 XMLRequest.sessionKey = skKey.generateKeyWithPwd("lin");
-				 request.setRequestDetail(Constants.TRUE);
-				 XMLRequest.sessionKey = skKey.generateKeyWithPwd(seed);
-				 callBackResult(request);
-				 */
-				 continue;
+				    continue;
 			}
+			*/
 			
-                         System.out.println("loginreq from server: "+request);
-                         
-			request.decrypt();
-                         
-                        
-                        
-                        
-			if (request.getRequestID().equals(Constants.QUIT_ID)) {
-					return;
-				}
-                        
-                       
-                        
-                        //System.out.println("server session key: " + request.sessionKey.skey);
+			 
+			 
+			 if (request.getRequestID().equals(Constants.REQ_SERVER_PUBKEY)) {
+				 //ServerSocket s = new ServerSocket(12346);
+				 KeyFactory fact = KeyFactory.getInstance("RSA");
+				 RSAPublicKeySpec pub = fact.getKeySpec(K_server,RSAPublicKeySpec.class);
+				 oos.writeObject(pub.getModulus());
+				 oos.writeObject(pub.getPublicExponent());
+				 continue;
+			 }
+			 
+			 if (request.getRequestID().equals(Constants.SESSION_KEY_EST)) {
+				 //decrypt cipher_sessionKey with private key:
+				 MyPKI mypki = MyPKI.getInstance();
+				 byte[] k_session_byteArr = mypki.rsaDecrypt(k_server, request.cipher_sessionKey);
+				 k_session = new String(k_session_byteArr);
+				 System.out.println("server: k_session = "+k_session);
+				 
+				 continue;
+			 }
 
-                        
-                        
-                        
-                        
-                        
-                        
-				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {
-                                    
+			 	//request.decrypt(); //commented out by Lin-4/12/12
+    
+			if (request.getRequestID().equals(Constants.QUIT_ID)) {
+				return;
+			}
+                              
+				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {           
 					user_id = request.getUserID();
 					loginServlet lServlet = new loginServlet(request, this);
 					Thread t = new Thread(lServlet);
 					t.start();
 					threadCount++;
-				} else {
+				} 
+				else {
 					if (request.getActionID().equals(Constants.SELECT)) {
 						ReadServlet rServelet = new ReadServlet(request, this);
 						//Thread t = new Thread(rServelet);
 						//t.start();
 						rServelet.run();
 						threadCount++;
-					} else if (request.getActionID().equals(Constants.UPDATE)) {
+					} 
+					else if (request.getActionID().equals(Constants.UPDATE)) {
 						UpdateServlet uServlet = new UpdateServlet(request,
 								this);
 						Thread t = new Thread(uServlet);
 						t.start();
 						threadCount++;
+					}
+					else{
+						System.err.println("ThreadHandler: unrecognized xml request from client");
 					}
 				}
 			} catch (IOException e) {

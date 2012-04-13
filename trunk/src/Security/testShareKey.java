@@ -69,7 +69,7 @@ public class testShareKey {
 	    ///////////////////////////////////////////////////////////////////////
 	    System.out.println("==============random key testing============");
 	    
-	    MyKey randomKey=sk.generateRandomKey();
+	    MyKey randomKey=null;//sk.generateRandomKey();
 	    String str = "lin";
 	    sk.encrypt(str, randomKey);
 	    String result = sk.decrypt(sk.encrypt(str, randomKey), randomKey);

@@ -11,6 +11,9 @@ import java.util.*;
 import JDBC.DataBase;
 
 import com.mysql.jdbc.Driver;
+
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.sql.*;
 import Security.*;
 
@@ -27,49 +30,46 @@ public class EntNetServer {
     static private SharedKey symmKeyCryptoAPI;
     static private String db_pwd;
     
+    static private PublicKey serverPublicKey;
+    static private PrivateKey serverPrivateKey;
+    
     public static void main(String[] args) {
 
         
         //static SharedKey k_db 
         try{
+            db_pwd = args[0];
             
-
+            System.out.println("db_pwd="+db_pwd);
             //symmKeyCryptoAPI = SharedKey.getInstance();
             //MyKey k_db = symmKeyCryptoAPI.generateKeyWithPwd(args[0]); //everything in db will be encrypted by k_db
             //sys admin must provide the same pwd to generate the same k_db for enc/dec
             
             DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
-
                                             "root",
-                                            "");
+                                            "mysql");
             sysDB.initialize();
+            
+
+            
+            
+            MyPKI mypki = MyPKI.getInstance();
+        	MyKey mk = mypki.InitAsymmKeyPair();
+        	serverPublicKey = mk.pubKey;
+        	serverPrivateKey = mk.privKey;
+        	
+        	//System.out.println("server: K_server = " + serverPublicKey);
+        	
+        	
+        	
+            
             
   		  InputStreamReader stdin = new  InputStreamReader(System.in);
 		   BufferedReader bReader = new BufferedReader(stdin);
 		   System.out.println("Please input the DataAdministration PWD");
-		    pwd = bReader.readLine();
-
-		  
-            
-            
-            /*--------------------
-            //DB test:
-            ResultSet rs = sysDB.DoQuery("SELECT * FROM Users");
-            while(rs.next()){ //must know table schema to extract results
-                String uid = rs.getString("username");
-                String pwd = rs.getString("password");
-                int roleID = rs.getInt("roleID");
-                int did = rs.getInt("did");
-                String name = rs.getString("name");
-                String phone = rs.getString("phone");
-                String location = rs.getString("location");
-                String currProj = rs.getString("currProj");
-                System.out.println("uid="+uid+", pwd="+pwd+", roleID"+roleID+", did="+did+", name="+name+", phone="+phone+", location="+location+", currProj="+currProj);
-            }
-            //-----------------*/
-
-            
-            
+                   //pwd = bReader.readLine();
+		   pwd = "cs5300cornell";//bReader.readLine();
+                   
             
             System.out.println("SERVER STARTED. SERVER'S LOCALHOST IP = " + InetAddress.getLocalHost());
             
@@ -79,7 +79,7 @@ public class EntNetServer {
             while(true){
                 Socket incoming = s.accept();
                 System.out.println("Spawning thread "+i);
-                Runnable r = new ThreadedHandler(incoming, sysDB, db_pwd);
+                Runnable r = new ThreadedHandler(incoming, sysDB, db_pwd, serverPrivateKey, serverPublicKey);
                 Thread t = new Thread(r);
                 t.start();
                 i++;

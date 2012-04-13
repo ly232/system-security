@@ -11,7 +11,9 @@ package Constants;
  * @author Lin
  */
 public abstract class Constants {
-    public static final String LOGIN_REQUEST_ID = "LOGIN_REQUEST_ID";
+    
+	
+	public static final String LOGIN_REQUEST_ID = "LOGIN_REQUEST_ID";
     public static final String REGIST_REQUEST_ID = "REGIST_REQUEST_ID";
     public static final String READ_REGION_ID = "READ_REGION_ID";
     public static final String UPDATE_REGION_ID = "UPDATE_REGION_ID";
@@ -19,6 +21,9 @@ public abstract class Constants {
     public static final String DELETE_FRIEND_ID = "DELETE_FRIEND_ID";
     public static final String QUIT_ID = "QUIT_ID";
     public static final String SESSION_KEY_EST = "SESSION_KEY_EST";
+    public static final String REQ_SERVER_PUBKEY = "REQ_SERVER_PUBKEY";
+    public static final String FRIEND_REQUEST = "FRIEND_REQUEST";
+    public static final String POST_FRIEND_MESSAGE = "POST_FRIEND_MESSAGE";
     
     //ACTION REFERENCE 
     public static final String SELECT = "SELECT";

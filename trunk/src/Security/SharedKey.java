@@ -20,14 +20,15 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
 
 public class SharedKey implements SecurityObject{
 			//TODO: just illustrate the idea
 			static SharedKey sKey;
 			MyKey mk = new MyKey();
-			static final String xform = "PBEWithMD5AndDES";
+			static final String xform = "PBEWithMD5AndDES/CBC/PKCS5Padding";
 			private SharedKey(){}
 			public static SharedKey getInstance(){
 				if (sKey == null) {
@@ -47,6 +48,9 @@ public class SharedKey implements SecurityObject{
 	            Cipher pbeCipher=null;
 				try {
 					pbeCipher = Cipher.getInstance(xform);
+					//pbeCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+					
+					
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				} catch (NoSuchPaddingException e) {
@@ -94,6 +98,7 @@ public class SharedKey implements SecurityObject{
 	            
 				try {
 						pbeCipher = Cipher.getInstance(xform);	
+						//pbeCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				} catch (NoSuchPaddingException e) {
@@ -130,8 +135,48 @@ public class SharedKey implements SecurityObject{
 				return ciphertext;
 			}
 	
+			/*
+		    //Lin-4/12/12
+			public SecretKey generateSessionKeyWithPassword(String sessionKeyGenStr) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException{
+				String salt = "saltings";
+	        	PBEParameterSpec paramspec = new PBEParameterSpec (salt.getBytes(),20);
+	        	Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+	        	PBEKeySpec keyspec = new PBEKeySpec(sessionKeyGenStr.toCharArray());
+	        	SecretKeyFactory factory= SecretKeyFactory.getInstance ("PBEWithMD5AndDES");
+	        	SecretKey k_session = factory.generateSecret(keyspec);
+	        	cipher.init (Cipher.ENCRYPT_MODE, k_session, paramspec);
+	        	return k_session;
+			}*/
+			//Lin-4/12/12
 			
-		
+			public byte[] sessionKeyEncrypt(String k_session, String data) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+				//System.out.println("sessionKeyEncrypt: inside...k_session = " + k_session);
+				String salt = "saltings";
+	        	PBEParameterSpec paramspec = new PBEParameterSpec (salt.getBytes(),20);
+	        	Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+	        	PBEKeySpec keyspec = new PBEKeySpec(k_session.toCharArray());
+	        	SecretKeyFactory factory= SecretKeyFactory.getInstance ("PBEWithMD5AndDES");
+	        	SecretKey key = factory.generateSecret(keyspec);
+	        	cipher.init (Cipher.ENCRYPT_MODE, key, paramspec);
+	        	byte[] ciphertext = cipher.doFinal(data.getBytes());
+	        	
+	        	//System.out.println("sessionKeyEncrypt: ciphertext = "+ciphertext);
+	        	
+	        	return ciphertext;
+			}
+			public String sessionKeyDecrypt(String k_session, byte[] cipherText) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+				PBEKeySpec keyspec = new PBEKeySpec(k_session.toCharArray());
+				SecretKeyFactory factory= SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+				SecretKey key = factory.generateSecret(keyspec);
+				Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+				String salt = "saltings";
+	        	PBEParameterSpec paramspec = new PBEParameterSpec (salt.getBytes(),20);
+				cipher.init(Cipher.DECRYPT_MODE, key, paramspec);
+				byte[] decryptedText = cipher.doFinal(cipherText);
+				return new String(decryptedText);
+			}
+			
+			
 			
 			public  MyKey generateKeyWithPwd(String pwd){
 				 
@@ -165,7 +210,6 @@ public class SharedKey implements SecurityObject{
 	            for (int i = 0; i < s.length; i++) {
 					s[i] = (byte) i;
 				}
-	            //int count = salt.length;
 	            mk.pps = new PBEParameterSpec(s, 8);
 	            
 
@@ -187,6 +231,16 @@ public class SharedKey implements SecurityObject{
 				}
 				return null;
 
+			}
+			@Override
+			public String decrypt(byte[] data, byte[] key) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			@Override
+			public byte[] encrypt(String data, byte[] key) {
+				// TODO Auto-generated method stub
+				return null;
 			}
 			
 			/*
@@ -292,17 +346,5 @@ public class SharedKey implements SecurityObject{
 	*/	
 			
 			
-			
-			
-			@Override
-			public String decrypt(byte[] data, byte[] key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			@Override
-			public byte[] encrypt(String data, byte[] key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
+		
 }
