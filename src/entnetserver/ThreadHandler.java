@@ -49,14 +49,16 @@ class ThreadedHandler implements Runnable {
 	private InputStream inStream = null;
 	private OutputStream outStream = null;
 	private int threadCount = 0;
-	private static ObjectOutputStream oos;
-	private static ObjectInputStream ois;
+	private  ObjectOutputStream oos;
+	private  ObjectInputStream ois;
 	private DataBase sysDB;
 	
 	public static PrivateKey k_server;
 	public static PublicKey K_server;
-	public static String k_session;
+	public  String k_session;
 
+	
+	
 	
 	/**
 	 * @param i
@@ -146,40 +148,6 @@ class ThreadedHandler implements Runnable {
 			 	
 			 XMLRequest request = (XMLRequest)ois.readObject();
 			 
-			 
-			 /*
-			 //old session key establishment thread handling stuff...
-			 if (request.getRequestID().equals(Constants.SESSION_KEY_EST)) {
-					 //XMLRequest.sessionKey = (MyKey)ois.readObject();
-					 ServerSocket s = new ServerSocket(12345);
-					 oos.writeObject(Constants.TRUE);
-					 Socket sessionSocket = s.accept();
-					 PrivateKey privateKey = SerilizeKey.ReadPrivateKey(EntNetServer.pwd);
-					 MyPKI mypki = MyPKI.getInstance();
-					 Cipher desCipher = Cipher.getInstance(MyPKI.xform);
-				    desCipher.init(Cipher.DECRYPT_MODE, privateKey);
-				    // Create stream
-				    BufferedInputStream bis = new BufferedInputStream(sessionSocket.getInputStream());
-				    CipherInputStream cis = new CipherInputStream(bis, desCipher);
-				    ObjectInputStream sessionObjectInput = new ObjectInputStream(cis);
-				    MyKey sessionKey = new MyKey();
-				    int length = sessionObjectInput.readInt();
-				    byte[] keys = new byte[length];
-				    sessionObjectInput.read(keys);
-				    String algorithm = (String)sessionObjectInput.readObject();
-				    byte[] salt = new byte[8];
-				    sessionObjectInput.read(salt);
-				    sessionKey.pps =  new PBEParameterSpec(salt, 8);
-				    sessionKey.skey = new SecretKeySpec(keys,algorithm);           
-				    XMLRequest.sessionKey = sessionKey;
-				    //sessionKey.skey = (SecretKey)sessionObjectInput.readObject();
-				    sessionObjectInput.close();
-				    continue;
-			}
-			*/
-			
-			 
-			 
 			 if (request.getRequestID().equals(Constants.REQ_SERVER_PUBKEY)) {
 				 //ServerSocket s = new ServerSocket(12346);
 				 KeyFactory fact = KeyFactory.getInstance("RSA");
@@ -232,10 +200,11 @@ class ThreadedHandler implements Runnable {
 					}
 				}
 			} catch (IOException e) {
-				System.err.println("xml parse failed");
+				System.err.println("read  failed");
 				System.err.println(e.getLocalizedMessage());
 				//write.println(Constants.END_STRING);
 				e.printStackTrace();
+				return;
 			} catch (Exception e) {
 				System.err.println("ThreadHandle failed");
 				System.err.println(e.getLocalizedMessage());

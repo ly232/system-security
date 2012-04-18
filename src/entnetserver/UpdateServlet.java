@@ -23,16 +23,16 @@ public class UpdateServlet extends Servelet implements Runnable{
 				//System.out.println("updateServelet: get a regist reqest");
 				
 				String regist_uname = 
-					new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session, 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("user_id")));
 				String regist_pwd = 
-					new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session, 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("password")));
 				String regist_contact_info = 
-					new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session, 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("contact_info")));
 				String regist_role_id = 
-					new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session, 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("role_id")));
 				
 				query = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
@@ -45,7 +45,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 			else if (this.xmlRequest.getRequestID().equals(Constants.DELETE_FRIEND_ID)){
 				
 				String deleteFriendID = 
-					new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+					new String(sk.sessionKeyDecrypt(handle.k_session,
 							this.xmlRequest.requestData.get("deleteFriendID")));
 				query = 
 					"DELETE FROM friend where (aes_decrypt(user1,'"
@@ -61,7 +61,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 			}
 			else if (this.xmlRequest.getRequestID().equals(Constants.ADD_FRIEND_ID)){
 				String requestFriendID = 
-					new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+					new String(sk.sessionKeyDecrypt(handle.k_session,
 							this.xmlRequest.requestData.get("requestFriendID")));
 				query = 
 					"insert into friend " +
@@ -77,10 +77,10 @@ public class UpdateServlet extends Servelet implements Runnable{
 			else if (this.xmlRequest.getRequestID().equals(Constants.UPDATE_REGION_ID)){
 				if (this.xmlRequest.getRequestDetail().equals(Constants.POST_FRIEND_MESSAGE)){
 					String friend_id = 
-						new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+						new String(sk.sessionKeyDecrypt(handle.k_session,
 								this.xmlRequest.requestData.get("postedFriendID")));
 					String messageString = 
-						new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+						new String(sk.sessionKeyDecrypt(handle.k_session,
 								this.xmlRequest.requestData.get("postedFriendMessage")));
 					query = 
 						"insert into friend values(aes_encrypt('" + friend_id 
@@ -92,7 +92,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.REGION1)){
 					String newContent = 
-						new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+						new String(sk.sessionKeyDecrypt(handle.k_session,
 								this.xmlRequest.requestData.get("newContent")));
 					query = 
 						"UPDATE user SET contact_info = aes_encrypt('" + newContent 
@@ -102,7 +102,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.REGION2)){
 					String newContent = 
-						new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+						new String(sk.sessionKeyDecrypt(handle.k_session,
 								this.xmlRequest.requestData.get("newContent")));
 					query = 
 						"UPDATE currloc SET loc_id = aes_encrypt('" + newContent 
@@ -112,7 +112,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.REGION3)){
 					String newContent = 
-						new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session,
+						new String(sk.sessionKeyDecrypt(handle.k_session,
 								this.xmlRequest.requestData.get("newContent")));
 					query = 
 						"UPDATE workon SET pid = aes_encrypt('" + newContent 

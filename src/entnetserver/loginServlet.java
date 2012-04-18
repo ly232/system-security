@@ -32,7 +32,7 @@ public class loginServlet extends Servelet implements Runnable{
 		
 		String loginUname = null;
 		try {
-			loginUname = new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session, 
+			loginUname = new String(sk.sessionKeyDecrypt(handle.k_session, 
 					xmlRequest.requestData.get("user_id")));
 		} catch (InvalidKeyException e1) {
 			// TODO Auto-generated catch block
@@ -59,7 +59,7 @@ public class loginServlet extends Servelet implements Runnable{
 		
 		String loginPwd = null;
 		try {
-			loginPwd = new String(sk.sessionKeyDecrypt(ThreadedHandler.k_session, 
+			loginPwd = new String(sk.sessionKeyDecrypt(handle.k_session, 
 					xmlRequest.requestData.get("password")));
 		} catch (InvalidKeyException e1) {
 			// TODO Auto-generated catch block

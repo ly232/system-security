@@ -100,10 +100,6 @@ public class requestHandler implements Runnable {
 				if (out == null) {
 					 out = new ObjectOutputStream(socket.getOutputStream());
 				}
-				if (in == null) {
-					InputStream o = socket.getInputStream();
-					in = new ObjectInputStream(o);
-				}
 				//-----------------
 				//send request:
 				//-----------------
@@ -112,6 +108,10 @@ public class requestHandler implements Runnable {
 					System.out.println("request handler: requesting server public key..");
 					
 					out.writeObject(xmlRequest);
+					if (in == null) {
+						InputStream o = socket.getInputStream();
+						in = new ObjectInputStream(o);
+					}
 					BigInteger K_server_mod = (BigInteger) in.readObject();
 					BigInteger K_server_exp = (BigInteger) in.readObject();
 					//reconstruct server public key:

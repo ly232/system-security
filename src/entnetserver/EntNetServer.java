@@ -47,7 +47,7 @@ public class EntNetServer {
             
             DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
                                             "root",
-                                            "mysql");
+                                            "");
             sysDB.initialize();
             
 
