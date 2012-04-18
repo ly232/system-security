@@ -138,7 +138,7 @@ public class ReadServlet extends Servelet implements Runnable{
 				System.out.println("ReadServlet: received a request that's not read region");
 			}
 
-			MyResultSet rs = new MyResultSet(db.DoQuery(readQuery), ThreadedHandler.k_session);
+			MyResultSet rs = new MyResultSet(db.DoQuery(readQuery), handle.k_session);
 
  			xmlRequest.setRequestDetail(Constants.RETURN_RESULTSET);
  			xmlRequest.setMyResultSet(rs);
