@@ -107,7 +107,7 @@ jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                        int   index   =   jList1.locationToIndex(e.getPoint()); 
                        //System.out.println( "Double   clicked   on   Item   "   +   index); 
                        try{
-						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.OTHER_TO_OTHER_VIEW);
+						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.HOME_TO_OTHER_VIEW);
 						   }catch(Exception execp){};
 
                  
@@ -207,7 +207,30 @@ jLabel2.setText("Current Location");
 jButtonLocation.setText("Update");
 jButtonLocation.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonLocationActionPerformed(evt);
+try {
+	jButtonLocationActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -255,7 +278,30 @@ jLabel3.setText("Current Project");
 jButtonProject.setText("Update");
 jButtonProject.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonProjectActionPerformed(evt);
+try {
+	jButtonProjectActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -563,14 +609,16 @@ pack();
 		// TODO add your handling code here:
 	}
 
-	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		String temp = (String) this.jComboBoxProject.getSelectedItem();
 		this.jLabelproject.setText(temp);
+		this.controller.clientUpdateRegion(Constants.REGION3, temp);
 	}
 
-	private void jButtonLocationActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonLocationActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		String temp = (String) this.jComboBoxLocation.getSelectedItem();
 		this.jLabellocation.setText(temp);
+		this.controller.clientUpdateRegion(Constants.REGION2, temp);
 
 	}
 
@@ -648,13 +696,27 @@ pack();
 		}
 		if (s.equals(Constants.REGION2)) {
 
-			jComboBoxLocation.addItem(a);
+			//jComboBoxLocation.addItem(a);
+			this.jLabellocation.setText(a.get(0).toString());
 			jPanel2.repaint();
 
 		}
+		if (s.equals(Constants.VALID_LOCATION)) {
+			for (int i=0;i<a.size();i++){
+				jComboBoxLocation.addItem(a.get(i).toString());
+			}
+			jComboBoxLocation.repaint();
+		}
 		if (s.equals(Constants.REGION3)) {
-			jComboBoxProject.addItem(a);
+			//jComboBoxProject.addItem(a);
+			this.jLabelproject.setText(a.get(0).toString());
 			jPanel3.repaint();
+		}
+		if (s.equals(Constants.VALID_PROJECT)) {
+			for (int i=0;i<a.size();i++){
+				jComboBoxProject.addItem(a.get(i).toString());
+			}
+			jComboBoxProject.repaint();
 		}
 		if (s.equals(Constants.REGION4)) {
 
