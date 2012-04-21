@@ -44,7 +44,8 @@ class ThreadedHandler implements Runnable {
     public static String db_pwd = null;
     private Socket incoming = null;
 	private final int MAX_LOGIN_TRAIL = 5;
-	private String user_id = ""; // keep track of the assocated user with respect to this thread
+	public String user_id = ""; // keep track of the assocated user with respect to this thread
+	public int roleID;
 	private Scanner read = null;
 	private InputStream inStream = null;
 	private OutputStream outStream = null;

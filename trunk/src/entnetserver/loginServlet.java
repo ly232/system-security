@@ -98,6 +98,7 @@ public class loginServlet extends Servelet implements Runnable{
 		ResultSet rSet = dB.DoQuery(loginQuery);
 		try {
 			if (rSet.first()) {
+				handle.roleID = rSet.getInt("role_id");
 				xmlRequest.setRequestDetail(Constants.TRUE);
 				xmlRequest.setUserID(loginUname);
 			}else {

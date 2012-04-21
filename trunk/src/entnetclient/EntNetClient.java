@@ -302,6 +302,83 @@ public class EntNetClient {
       			  sk.sessionKeyEncrypt(this.k_session, friend_id));
       	  invokeRequestThread(xmlRequest);
         }
+     
+        
+        public void updateDeptBoard(String Mes){
+    		XMLRequest xmlRequest = new XMLRequest(  
+        			  Constants.UPDATE_REGION_ID, 
+          			  thisUserID,
+          			  Constants.REGION5, 
+          			  Constants.INVALID, 
+          			  Constants.INVALID, 
+          			  Constants.UPDATE);
+        	  SharedKey sk = SharedKey.getInstance();
+          	  try {
+				xmlRequest.requestData.put("Message", 
+						  sk.sessionKeyEncrypt(this.k_session, Mes));
+			} catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidAlgorithmParameterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalBlockSizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BadPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+          	  invokeRequestThread(xmlRequest);	
+    }
+        
+        public void updateCompanyBoard(String companyMes){
+        		XMLRequest xmlRequest = new XMLRequest(  
+            			  Constants.UPDATE_REGION_ID, 
+              			  thisUserID,
+              			  Constants.REGION4, 
+              			  Constants.INVALID, 
+              			  Constants.INVALID, 
+              			  Constants.UPDATE);
+            	  SharedKey sk = SharedKey.getInstance();
+              	  try {
+					xmlRequest.requestData.put("Message", 
+							  sk.sessionKeyEncrypt(this.k_session, companyMes));
+				} catch (InvalidKeyException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchPaddingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidAlgorithmParameterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalBlockSizeException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BadPaddingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+              	  invokeRequestThread(xmlRequest);	
+        }
+        
+        
         
         public void postMessage(String friend_id, String messageString) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
         	/*  
