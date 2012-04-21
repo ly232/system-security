@@ -76,6 +76,8 @@ public class LoginUI extends javax.swing.JFrame {
 		jTextFieldRegcontact = new javax.swing.JTextField();
 		jLabelRegrole = new javax.swing.JLabel();
 		jTextFieldRegrole = new javax.swing.JTextField();
+		jLabelVcode = new javax.swing.JLabel();
+		jTextFieldVcode = new javax.swing.JTextField();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,30 +91,7 @@ public class LoginUI extends javax.swing.JFrame {
 		jButtonReg.setText("Regist");
 		jButtonReg.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				try {
-					jButtonRegActionPerformed(evt);
-				} catch (InvalidKeyException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchPaddingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidKeySpecException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidAlgorithmParameterException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalBlockSizeException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (BadPaddingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				jButtonRegActionPerformed(evt);
 			}
 		});
 
@@ -139,6 +118,8 @@ public class LoginUI extends javax.swing.JFrame {
 		});
 
 		jLabelRegrole.setText("Regrole");
+
+		jLabelVcode.setText("Vcode");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
@@ -208,26 +189,37 @@ public class LoginUI extends javax.swing.JFrame {
 																				.addComponent(
 																						jLabelRegcontact)
 																				.addComponent(
-																						jLabelRegrole))
+																						jLabelRegrole)
+																				.addComponent(
+																						jLabelVcode))
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.RELATED,
 																		57,
 																		Short.MAX_VALUE)
 																.addGroup(
 																		layout.createParallelGroup(
-																				javax.swing.GroupLayout.Alignment.LEADING,
-																				false)
+																				javax.swing.GroupLayout.Alignment.LEADING)
 																				.addComponent(
-																						jTextFieldRegrole)
-																				.addComponent(
-																						jTextFieldRegcontact)
-																				.addComponent(
-																						jTextFieldRegpwd)
-																				.addComponent(
-																						jTextFieldRegid,
+																						jTextFieldVcode,
 																						javax.swing.GroupLayout.DEFAULT_SIZE,
 																						94,
-																						Short.MAX_VALUE))))
+																						Short.MAX_VALUE)
+																				.addGroup(
+																						javax.swing.GroupLayout.Alignment.TRAILING,
+																						layout.createParallelGroup(
+																								javax.swing.GroupLayout.Alignment.LEADING,
+																								false)
+																								.addComponent(
+																										jTextFieldRegrole)
+																								.addComponent(
+																										jTextFieldRegcontact)
+																								.addComponent(
+																										jTextFieldRegpwd)
+																								.addComponent(
+																										jTextFieldRegid,
+																										javax.swing.GroupLayout.DEFAULT_SIZE,
+																										94,
+																										Short.MAX_VALUE)))))
 								.addGap(87, 87, 87)));
 		layout.setVerticalGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,8 +303,15 @@ public class LoginUI extends javax.swing.JFrame {
 																		javax.swing.GroupLayout.DEFAULT_SIZE,
 																		javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(
+																		jTextFieldVcode,
+																		javax.swing.GroupLayout.PREFERRED_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-																		132,
+																		103,
 																		Short.MAX_VALUE)
 																.addGroup(
 																		layout.createParallelGroup(
@@ -327,6 +326,10 @@ public class LoginUI extends javax.swing.JFrame {
 														layout.createSequentialGroup()
 																.addComponent(
 																		jLabelRegrole)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																.addComponent(
+																		jLabelVcode)
 																.addContainerGap()))));
 
 		pack();
@@ -337,15 +340,23 @@ public class LoginUI extends javax.swing.JFrame {
 		// TODO add your handling code here:
 	}
 
-	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-		if(jTextFieldRegid.getText().equals("")||jTextFieldRegrole.getText().equals("")||jTextFieldRegpwd.getText().equals("")||jTextFieldRegcontact.getText().equals(""))
-			JOptionPane.showMessageDialog(null, "Please fill in all the four reg sections!");
-		else{
-		controller.clientRegist(
-				jTextFieldRegid.getText(), jTextFieldRegpwd.getText(),
-				jTextFieldRegcontact.getText(),
-				jTextFieldRegrole.getText());}
-		
+	private void jButtonRegActionPerformed(java.awt.event.ActionEvent evt)
+			throws InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException,
+			BadPaddingException {
+		if (jTextFieldRegid.getText().equals("")
+				|| jTextFieldRegrole.getText().equals("")
+				|| jTextFieldRegpwd.getText().equals("")
+				|| jTextFieldRegcontact.getText().equals(""))
+			JOptionPane.showMessageDialog(null,
+					"Please fill in all the four reg sections!");
+		else {
+			controller.clientRegist(jTextFieldRegid.getText(),
+					jTextFieldRegpwd.getText(), jTextFieldRegcontact.getText(),
+					jTextFieldRegrole.getText());
+		}
+
 	}
 
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
@@ -374,10 +385,10 @@ public class LoginUI extends javax.swing.JFrame {
 					"Registration succeed, please login!");
 	}
 
-	
-	public static void loginPopUp(){
+	public static void loginPopUp() {
 		JOptionPane.showMessageDialog(null, "Login failed!");
 	}
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -392,12 +403,14 @@ public class LoginUI extends javax.swing.JFrame {
 	private javax.swing.JLabel jLabelRegid;
 	private javax.swing.JLabel jLabelRegpwd;
 	private javax.swing.JLabel jLabelRegrole;
+	private javax.swing.JLabel jLabelVcode;
 	private javax.swing.JTextField jTextFieldId;
 	private javax.swing.JTextField jTextFieldPwd;
 	private javax.swing.JTextField jTextFieldRegcontact;
 	private javax.swing.JTextField jTextFieldRegid;
 	private javax.swing.JTextField jTextFieldRegpwd;
 	private javax.swing.JTextField jTextFieldRegrole;
+	private javax.swing.JTextField jTextFieldVcode;
 	// End of variables declaration//GEN-END:variables
 
 }
