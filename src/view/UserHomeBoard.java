@@ -21,6 +21,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
+
 import Constants.Constants;
 
 /**
@@ -89,7 +90,30 @@ jTextAreaFR = new javax.swing.JTextArea();
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-//jList1.setModel([]);
+jList1.setModel(new javax.swing.AbstractListModel() {
+	String[] strings = { };
+
+	public int getSize() {
+		return strings.length;
+	}
+
+	public Object getElementAt(int i) {
+		return strings[i];
+	}
+});
+jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	 MouseListener   mouseListener   =   new   MouseAdapter()   { 
+       public   void   mouseClicked(MouseEvent   e)   { 
+                       int   index   =   jList1.locationToIndex(e.getPoint()); 
+                       //System.out.println( "Double   clicked   on   Item   "   +   index); 
+                       try{
+						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.OTHER_TO_OTHER_VIEW);
+						   }catch(Exception execp){};
+
+                 
+       } 
+}; 
+jList1.addMouseListener(mouseListener);
 jScrollPane1.setViewportView(jList1);
 
 jPanel1.setBackground(new java.awt.Color(255, 255, 204));
