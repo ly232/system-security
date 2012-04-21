@@ -752,6 +752,8 @@ pack();
 		return this.jTextField1.getText();
 		
 	}
+	
+	
 	private String[] strArrFromClientLogic;
 
 }
