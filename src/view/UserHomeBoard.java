@@ -348,7 +348,30 @@ jScrollPaneCA.setViewportView(jTextAreaCA);
 jButtonCom.setText("Update");
 jButtonCom.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonComActionPerformed(evt);
+try {
+	jButtonComActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -392,7 +415,30 @@ jScrollPaneDA.setViewportView(jTextAreaDA);
 jButtonDep.setText("Update");
 jButtonDep.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonDepActionPerformed(evt);
+try {
+	jButtonDepActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -601,12 +647,22 @@ pack();
 }// </editor-fold>
 
 	//GEN-END:initComponents
-	private void jButtonDepActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+	private void jButtonDepActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		String new_dept_msg = this.jTextFieldDep.getText();
+		if (new_dept_msg.length() == 0) {
+			System.out.println("cannot update new contact info to null");
+		} else {
+			controller.postDeptMessage(new_dept_msg);
+		}
 	}
 
-	void jButtonComActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+	void jButtonComActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		String new_company_msg = this.jTextFieldCom.getText();
+		if (new_company_msg.length() == 0) {
+			System.out.println("cannot update new contact info to null");
+		} else {
+			controller.postCompanyMessage(new_company_msg);
+		}
 	}
 
 	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
