@@ -45,9 +45,11 @@ public class ClientMain {
         public void giveArrayListToUI(ArrayList<String> al, String RegionID){
             if (currUI.equals("UserHomeBoard")){
                 uui.dataRefresh(al, RegionID);
+                System.out.println("called data refresh to region "+RegionID);
             }
             else if (currUI.equals("PersonHomeBoard")){
                 pui.dataRefresh(al, RegionID);
+                System.out.println("called data refresh");
             }
             else{
                 System.err.println("ERROR: encountered invalid board id in ClientMain::giveHashMapToUI");

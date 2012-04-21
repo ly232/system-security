@@ -29,13 +29,25 @@ import Constants.Constants;
  * @author  Shuai
  */
 public class UserHomeBoard extends javax.swing.JFrame {
+	
+	public Boolean showUpdateCompanyBoardButton = false;
+	public Boolean showUpdateDeptBoardButton = false;
+	
 	DefaultListModel model = new DefaultListModel();
 	public static EntNetClient controller;
 
 	/** Creates new form UserHomeBoard */
 	public UserHomeBoard(EntNetClient ec) {
-		initComponents();
+		
 		controller = ec;
+		String roleID = controller.roleID;
+		System.out.println("roleID from ui: "+roleID);
+		if (roleID.equals(Constants.BOSS_ROLE_ID))
+			this.showUpdateCompanyBoardButton = true;
+		if (roleID.equals(Constants.DEPTHEAD_ROLE_ID))
+			this.showUpdateDeptBoardButton = true;
+		
+		initComponents();
 	}
 
 	//GEN-BEGIN:initComponents
@@ -89,6 +101,21 @@ jScrollPane2 = new javax.swing.JScrollPane();
 jTextAreaFR = new javax.swing.JTextArea();
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+jButtonCom.setVisible(false);
+jTextFieldCom.setVisible(false);
+jButtonDep.setVisible(false);
+jTextFieldDep.setVisible(false);
+
+if (this.showUpdateCompanyBoardButton){
+	jButtonCom.setVisible(true);
+	jTextFieldCom.setVisible(true);
+}
+if (this.showUpdateDeptBoardButton){
+	jButtonDep.setVisible(true);
+	jTextFieldDep.setVisible(true);
+}
+
 
 jList1.setModel(new javax.swing.AbstractListModel() {
 	String[] strings = { };

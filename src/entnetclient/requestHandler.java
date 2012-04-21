@@ -133,75 +133,14 @@ public class requestHandler implements Runnable {
 					out.writeObject(xmlRequest); //notify server to close the thread
 					return;
 				}
-				else{ //Constants.READ_REGION_ID
+				else{ //read region requests...
 					out.writeObject(xmlRequest);
 					//do not return!!! wait for server's response
 				}
 				//-------------------
 				//receive request:
 				//-------------------
-				
-				
-				
-				
-				
-				/*
-				else if (xmlRequest.getRequestID().equals(Constants.SESSION_KEY_EST)) {
-					//xmlRequest.encrypt(); //actually,,,for session key, you should encrypt with the public key  of the server
-				
-					System.out.println("SESSION_KEY_EST");
-					
-					out.writeObject(xmlRequest);
-					String tempString = (String)in.readObject();
-					if (tempString.equals(Constants.TRUE)) {
-						MyPKI mypki = MyPKI.getInstance();
-			            PublicKey pubkey = SerilizeKey.ReadPublicKey();
-                                    
-                                    
-			             //send the session key to the server
-							Socket sessionSocket = new Socket("localhost", 12345);
-							// Create Cipher
-						    Cipher desCipher = Cipher.getInstance(MyPKI.xform);
-						    desCipher.init(Cipher.ENCRYPT_MODE, pubkey);
-						    
-						    // Create stream
-						    BufferedOutputStream bos = new BufferedOutputStream(sessionSocket.getOutputStream());
-						    CipherOutputStream cos = new CipherOutputStream(bos, desCipher);
-						    ObjectOutputStream sessionOos = new ObjectOutputStream(cos);
 
-						    
-						    
-						    byte[] keys = xmlRequest.sessionKey.skey.getEncoded();
-						    String algorithm = xmlRequest.sessionKey.skey.getAlgorithm();
-						    sessionOos.writeInt(keys.length);
-						    sessionOos.write(keys);
-						    sessionOos.writeObject(algorithm);
-                                                    
-                                                    //salt:
-				            byte[] s = new byte[8];
-				            for (int i = 0; i < s.length; i++) {
-								s[i] = (byte) i;
-							}
-				            sessionOos.write(s);
-
-						    sessionOos.flush();
-						    sessionOos.close();
-						    sessionSocket.close();
-					}else {
-						System.out.print("error in requestHandler session key establishment");
-					}
-					    return;
-				}
-				*/
-				
-                                
-                                
-				//write out encrypted xml request to server:
-				//xmlRequest.encrypt(); //commented out by Lin-4/12/12
-				//out.writeObject(xmlRequest);//commented out by Lin-4/12/12
-				//System.out.println("reqhandler: "+xmlRequest);//commented out by Lin-4/12/12
-				
-				
 				
 				
 				XMLRequest resultRequest = (XMLRequest)in.readObject();

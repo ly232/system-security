@@ -24,6 +24,14 @@ public abstract class Constants {
     public static final String REQ_SERVER_PUBKEY = "REQ_SERVER_PUBKEY";
     public static final String FRIEND_REQUEST = "FRIEND_REQUEST";
     public static final String POST_FRIEND_MESSAGE = "POST_FRIEND_MESSAGE";
+    public static final String VALID_LOCATION = "VALID_LOCATION";
+    public static final String VALID_PROJECT = "VALID_PROJECT";
+    public static final String POST_COMPANY_MESSAGE = "POST_COMPANY_MESSAGE";
+    public static final String POST_DEPT_MESSAGE = "POST_DEPT_MESSAGE";
+    
+    public static final String BOSS_ROLE_ID = "1";
+    public static final String DEPTHEAD_ROLE_ID = "2";
+    public static final String REGEMP_ROLE_ID = "3";
     
     //ACTION REFERENCE 
     public static final String SELECT = "SELECT";
@@ -50,11 +58,14 @@ public abstract class Constants {
     //end of the transaction
     public static final String END_STRING = "END_STRING";
     
-    public static final String COMPANY_DID = "1";
+    public static final String COMPANY_DID = "0";
     public static final String INVALID_REQUEST = "INVALID_REQUEST";
     
     public static final String RETURN_RESULTSET = "RETURN_RESULTSET";
     public static final String GET_RESULTSET = "GET_RESULTSET";
+    
+    public static final String ACCESS_DENIED = "ACCESS_DENIED";
+    
     
     //switch board constatns:
     public static final String HOME_TO_OTHER_VIEW = "HOME_TO_OTHER_VIEW";

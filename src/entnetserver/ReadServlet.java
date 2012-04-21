@@ -44,7 +44,7 @@ public class ReadServlet extends Servelet implements Runnable{
 	                	+ "FROM friend F2 WHERE AES_DECRYPT(F2.user1,'"+ThreadedHandler.db_pwd+"')"
 	                	+ "=AES_DECRYPT(F.user2,'"+ThreadedHandler.db_pwd+"'));";
 					
-					System.out.println("friendlistrequestquery: "+readQuery);
+					//System.out.println("friendlistrequestquery: "+readQuery);
 					
 				}
 				else if (this.xmlRequest.getRegionID().equals(Constants.NOTIFYREGION)){
@@ -62,7 +62,7 @@ public class ReadServlet extends Servelet implements Runnable{
 								+ "SELECT aes_decrypt(F3.user2,'"+ThreadedHandler.db_pwd
 								+"') FROM friend F3 WHERE aes_decrypt(F3.user1,'"+ThreadedHandler.db_pwd
 								+"')=aes_decrypt(F2.user2,'"+ThreadedHandler.db_pwd+"')));";
-					System.out.println("friend notification query: " + readQuery);
+					//System.out.println("friend notification query: " + readQuery);
 				}
 				else if (this.xmlRequest.getRegionID().equals(Constants.REGION1)){
 					readQuery = 
@@ -70,7 +70,7 @@ public class ReadServlet extends Servelet implements Runnable{
 	                    + "AES_DECRYPT(contact_info,'"+ThreadedHandler.db_pwd+"') as contact_info "
 	                    + "FROM user WHERE AES_DECRYPT(user_id,'"+ThreadedHandler.db_pwd+"') = '" 
 	                    + this.xmlRequest.getUserID() + "';";
-					System.out.println("region1query = " + readQuery);
+					//System.out.println("region1query = " + readQuery);
 				}
 				else if (this.xmlRequest.getRegionID().equals(Constants.REGION2)){
 					readQuery = 
@@ -127,13 +127,31 @@ public class ReadServlet extends Servelet implements Runnable{
 		            	+ "' and aes_decrypt(message,'"+ThreadedHandler.db_pwd+"')" +
 		            			"<>'"+Constants.FRIEND_REQUEST+"';";
 					
-					System.out.println("read friendpost query = "+readQuery);
+					//System.out.println("read friendpost query = "+readQuery);
 					
 				}
+				else if (this.xmlRequest.getRegionID().equals(Constants.VALID_LOCATION)){
+					readQuery = 
+						"select aes_decrypt(loc_name,'"+ThreadedHandler.db_pwd
+						+"') as loc_name from location;";
+					
+					//System.out.println("get valid location query = "+readQuery);
+					
+				}
+				else if (this.xmlRequest.getRegionID().equals(Constants.VALID_PROJECT)){
+					readQuery = 
+						"select aes_decrypt(proj_name,'"+ThreadedHandler.db_pwd
+						+"') as proj_name from project;";
+					
+					//System.out.println("get valid project query = "+readQuery);
+					
+				}
+				
 				else{
 					System.err.println("ReadServlet: unrecognized regionID to read");
 				}
 			}
+
 			else{
 				System.out.println("ReadServlet: received a request that's not read region");
 			}
