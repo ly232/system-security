@@ -82,7 +82,7 @@ CREATE TABLE `friend` (
   `user2` varbinary(100) NOT NULL,
   `message` varbinary(500) NOT NULL,
   `msg_id` varbinary(100) NOT NULL,
-  PRIMARY KEY (`msg_id`,`user1`,`user2`),
+  PRIMARY KEY (`user1`,`user2`,`message`),
   KEY `user1` (`user1`),
   KEY `user2` (`user2`),
   CONSTRAINT `user1` FOREIGN KEY (`user1`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -96,7 +96,7 @@ CREATE TABLE `friend` (
 
 LOCK TABLES `friend` WRITE;
 /*!40000 ALTER TABLE `friend` DISABLE KEYS */;
-INSERT INTO `friend` VALUES ('“Uh	v@ğ5 T','b(ªá¬½´cVçÀ\'ÙÌ','ğI‘ç˜éBĞº²òÈ¦ú','¦ „¦ÜåsàÀ·…yéŠ'),('b(ªá¬½´cVçÀ\'ÙÌ','“Uh	v@ğ5 T','ğI‘ç˜éBĞº²òÈ¦ú','×»äĞa³š¬H¢/Ö2×\r');
+INSERT INTO `friend` VALUES (' \0—µJ©’»öL.^·','“Uh	v@ğ5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑğÊJc\0'),('b(ªá¬½´cVçÀ\'ÙÌ','“Uh	v@ğ5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑğÊJc\0'),('p=\0®µGœkÛ¦?V','“Uh	v@ğ5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑğÊJc\0'),('“Uh	v@ğ5 T',' \0—µJ©’»öL.^·','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑğÊJc\0'),('“Uh	v@ğ5 T','b(ªá¬½´cVçÀ\'ÙÌ','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑğÊJc\0'),('“Uh	v@ğ5 T','p=\0®µGœkÛ¦?V','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑğÊJc\0');
 /*!40000 ALTER TABLE `friend` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,10 +160,10 @@ DROP TABLE IF EXISTS `postworkmessage`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `postworkmessage` (
-  `msg_id` varbinary(100) NOT NULL,
+  `msg_id` varbinary(100) DEFAULT NULL,
   `did` varbinary(100) NOT NULL,
   `msg_content` varbinary(500) NOT NULL,
-  PRIMARY KEY (`msg_id`,`did`),
+  PRIMARY KEY (`did`,`msg_content`),
   KEY `did` (`did`),
   CONSTRAINT `did` FOREIGN KEY (`did`) REFERENCES `department` (`did`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -225,7 +225,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (' \0—µJ©’»öL.^·','ÕŒ›íÛSóN÷¥m<Ô]','²7sçï¿ôœµyA\\ÜªxÕ','×»äĞa³š¬H¢/Ö2×\r'),('b(ªá¬½´cVçÀ\'ÙÌ','ÕŒ›íÛSóN÷¥m<Ô]','D;áz0xäÑ•¦åƒU','Í5ÉÊİ—\04Êvfû)'),('p=\0®µGœkÛ¦?V','ÕŒ›íÛSóN÷¥m<Ô]','|]–pÜ¬è°µôæ°±e0','Í5ÉÊİ—\04Êvfû)'),('“Uh	v@ğ5 T','ÕŒ›íÛSóN÷¥m<Ô]','×?|œ}0Üğ´ö¡h53?·','¦ „¦ÜåsàÀ·…yéŠ');
+INSERT INTO `user` VALUES ('c–\Z¥~b–óÙßˆ9V','ÕŒ›íÛSóN÷¥m<Ô]','ùäƒÄ]|+-|+\n\r\"]','Í5ÉÊİ—\04Êvfû)'),(' \0—µJ©’»öL.^·','ÕŒ›íÛSóN÷¥m<Ô]','C°_[halêJÁİû\Zí\0','×»äĞa³š¬H¢/Ö2×\r'),('ZV=Á¢YâµFN‡«.¬ô','ÕŒ›íÛSóN÷¥m<Ô]',' uì£|ı„\Z.ˆ`DŞ¿','Í5ÉÊİ—\04Êvfû)'),('b(ªá¬½´cVçÀ\'ÙÌ','ÕŒ›íÛSóN÷¥m<Ô]','D;áz0xäÑ•¦åƒU','Í5ÉÊİ—\04Êvfû)'),('p=\0®µGœkÛ¦?V','ÕŒ›íÛSóN÷¥m<Ô]','|]–pÜ¬è°µôæ°±e0','Í5ÉÊİ—\04Êvfû)'),('“Uh	v@ğ5 T','ÕŒ›íÛSóN÷¥m<Ô]','aÂø†ôï†vjnyy','¦ „¦ÜåsàÀ·…yéŠ'),('ÕKå£–!¨98ÌÖ=ã·ñ^','ÕŒ›íÛSóN÷¥m<Ô]','d@ĞS)j«È J(','Í5ÉÊİ—\04Êvfû)'),('õ¸joe<¶®÷!;Šıs','ÕŒ›íÛSóN÷¥m<Ô]','áŸ:1Y<Ûä×nHm?U','Í5ÉÊİ—\04Êvfû)');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-03-31  9:20:33
+-- Dump completed on 2012-04-21 11:49:17
