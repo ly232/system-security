@@ -84,12 +84,12 @@ public class loginServlet extends Servelet implements Runnable{
 			e1.printStackTrace();
 		}
 		
-		String loginQuery = "select aes_decrypt(user_id, 'cornell'),"
-                        + "aes_decrypt(user_pwd,'cornell'),"
-                        + "aes_decrypt(contact_info,'cornell'),"
-                        + "aes_decrypt(role_id,'cornell')"
-                        + " from user where aes_decrypt(user_id, 'cornell') = \"" + loginUname + 
-				"\" and aes_decrypt(user_pwd,'cornell') = \"" + loginPwd + "\";";
+		String loginQuery = "select aes_decrypt(user_id, '"+ThreadedHandler.db_pwd+"') as user_id,"
+                        + "aes_decrypt(user_pwd,'"+ThreadedHandler.db_pwd+"') as user_pwd,"
+                        + "aes_decrypt(contact_info,'"+ThreadedHandler.db_pwd+"') as contact_info,"
+                        + "aes_decrypt(role_id,'"+ThreadedHandler.db_pwd+"') as role_id"
+                        + " from user where aes_decrypt(user_id, '"+ThreadedHandler.db_pwd+"') = \"" + loginUname + 
+				"\" and aes_decrypt(user_pwd,'"+ThreadedHandler.db_pwd+"') = \"" + loginPwd + "\";";
 		//String k_db_str = this.handle.getKdb().skey.toString();
                 
        //System.out.println("login query: "+loginQuery);
@@ -98,9 +98,11 @@ public class loginServlet extends Servelet implements Runnable{
 		ResultSet rSet = dB.DoQuery(loginQuery);
 		try {
 			if (rSet.first()) {
-				handle.roleID = rSet.getInt("role_id");
+				handle.roleID = rSet.getString("role_id");
 				xmlRequest.setRequestDetail(Constants.TRUE);
 				xmlRequest.setUserID(loginUname);
+				xmlRequest.setSessionID(handle.roleID);
+				handle.setUserID(loginUname);
 			}else {
 				xmlRequest.setRequestDetail(Constants.FALSE);
 			}

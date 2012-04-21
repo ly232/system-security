@@ -41,13 +41,10 @@ public class EntNetServer {
             db_pwd = args[0];
             
             System.out.println("db_pwd="+db_pwd);
-            //symmKeyCryptoAPI = SharedKey.getInstance();
-            //MyKey k_db = symmKeyCryptoAPI.generateKeyWithPwd(args[0]); //everything in db will be encrypted by k_db
-            //sys admin must provide the same pwd to generate the same k_db for enc/dec
-            
+
             DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
                                             "root",
-                                            "");
+                                            "mysql");
             sysDB.initialize();
             
 
@@ -58,16 +55,10 @@ public class EntNetServer {
         	serverPublicKey = mk.pubKey;
         	serverPrivateKey = mk.privKey;
         	
-        	//System.out.println("server: K_server = " + serverPublicKey);
-        	
-        	
-        	
-            
             
   		  InputStreamReader stdin = new  InputStreamReader(System.in);
 		   BufferedReader bReader = new BufferedReader(stdin);
-		   System.out.println("Please input the DataAdministration PWD");
-                   //pwd = bReader.readLine();
+
 		   pwd = "cs5300cornell";//bReader.readLine();
                    
             
