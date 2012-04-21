@@ -108,19 +108,20 @@ jButtonCom.setVisible(false);
 jTextFieldCom.setVisible(false);
 jButtonDep.setVisible(false);
 jTextFieldDep.setVisible(false);
-jComboBoxDep.setVisible(false);
-jButtonSwitch.setVisible(false);
+this.jComboBoxDep.setVisible(false);
+this.jButtonSwitch.setVisible(false);
 
 if (this.showUpdateCompanyBoardButton){
 	jButtonCom.setVisible(true);
 	jTextFieldCom.setVisible(true);
-	jComboBoxDep.setVisible(true);
-	jButtonSwitch.setVisible(true);
+	this.jComboBoxDep.setVisible(true);
+	this.jButtonSwitch.setVisible(true);
 }
 if (this.showUpdateDeptBoardButton){
 	jButtonDep.setVisible(true);
 	jTextFieldDep.setVisible(true);
 }
+
 
 jList1.setModel(new javax.swing.AbstractListModel() {
 	String[] strings = { };
@@ -139,7 +140,7 @@ jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                        int   index   =   jList1.locationToIndex(e.getPoint()); 
                        //System.out.println( "Double   clicked   on   Item   "   +   index); 
                        try{
-						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.OTHER_TO_OTHER_VIEW);
+						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.HOME_TO_OTHER_VIEW);
 						   }catch(Exception execp){};
 
                  
@@ -418,7 +419,7 @@ jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
 .addComponent(jTextFieldCom, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
 .addComponent(jButtonCom)))
 .addContainerGap())
 );
@@ -477,6 +478,11 @@ try {
 
 
 jButtonSwitch.setText("Switch");
+jButtonSwitch.addActionListener(new java.awt.event.ActionListener() {
+public void actionPerformed(java.awt.event.ActionEvent evt) {
+jButtonSwitchActionPerformed(evt);
+}
+});
 
 javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
 jPanel5.setLayout(jPanel5Layout);
@@ -489,16 +495,15 @@ jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel5)
 .addComponent(jScrollPaneDA, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jButtonSwitch)
-.addComponent(jComboBoxDep, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addContainerGap())
+.addComponent(jComboBoxDep, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-.addComponent(jTextFieldDep, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+.addComponent(jTextFieldDep, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
 .addGap(14, 14, 14)
-.addComponent(jButtonDep)
-.addContainerGap())))
+.addComponent(jButtonDep)))
+.addContainerGap())
 );
 jPanel5Layout.setVerticalGroup(
 jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -694,6 +699,12 @@ pack();
 }// </editor-fold>
 
 	//GEN-END:initComponents
+	private void jButtonSwitchActionPerformed(java.awt.event.ActionEvent evt) {
+		// TODO add your handling code here:
+		String dname = (String) this.jComboBoxDep.getSelectedItem();
+		controller.switchDeptBoard(dname);
+	}
+
 	private void jButtonDepActionPerformed(java.awt.event.ActionEvent evt)
 			throws InvalidKeyException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidKeySpecException,
