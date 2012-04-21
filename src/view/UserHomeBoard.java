@@ -104,6 +104,24 @@ jButtonRefresh = new javax.swing.JButton();
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+jButtonCom.setVisible(false);
+jTextFieldCom.setVisible(false);
+jButtonDep.setVisible(false);
+jTextFieldDep.setVisible(false);
+jComboBoxDep.setVisible(false);
+jButtonSwitch.setVisible(false);
+
+if (this.showUpdateCompanyBoardButton){
+	jButtonCom.setVisible(true);
+	jTextFieldCom.setVisible(true);
+	jComboBoxDep.setVisible(true);
+	jButtonSwitch.setVisible(true);
+}
+if (this.showUpdateDeptBoardButton){
+	jButtonDep.setVisible(true);
+	jTextFieldDep.setVisible(true);
+}
+
 jList1.setModel(new javax.swing.AbstractListModel() {
 	String[] strings = { };
 
@@ -805,6 +823,12 @@ pack();
 		if (s.equals(Constants.VALID_LOCATION)) {
 			for (int i = 0; i < a.size(); i++) {
 				jComboBoxLocation.addItem(a.get(i).toString());
+			}
+			jComboBoxLocation.repaint();
+		}
+		if (s.equals(Constants.VALID_DEPT)) {
+			for (int i = 0; i < a.size(); i++) {
+				this.jComboBoxDep.addItem(a.get(i).toString());
 			}
 			jComboBoxLocation.repaint();
 		}

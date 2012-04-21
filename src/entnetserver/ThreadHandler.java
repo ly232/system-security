@@ -40,13 +40,17 @@ import Security.*;
 
 class ThreadedHandler implements Runnable {
    
-	private SharedKey symmKeyCryptoAPI = null;
+	//private SharedKey symmKeyCryptoAPI = null;
     public static String db_pwd = null;
     private Socket incoming = null;
+
+	//private final int MAX_LOGIN_TRAIL = 5;
+	private String user_id = "INVALID_USER"; // keep track of the assocated user with respect to this thread
+	//private Scanner read = null;
+
 	private final int MAX_LOGIN_TRAIL = 5;
-	public String user_id = ""; // keep track of the assocated user with respect to this thread
-	public int roleID;
 	private Scanner read = null;
+
 	private InputStream inStream = null;
 	private OutputStream outStream = null;
 	private int threadCount = 0;
@@ -54,9 +58,12 @@ class ThreadedHandler implements Runnable {
 	private  ObjectInputStream ois;
 	private DataBase sysDB;
 	
-	public static PrivateKey k_server;
-	public static PublicKey K_server;
-	public  String k_session;
+
+	public PrivateKey k_server;
+	public PublicKey K_server;
+	public String k_session;
+	public String roleID;
+
 
 	
 	
@@ -71,10 +78,16 @@ class ThreadedHandler implements Runnable {
 		incoming = i;
 		sysDB = db;
         db_pwd = dbpwd;
-        symmKeyCryptoAPI = SharedKey.getInstance();
+        //symmKeyCryptoAPI = SharedKey.getInstance();
         this.k_server = k_server;
         this.K_server = K_server;
         
+	}
+	public void setUserID(String uid){
+		this.user_id = uid;
+	}
+	public String getUserID(){
+		return this.user_id;
 	}
     public String getDBpwd(){
             return this.db_pwd;
@@ -124,8 +137,8 @@ class ThreadedHandler implements Runnable {
 					if (rq.getRequestDetail() == Constants.RETURN_RESULTSET) {
 						oos.writeObject(rq.getMyResultSet());
 					} 
-					if (rq.getRequestID() == Constants.SESSION_KEY_EST) {
-						
+					if (rq.getRequestDetail() == Constants.ACCESS_DENIED){
+						//TODO: inform client about access denied.
 					}
 					}catch (IOException e) {
 						System.err.println("err for writeobject");
@@ -148,7 +161,7 @@ class ThreadedHandler implements Runnable {
 			try {
 			 	
 			 XMLRequest request = (XMLRequest)ois.readObject();
-			 
+
 			 if (request.getRequestID().equals(Constants.REQ_SERVER_PUBKEY)) {
 				 //ServerSocket s = new ServerSocket(12346);
 				 KeyFactory fact = KeyFactory.getInstance("RSA");
@@ -171,11 +184,10 @@ class ThreadedHandler implements Runnable {
 			 	//request.decrypt(); //commented out by Lin-4/12/12
     
 			if (request.getRequestID().equals(Constants.QUIT_ID)) {
-				return;
+				break;
 			}
                               
 				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {           
-					user_id = request.getUserID();
 					loginServlet lServlet = new loginServlet(request, this);
 					Thread t = new Thread(lServlet);
 					t.start();
@@ -213,6 +225,8 @@ class ThreadedHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Thread for user '"+this.user_id+"' has been terminated.");
 	}
 
 }

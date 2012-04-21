@@ -386,7 +386,17 @@ public class EntNetClient {
       				);
         	invokeRequestThread(xmlRequest);
         }
-        
+        public void getAllValidDepartment(){
+        	XMLRequest xmlRequest = new XMLRequest(
+      				Constants.READ_REGION_ID, 
+      				thisUserID,
+      				Constants.VALID_DEPT, 
+      				Constants.INVALID, //session
+      				Constants.INVALID, //request detail
+      				Constants.SELECT
+      				);
+        	invokeRequestThread(xmlRequest);
+        }
         
         
 
@@ -504,6 +514,7 @@ public class EntNetClient {
                     //get all valid locations and projects to populate the droplist:
                     this.getAllValidLocation();
                     this.getAllValidProject();
+                    this.getAllValidDepartment();
                     
                 }catch(Exception e){};
             }
@@ -719,7 +730,7 @@ public class EntNetClient {
                     			myRS.getCipherValue(i, "loc_name")));
                     resultSetArrayList.add(loc_name);
                 }
-            	System.out.println("valid locations: " + resultSetArrayList);
+            	//System.out.println("valid locations: " + resultSetArrayList);
             	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
             	
             	//TODO: pass resultSetArrayList to UI to populate droplist
@@ -732,11 +743,24 @@ public class EntNetClient {
                     			myRS.getCipherValue(i, "proj_name")));
                     resultSetArrayList.add(proj_name);
                 }
-            	System.out.println("valid projects: " + resultSetArrayList);
+            	//System.out.println("valid projects: " + resultSetArrayList);
             	
             	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
             	//TODO: pass resultSetArrayList to UI to populate droplist
             }
+            else if (regionID.equals(Constants.VALID_DEPT)){
+            	for (int i=0;i<myRS.getTable().size();i++){
+                	SharedKey sk = SharedKey.getInstance();
+                    String dname = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "dname")));
+                    resultSetArrayList.add(dname);
+                }
+            	//System.out.println("valid projects: " + resultSetArrayList);
+            	
+            	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
+            }
+            
             else{
                 System.err.println("requestThreadCallBack ERROR: cannot identify region id");
                 return;

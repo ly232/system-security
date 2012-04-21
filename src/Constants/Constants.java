@@ -26,6 +26,7 @@ public abstract class Constants {
     public static final String POST_FRIEND_MESSAGE = "POST_FRIEND_MESSAGE";
     public static final String VALID_LOCATION = "VALID_LOCATION";
     public static final String VALID_PROJECT = "VALID_PROJECT";
+    public static final String VALID_DEPT = "VALID_DEPT";
     public static final String POST_COMPANY_MESSAGE = "POST_COMPANY_MESSAGE";
     public static final String POST_DEPT_MESSAGE = "POST_DEPT_MESSAGE";
     
