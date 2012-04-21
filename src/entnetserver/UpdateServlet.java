@@ -1,5 +1,6 @@
 package entnetserver;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Constants.Constants;
@@ -11,8 +12,25 @@ public class UpdateServlet extends Servelet implements Runnable{
 
 	public UpdateServlet(XMLRequest rq, ThreadedHandler th) {
 		super(rq, th);
+	}	
+	
+	
+	String getDid(DataBase db){
+		String Query = "select aes_decrypt(deptID_workat, 'cornell'),"
+                + " from workat where aes_decrypt(userID_workat, 'cornell') = \"" + handle.user_id + "\";";
+		ResultSet rSet =  db.DoQuery(Query);
+		try {
+			if (rSet.first()) {
+				return rSet.getString("deptID_workat");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "1";
 	}
-
+	
+	
 	public void run() {
 		try {
        	 	DataBase db = handle.getSysDB();
@@ -121,9 +139,24 @@ public class UpdateServlet extends Servelet implements Runnable{
 	                    + xmlRequest.getUserID() + "';";	
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.REGION4)){
+					String newContent = 
+							new String(sk.sessionKeyDecrypt(handle.k_session,
+									this.xmlRequest.requestData.get("Message")));
+					if (handle.roleID == 1) {
+						query = "INSERT postworkmessage user (msg_id,did, msg_content) VALUES (AES_ENCRYPT('1', 'cornell'),AES_ENCRYPT('1', 'cornell'),AES_ENCRYPT('" + newContent+
+								"', 'cornell'));";
+					}
 					//TODO: add authorization check here...only boss (roleID=1) can update region 4 (company message)
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.REGION5)){
+					String newContent = 
+							new String(sk.sessionKeyDecrypt(handle.k_session,
+									this.xmlRequest.requestData.get("Message")));
+					String dept = getDid(db);
+					if (handle.roleID == 2) {
+						query = "INSERT into postworkmessage (msg_id,did, msg_content) VALUES (AES_ENCRYPT('1', 'cornell'),AES_ENCRYPT('"  + dept  +  "', 'cornell'),AES_ENCRYPT('" + newContent+
+								"', 'cornell'));";
+					}
 					//TODO: add authorization check here...only dept_head (roleID=2) can update region 5 (dept message)
 				}
 				else{
