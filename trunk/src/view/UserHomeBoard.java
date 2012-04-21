@@ -107,7 +107,7 @@ jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                        int   index   =   jList1.locationToIndex(e.getPoint()); 
                        //System.out.println( "Double   clicked   on   Item   "   +   index); 
                        try{
-						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.OTHER_TO_OTHER_VIEW);
+						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.HOME_TO_OTHER_VIEW);
 						   }catch(Exception execp){};
 
                  
@@ -747,6 +747,11 @@ pack();
 		this.strArrFromClientLogic = strArr;
 	}
 
+	public String getTextField1()
+	{
+		return this.jTextField1.getText();
+		
+	}
 	private String[] strArrFromClientLogic;
 
 }
