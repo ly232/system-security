@@ -109,7 +109,30 @@ jTextField1ActionPerformed(evt);
 jButtonCon.setText("Update");
 jButtonCon.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-//jButtonConActionPerformed(evt);
+try {
+	jButtonConActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -374,7 +397,30 @@ jButtonLogoutActionPerformed(evt);
 jButtonAdd.setText("Add Friend");
 jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
 public void actionPerformed(java.awt.event.ActionEvent evt) {
-//jButtonAddActionPerformed(evt);
+try {
+	jButtonAddActionPerformed(evt);
+} catch (InvalidKeyException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchAlgorithmException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (NoSuchPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidKeySpecException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (InvalidAlgorithmParameterException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (IllegalBlockSizeException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+} catch (BadPaddingException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 }
 });
 
@@ -532,7 +578,7 @@ pack();
 		controller.quitClient();
 	}
 
-	public void dataRefresh(ArrayList a, String s) {
+	public void dataRefresh(ArrayList<?> a, String s) {
 		if (s.equals(Constants.FRIENDLISTREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 
