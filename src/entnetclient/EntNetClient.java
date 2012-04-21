@@ -362,8 +362,7 @@ public class EntNetClient {
 	        );
 	        return xmlapi;
         }
-        
-        
+
         public void getAllValidLocation(){
         	XMLRequest xmlRequest = new XMLRequest(
       				Constants.READ_REGION_ID, 
@@ -393,6 +392,17 @@ public class EntNetClient {
       				Constants.VALID_DEPT, 
       				Constants.INVALID, //session
       				Constants.INVALID, //request detail
+      				Constants.SELECT
+      				);
+        	invokeRequestThread(xmlRequest);
+        }
+        public void switchDeptBoard(String dname){
+        	XMLRequest xmlRequest = new XMLRequest(
+      				Constants.READ_REGION_ID, 
+      				thisUserID,
+      				Constants.SWITCH_DEPT,
+      				Constants.INVALID, //session
+      				dname, //request detail
       				Constants.SELECT
       				);
         	invokeRequestThread(xmlRequest);
@@ -760,7 +770,22 @@ public class EntNetClient {
             	
             	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
             }
-            
+            else if (regionID.equals(Constants.SWITCH_DEPT)){
+            	for (int i=0;i<myRS.getTable().size();i++){
+                	SharedKey sk = SharedKey.getInstance();
+                    String msg_content = 
+                    	new String(sk.sessionKeyDecrypt(this.k_session, 
+                    			myRS.getCipherValue(i, "msg_content")));
+                    //String msg_content = myRS.getStringValue(i, "msg_content");
+                    resultSetArrayList.add(msg_content);
+                }
+                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
+                if (commandline) {
+					test.personPanelCallback(Constants.REGION5, resultSetArrayList);
+				} else {
+	                this.clientMain.giveArrayListToUI(resultSetArrayList, Constants.REGION5);
+				}
+            }
             else{
                 System.err.println("requestThreadCallBack ERROR: cannot identify region id");
                 return;

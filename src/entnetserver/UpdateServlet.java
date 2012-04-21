@@ -198,17 +198,17 @@ public class UpdateServlet extends Servelet implements Runnable{
 					rs.first();
 					String this_user_role_id = rs.getString("role_id");
 					if (this_user_role_id.equals("1")){ //role id is the boss. continue to post the company message.
-						System.out.println("hello boss");
+						//System.out.println("hello boss");
 						String postedMsg = 
 							new String(sk.sessionKeyDecrypt(handle.k_session,
 									this.xmlRequest.requestData.get("postedCompnayMessage")));
-						System.out.println("postedMsg="+postedMsg);
+						//System.out.println("postedMsg="+postedMsg);
 						query = 
 							"insert into postworkmessage (msg_id,did,msg_content) values " +
 									"(aes_encrypt('1','"+ThreadedHandler.db_pwd+"')," +
 									"aes_encrypt('"+Constants.COMPANY_DID+"','"+ThreadedHandler.db_pwd
 									+"'),aes_encrypt('"+postedMsg+"','"+ThreadedHandler.db_pwd+"'));";
-						System.out.println("company board update query = "+query);
+						//System.out.println("company board update query = "+query);
 					}
 					else{ //the role id does not match a boss. access denied.
 						System.err.println("ACCESS DENIED: in UpdateServlet::update_region, invoker tries to update company board but role id is not boss!");
