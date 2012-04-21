@@ -146,6 +146,14 @@ public class ReadServlet extends Servelet implements Runnable{
 					//System.out.println("get valid project query = "+readQuery);
 					
 				}
+				else if (this.xmlRequest.getRegionID().equals(Constants.VALID_DEPT)){
+					readQuery = 
+						"select aes_decrypt(dname,'"+ThreadedHandler.db_pwd
+						+"') as dname from department where aes_decrypt(dname,'"+ThreadedHandler.db_pwd+"')<>'boss';";
+					
+					//System.out.println("get valid project query = "+readQuery);
+					
+				}
 				
 				else{
 					System.err.println("ReadServlet: unrecognized regionID to read");
