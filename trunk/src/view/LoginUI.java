@@ -374,6 +374,10 @@ public class LoginUI extends javax.swing.JFrame {
 					"Registration succeed, please login!");
 	}
 
+	
+	public static void loginPopUp(){
+		JOptionPane.showMessageDialog(null, "Login failed!");
+	}
 	/**
 	 * @param args the command line arguments
 	 */
