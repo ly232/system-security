@@ -29,24 +29,24 @@ import Constants.Constants;
  * @author  Shuai
  */
 public class UserHomeBoard extends javax.swing.JFrame {
-	
+
 	public Boolean showUpdateCompanyBoardButton = false;
 	public Boolean showUpdateDeptBoardButton = false;
-	
+
 	DefaultListModel model = new DefaultListModel();
 	public static EntNetClient controller;
 
 	/** Creates new form UserHomeBoard */
 	public UserHomeBoard(EntNetClient ec) {
-		
+
 		controller = ec;
 		String roleID = controller.roleID;
-		System.out.println("roleID from ui: "+roleID);
+		System.out.println("roleID from ui: " + roleID);
 		if (roleID.equals(Constants.BOSS_ROLE_ID))
 			this.showUpdateCompanyBoardButton = true;
 		if (roleID.equals(Constants.DEPTHEAD_ROLE_ID))
 			this.showUpdateDeptBoardButton = true;
-		
+
 		initComponents();
 	}
 
@@ -87,6 +87,7 @@ jTextAreaDA = new javax.swing.JTextArea();
 jButtonDep = new javax.swing.JButton();
 jComboBoxDep = new javax.swing.JComboBox();
 jTextFieldDep = new javax.swing.JTextField();
+jButtonSwitch = new javax.swing.JButton();
 jPanel6 = new javax.swing.JPanel();
 jLabel6 = new javax.swing.JLabel();
 jScrollPane3 = new javax.swing.JScrollPane();
@@ -99,23 +100,9 @@ jPanelFR = new javax.swing.JPanel();
 jLabel10 = new javax.swing.JLabel();
 jScrollPane2 = new javax.swing.JScrollPane();
 jTextAreaFR = new javax.swing.JTextArea();
+jButtonRefresh = new javax.swing.JButton();
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-jButtonCom.setVisible(false);
-jTextFieldCom.setVisible(false);
-jButtonDep.setVisible(false);
-jTextFieldDep.setVisible(false);
-
-if (this.showUpdateCompanyBoardButton){
-	jButtonCom.setVisible(true);
-	jTextFieldCom.setVisible(true);
-}
-if (this.showUpdateDeptBoardButton){
-	jButtonDep.setVisible(true);
-	jTextFieldDep.setVisible(true);
-}
-
 
 jList1.setModel(new javax.swing.AbstractListModel() {
 	String[] strings = { };
@@ -134,7 +121,7 @@ jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                        int   index   =   jList1.locationToIndex(e.getPoint()); 
                        //System.out.println( "Double   clicked   on   Item   "   +   index); 
                        try{
-						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.HOME_TO_OTHER_VIEW);
+						   controller.clientViewOtherPersonBoard((String)jList1.getSelectedValue(), Constants.OTHER_TO_OTHER_VIEW);
 						   }catch(Exception execp){};
 
                  
@@ -261,7 +248,7 @@ try {
 }
 });
 
-//jComboBoxLocation.setModel(javax.swing.DefaultComboBoxModel@56a0bd91);
+
 
 jLabellocation.setText("jLabel11");
 
@@ -293,7 +280,7 @@ jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabellocation)
 .addGap(18, 18, 18)
 .addComponent(jComboBoxLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
 .addComponent(jButtonLocation)
 .addGap(32, 32, 32))
 );
@@ -332,7 +319,7 @@ try {
 }
 });
 
-//jComboBoxProject.setModel(javax.swing.DefaultComboBoxModel@52fda705);
+
 
 jLabelproject.setText("jLabel11");
 
@@ -359,7 +346,7 @@ jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabelproject)
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 .addComponent(jComboBoxProject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
 .addComponent(jButtonProject)
 .addContainerGap())
 );
@@ -413,7 +400,7 @@ jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
 .addComponent(jTextFieldCom, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
 .addComponent(jButtonCom)))
 .addContainerGap())
 );
@@ -469,7 +456,9 @@ try {
 }
 });
 
-//jComboBoxDep.setModel(javax.swing.DefaultComboBoxModel@ae063d4);
+
+
+jButtonSwitch.setText("Switch");
 
 javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
 jPanel5.setLayout(jPanel5Layout);
@@ -482,10 +471,13 @@ jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel5)
 .addComponent(jScrollPaneDA, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+.addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+.addComponent(jButtonSwitch)
 .addComponent(jComboBoxDep, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+.addContainerGap())
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-.addComponent(jTextFieldDep, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+.addComponent(jTextFieldDep, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
 .addGap(14, 14, 14)
 .addComponent(jButtonDep)
 .addContainerGap())))
@@ -497,9 +489,12 @@ jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel5)
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+.addGroup(jPanel5Layout.createSequentialGroup()
 .addComponent(jComboBoxDep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+.addGap(33, 33, 33)
+.addComponent(jButtonSwitch))
 .addComponent(jScrollPaneDA, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jButtonDep, javax.swing.GroupLayout.Alignment.TRAILING)
 .addComponent(jTextFieldDep, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -522,7 +517,7 @@ jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
 .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
-.addContainerGap(90, Short.MAX_VALUE))
+.addContainerGap(110, Short.MAX_VALUE))
 );
 jPanel6Layout.setVerticalGroup(
 jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -603,6 +598,8 @@ jPanelFRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 );
 
+jButtonRefresh.setText("Refresh");
+
 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 getContentPane().setLayout(layout);
 layout.setHorizontalGroup(
@@ -628,8 +625,10 @@ layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-.addComponent(jButtonLogout)
-.addContainerGap())
+.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+.addComponent(jButtonRefresh, 0, 0, Short.MAX_VALUE)
+.addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+.addGap(18, 18, 18))
 );
 layout.setVerticalGroup(
 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -638,7 +637,10 @@ layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(layout.createSequentialGroup()
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-.addComponent(jButtonLogout)
+.addGroup(layout.createSequentialGroup()
+.addComponent(jButtonRefresh)
+.addGap(18, 18, 18)
+.addComponent(jButtonLogout))
 .addGroup(layout.createSequentialGroup()
 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 .addGroup(layout.createSequentialGroup()
@@ -661,7 +663,7 @@ layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(layout.createSequentialGroup()
 .addGap(97, 97, 97)
 .addComponent(jTextFieldAF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
 .addComponent(jButtonAdd))
 .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
 .addGap(27, 27, 27))
@@ -674,7 +676,11 @@ pack();
 }// </editor-fold>
 
 	//GEN-END:initComponents
-	private void jButtonDepActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	private void jButtonDepActionPerformed(java.awt.event.ActionEvent evt)
+			throws InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException,
+			BadPaddingException {
 		String new_dept_msg = this.jTextFieldDep.getText();
 		if (new_dept_msg.length() == 0) {
 			System.out.println("cannot update new contact info to null");
@@ -683,7 +689,11 @@ pack();
 		}
 	}
 
-	void jButtonComActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	void jButtonComActionPerformed(java.awt.event.ActionEvent evt)
+			throws InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException,
+			BadPaddingException {
 		String new_company_msg = this.jTextFieldCom.getText();
 		if (new_company_msg.length() == 0) {
 			System.out.println("cannot update new contact info to null");
@@ -692,13 +702,21 @@ pack();
 		}
 	}
 
-	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt)
+			throws InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException,
+			BadPaddingException {
 		String temp = (String) this.jComboBoxProject.getSelectedItem();
 		this.jLabelproject.setText(temp);
 		this.controller.clientUpdateRegion(Constants.REGION3, temp);
 	}
 
-	private void jButtonLocationActionPerformed(java.awt.event.ActionEvent evt) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	private void jButtonLocationActionPerformed(java.awt.event.ActionEvent evt)
+			throws InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException,
+			BadPaddingException {
 		String temp = (String) this.jComboBoxLocation.getSelectedItem();
 		this.jLabellocation.setText(temp);
 		this.controller.clientUpdateRegion(Constants.REGION2, temp);
@@ -785,7 +803,7 @@ pack();
 
 		}
 		if (s.equals(Constants.VALID_LOCATION)) {
-			for (int i=0;i<a.size();i++){
+			for (int i = 0; i < a.size(); i++) {
 				jComboBoxLocation.addItem(a.get(i).toString());
 			}
 			jComboBoxLocation.repaint();
@@ -796,7 +814,7 @@ pack();
 			jPanel3.repaint();
 		}
 		if (s.equals(Constants.VALID_PROJECT)) {
-			for (int i=0;i<a.size();i++){
+			for (int i = 0; i < a.size(); i++) {
 				jComboBoxProject.addItem(a.get(i).toString());
 			}
 			jComboBoxProject.repaint();
@@ -854,6 +872,8 @@ pack();
 	private javax.swing.JButton jButtonLocation;
 	private javax.swing.JButton jButtonLogout;
 	private javax.swing.JButton jButtonProject;
+	private javax.swing.JButton jButtonRefresh;
+	private javax.swing.JButton jButtonSwitch;
 	private javax.swing.JComboBox jComboBoxDep;
 	private javax.swing.JComboBox jComboBoxLocation;
 	private javax.swing.JComboBox jComboBoxProject;
