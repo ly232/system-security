@@ -267,7 +267,7 @@ try {
 }
 });
 
-//jComboBoxLocation.setModel(javax.swing.DefaultComboBoxModel@6b2a1485);
+
 
 jLabellocation.setText("jLabel11");
 
@@ -338,7 +338,7 @@ try {
 }
 });
 
-//jComboBoxProject.setModel(javax.swing.DefaultComboBoxModel@7a96792f);
+
 
 jLabelproject.setText("jLabel11");
 
@@ -419,7 +419,7 @@ jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
 .addComponent(jTextFieldCom, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
 .addComponent(jButtonCom)))
 .addContainerGap())
 );
@@ -475,9 +475,14 @@ try {
 }
 });
 
-//jComboBoxDep.setModel(javax.swing.DefaultComboBoxModel@8cdd2a5);
+
 
 jButtonSwitch.setText("Switch");
+jButtonSwitch.addActionListener(new java.awt.event.ActionListener() {
+public void actionPerformed(java.awt.event.ActionEvent evt) {
+jButtonSwitchActionPerformed(evt);
+}
+});
 
 javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
 jPanel5.setLayout(jPanel5Layout);
@@ -490,12 +495,12 @@ jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jLabel5)
 .addComponent(jScrollPaneDA, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 .addComponent(jButtonSwitch)
 .addComponent(jComboBoxDep, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-.addComponent(jTextFieldDep, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+.addComponent(jTextFieldDep, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
 .addGap(14, 14, 14)
 .addComponent(jButtonDep)))
 .addContainerGap())
@@ -617,11 +622,6 @@ jPanelFRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 );
 
 jButtonRefresh.setText("Refresh");
-jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
-public void actionPerformed(java.awt.event.ActionEvent evt) {
-jButtonRefreshActionPerformed(evt);
-}
-});
 
 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 getContentPane().setLayout(layout);
@@ -698,11 +698,12 @@ layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 pack();
 }// </editor-fold>
 
+	
+	
 	//GEN-END:initComponents
-	private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-	}
+	
 
+	
 	private void jButtonSwitchActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		String dname = (String) this.jComboBoxDep.getSelectedItem();
@@ -719,6 +720,7 @@ pack();
 			System.out.println("cannot update new contact info to null");
 		} else {
 			controller.postDeptMessage(new_dept_msg);
+			controller.refreshHomeBoard();
 		}
 	}
 
@@ -732,8 +734,11 @@ pack();
 			System.out.println("cannot update new contact info to null");
 		} else {
 			controller.postCompanyMessage(new_company_msg);
+			controller.refreshHomeBoard();
 		}
 	}
+	
+	
 
 	private void jButtonProjectActionPerformed(java.awt.event.ActionEvent evt)
 			throws InvalidKeyException, NoSuchAlgorithmException,

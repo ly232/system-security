@@ -422,6 +422,16 @@ public class EntNetClient {
         	invokeRequestThread(xmlRequest);
         }
         
+        //refresh user home board:
+        public void refreshHomeBoard(){
+
+        	ArrayList<XMLRequest> homeBoardInfoXML = this.clientHomeBoardRequest(thisUserID);
+        	//now we are in homepage...load home board content
+            for (int i=0;i<homeBoardInfoXML.size();i++){
+                invokeRequestThread(homeBoardInfoXML.get(i));
+            }
+        	
+        }
         
 
         public void  clientViewOtherPersonBoard(String otherPersonUid, String switchBoardCode) throws IOException{
