@@ -85,7 +85,7 @@ public class ClientMain {
         
         public void PersonToHome(){
             pui.setVisible(false);
-            uui = new UserHomeBoard(controller);
+            //uui = new UserHomeBoard(controller);
             uui.setVisible(true);
             currUI = Constants.UserHomeBoard;
         }

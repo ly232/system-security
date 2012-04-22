@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.rmi.server.UID;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -242,108 +243,38 @@ public class SharedKey implements SecurityObject{
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
-			/*
-			private String encrypt(String message,SecretKey key) {
-		// Get a cipher object.
-					Cipher cipher;
-					try {
-						cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-						cipher.init(Cipher.ENCRYPT_MODE, key);
-						 
-						// Gets the raw bytes to encrypt, UTF8 is needed for
-						// having a standard character set
-						byte[] stringBytes = message.getBytes("UTF8");
-					 
-						// encrypt using the cypher
-						byte[] raw = cipher.doFinal(stringBytes);
-					 
-						// converts to base64 for easier display.
-						BASE64Encoder encoder = new BASE64Encoder();
-						String base64 = encoder.encode(raw);
-					 
-						return base64;
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (NoSuchPaddingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvalidKeyException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalBlockSizeException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (BadPaddingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				return null;
-	}
-
-			
-			
-			public PBEParameterSpec generatePBEParaSpec(){
-			
-			 SecureRandom r = new SecureRandom();
-	         byte[] salt = new byte[8];
-	         //parameter is the array to be filled in with random bytes
-	         r.nextBytes(salt);
-	         
-	         int count = 8;
-	         
-	         PBEParameterSpec pbeParamSpec = new PBEParameterSpec(salt, count);
-	         
-	         return pbeParamSpec;
-		}
-			
 		
-			public MyKey generateRandomKey(){
-				UID uid= new UID();
-				return this.generateKeyWithPwd(uid.toString());
-				
-			}
-			*/
 			
 			
-	/*		
-	
-	public MyKey generateRandomKey(){
-				
-				KeyGenerator generator=null;
-				try {
-					generator = KeyGenerator.getInstance("DES");
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
-				}
-				generator.init(new SecureRandom());
-				SecretKey randomKey = generator.generateKey();
-				
-				mk.skey = randomKey;
-				mk.ips=generateIvParaSpec();
-	            
-				return mk;
-				//Random pswNum= new Random();
-				//return this.generateKeyWithPwd(pswNum.toString());
-				
-			}
+			public static String getHash(String str)
 
-			public IvParameterSpec generateIvParaSpec(){
-				
-				SecureRandom iv = new SecureRandom();
-		         byte[] salt = new byte[8];
-		         //parameter is the array to be filled in with random bytes
-		        iv.nextBytes(salt);
-		        
-				IvParameterSpec ips = new IvParameterSpec(salt);
-		        return ips;
-			}	
-	
-	*/	
+			{
+				try {
+					MessageDigest md = MessageDigest.getInstance("MD5");
+					byte[] array = str.getBytes("utf8");
+					md.update(array);
+					byte[] temp;
+					temp = md.digest();
+					String result = "";
+					for (int i = 0; i < temp.length; i++) {
+						result += Integer.toHexString(
+								(0x000000ff & temp[i]) | 0xffffff00).substring(6);
+					}
+
+					return result;
+
+				} catch (Exception e) {
+				}
+				return null;
+
+			}
+			
+			public static Boolean checkHash(String str, String hash){
+				if (hash.equals(getHash(str)))
+					return true;
+				else
+					return false;
+			}
 			
 			
 		

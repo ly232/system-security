@@ -20,6 +20,7 @@ import javax.sql.rowset.WebRowSet;
 
 import Constants.Constants;
 import JDBC.DataBase;
+import Security.SharedKey;
 import XML.MyResultSet;
 import XML.XMLRequest;
 
@@ -175,11 +176,18 @@ public class ReadServlet extends Servelet implements Runnable{
 				System.out.println("ReadServlet: received a request that's not read region");
 			}
 
-			MyResultSet rs = new MyResultSet(db.DoQuery(readQuery), handle.k_session);
+			ResultSet tmp_rs = db.DoQuery(readQuery);
+			
+			MyResultSet rs = new MyResultSet(tmp_rs, handle.k_session);
 
  			xmlRequest.setRequestDetail(Constants.RETURN_RESULTSET);
  			xmlRequest.setMyResultSet(rs);
+ 			
+ 			xmlRequest.setSessionID(SharedKey.getHash(tmp_rs.toString())); //set the hash of myresultset for integrity checking
+ 			xmlRequest.setActionID(tmp_rs.toString()); //the action id field for server's reply message is re-used to store the orignal text of the result set. this will be used for integrity checking at the client side.
+ 			
  			handle.callBackResult(xmlRequest);
+ 			
 		}  catch (SQLException e) {
 			xmlRequest.setRequestDetail(Constants.INVALID_REQUEST);
 			handle.callBackResult(xmlRequest);
