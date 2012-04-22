@@ -843,14 +843,7 @@ public class EntNetClient {
             if (rowAffected.equals("1")){ 
                 System.out.println("update region successful");
                 
-                if (xmlreq.getRegionID().equals(Constants.REGION1))
-                {
-	                String newContactInfo = this.clientMain.uui.getTextField1();
-	                ArrayList<String> al = new ArrayList<String>();
-	                al.add(this.thisUserID);
-	                al.add(newContactInfo);
-	                this.clientMain.giveArrayListToUI(al, xmlreq.getRegionID());
-                }
+                this.refreshHomeBoard();
                 
                 
             }

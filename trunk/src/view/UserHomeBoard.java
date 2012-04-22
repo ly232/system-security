@@ -720,7 +720,7 @@ pack();
 			System.out.println("cannot update new contact info to null");
 		} else {
 			controller.postDeptMessage(new_dept_msg);
-			controller.refreshHomeBoard();
+			//controller.refreshHomeBoard();
 		}
 	}
 
@@ -734,7 +734,7 @@ pack();
 			System.out.println("cannot update new contact info to null");
 		} else {
 			controller.postCompanyMessage(new_company_msg);
-			controller.refreshHomeBoard();
+			//controller.refreshHomeBoard();
 		}
 	}
 	
