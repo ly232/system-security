@@ -72,14 +72,203 @@ public class UpdateServlet extends Servelet implements Runnable{
 					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("role_id")));
 				
-
-				query = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
-	                + "AES_ENCRYPT('"+regist_uname+"','"+handle.getDBpwd()+"'), "
-	                + "AES_ENCRYPT('"+regist_pwd+"','"+handle.getDBpwd()+"'), "
-	                + "AES_ENCRYPT('"+regist_contact_info+"','"+handle.getDBpwd()+"'), "
-	                + "AES_ENCRYPT('"+regist_role_id+"','"+handle.getDBpwd()+"'));";
+				String regist_dept_id = 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
+							xmlRequest.requestData.get("dept_id")));
 				
-			}
+				String regist_loc_id = 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
+							xmlRequest.requestData.get("loc_id")));
+				
+				String regist_proj_id = 
+					new String(sk.sessionKeyDecrypt(handle.k_session, 
+							xmlRequest.requestData.get("proj_id")));
+
+				//check whether the registed person tries to be the boss. if so the registration is rejected automatically. we assume that the boss is manually inserted by the sys admin at mysql console
+				if (regist_role_id.equals(Constants.BOSS_ROLE_ID)){
+					System.out.println("cannot register as a boss. must ask sys admin to regist as boss.");
+					xmlRequest.setRequestDetail(Constants.CANNOT_REGIST_AS_BOSS);
+					handle.callBackResult(xmlRequest);
+					return;
+				}
+				
+				
+				
+				Boolean hasManager;
+				String manager_uid = "";
+				String getManagerQuery = "select aes_decrypt(dhead_uid,'"+handle.getDBpwd()
+					+"') as dhead_uid from department where aes_decrypt(did,'"+handle.getDBpwd()+"')='"+regist_dept_id+"';";
+				
+				
+				ResultSet rs = db.DoQuery(getManagerQuery);
+				hasManager = rs.first();
+				if (hasManager)
+					manager_uid = rs.getString("dhead_uid");
+				
+				//check whether the user is already registered
+				query = "select aes_decrypt(user_id,'"+handle.getDBpwd()+"') as user_id from user where aes_decrypt(user_id,'"
+					+handle.getDBpwd()+"')='"+regist_uname+"';";
+				
+				//System.out.println(query);
+				rs = db.DoQuery(query);
+				//System.out.println(rs.first());
+				
+				if (rs.first()==false){ //regist_uname does not appear in user table
+					query = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
+		                + "AES_ENCRYPT('"+regist_uname+"','"+handle.getDBpwd()+"'), "
+		                + "AES_ENCRYPT('"+regist_pwd+"','"+handle.getDBpwd()+"'), "
+		                + "AES_ENCRYPT('"+regist_contact_info+"','"+handle.getDBpwd()+"'), "
+		                + "AES_ENCRYPT('"+regist_role_id+"','"+handle.getDBpwd()+"'));";
+					
+					//System.out.println(query);
+					
+					int insertCount = db.DoUpdateQuery(query);
+					if (insertCount!=1){
+						System.err.println("registration failed: cannot insert into user table");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					
+					query = "insert into currloc (loc_id, user_id) values (aes_encrypt('"+regist_loc_id+"','"
+		                		+handle.getDBpwd()+"'), aes_encrypt('"+regist_uname+"','"+handle.getDBpwd()+"'));";
+					insertCount = db.DoUpdateQuery(query);
+					if (insertCount!=1){
+						System.err.println("registration failed: cannot insert into currloc table");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					
+					query = "insert into workat (userID_workat, deptID_workat) values (aes_encrypt('"
+		                				+regist_uname+"','"+handle.getDBpwd()+"'), aes_encrypt('"+regist_dept_id+"','"+handle.getDBpwd()+"'));";
+					insertCount = db.DoUpdateQuery(query);
+					if (insertCount!=1){
+						System.err.println("registration failed: cannot insert into workat table");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					
+		            query = "insert into workon (uid, pid) values (aes_encrypt('"+regist_uname+"','"
+		                					+handle.getDBpwd()+"'), aes_encrypt('"+regist_proj_id+"','"+handle.getDBpwd()+"')); ";
+		            insertCount = db.DoUpdateQuery(query);
+					if (insertCount!=1){
+						System.err.println("registration failed: cannot insert into workon table");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					
+						if (hasManager){
+							query = "insert into manage (manager_id, worker_id) values (aes_encrypt('"+manager_uid+"','"
+								+handle.getDBpwd()+"'), aes_encrypt('"+regist_uname+"','"+handle.getDBpwd()+"')); ";
+							insertCount = db.DoUpdateQuery(query);
+							if (insertCount!=1){
+								System.err.println("registration failed: cannot insert into manage table");
+								xmlRequest.setRequestDetail(Constants.INVALID);
+								handle.callBackResult(xmlRequest);
+								return;
+							}
+						}
+						//update department head if the new registered user has role_id = 2
+						if (regist_role_id.equals(Constants.DEPTHEAD_ROLE_ID)){
+							query = "update department set dhead_uid = aes_encrypt('"+regist_uname+"','"+handle.getDBpwd()
+								+"') where aes_decrypt(did,'"+handle.getDBpwd()+"')='"+regist_dept_id+"'; ";
+							insertCount = db.DoUpdateQuery(query);
+							if (insertCount!=1){
+								System.err.println("registration failed: cannot update into department table");
+								xmlRequest.setRequestDetail(Constants.INVALID);
+								handle.callBackResult(xmlRequest);
+								return;
+							}
+							
+							if (hasManager){ //demote the current dept head to reg emp
+								query = "update user set role_id = aes_encrypt('"+Constants.REGEMP_ROLE_ID+"','"
+									+handle.getDBpwd()+"') where aes_decrypt(user_id,'"+handle.getDBpwd()+"')='"+manager_uid+"';";
+								insertCount = db.DoUpdateQuery(query);
+								if (insertCount!=1){
+									System.err.println("registration failed: cannot update into user table");
+									xmlRequest.setRequestDetail(Constants.INVALID);
+									handle.callBackResult(xmlRequest);
+									return;
+								}
+							}
+						}
+					
+					xmlRequest.setRequestDetail(Constants.REGISTRATION_SUCCESS);
+					handle.callBackResult(xmlRequest);
+					return;
+				
+				}
+				else{ //user already exists in the table. just update user's information
+					query = "update user set user_pwd=aes_encrypt('"
+						+regist_pwd+"','"+handle.getDBpwd()+"'), contact_info=aes_encrypt('"
+						+regist_contact_info+"','"+handle.getDBpwd()+"'), role_id=aes_encrypt('"
+						+regist_role_id+"','"+handle.getDBpwd()+"') where aes_decrypt(user_id,'"
+						+handle.getDBpwd()+"')='"+regist_uname+"';";
+					int insertCount = db.DoUpdateQuery(query);
+					if (insertCount>1){
+						System.err.println("registration failed: cannot update into user table for existing user");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					query = "update currloc set loc_id=aes_encrypt('"+regist_loc_id+"','"+handle.getDBpwd()+"') where aes_decrypt(user_id,'"
+						+handle.getDBpwd()+"')='"+regist_uname+"';";
+					insertCount = db.DoUpdateQuery(query);
+					if (insertCount>1){
+						System.err.println("registration failed: cannot update into currloc table for existing user");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					query = "update workon set pid=aes_encrypt('"+regist_proj_id+"','"+handle.getDBpwd()+"') where aes_decrypt(uid,'"
+						+handle.getDBpwd()+"')='"+regist_uname+"';";
+					insertCount = db.DoUpdateQuery(query);
+					if (insertCount>1){
+						System.err.println("registration failed: cannot update into workon table for existing user");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					//update department, workat, manage relations:
+					query = "update workat set deptID_workat=aes_encrypt('"+regist_dept_id+"','"+handle.getDBpwd()+"') where aes_decrypt(userID_workat,'"+handle.getDBpwd()+"')='"+regist_uname+"';";
+					insertCount = db.DoUpdateQuery(query);
+					if (insertCount>1){
+						System.err.println("registration failed: cannot update into workat table for existing user");
+						xmlRequest.setRequestDetail(Constants.INVALID);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					if (regist_role_id.equals(Constants.DEPTHEAD_ROLE_ID)){
+						query = "update department set dhead_uid = aes_encrypt('"+regist_uname+"','"+handle.getDBpwd()
+							+"') where aes_decrypt(did,'"+handle.getDBpwd()+"')='"+regist_dept_id+"'; ";
+						insertCount = db.DoUpdateQuery(query);
+						if (insertCount>1){
+							System.err.println("registration failed: cannot update into department table to change department head");
+							xmlRequest.setRequestDetail(Constants.INVALID);
+							handle.callBackResult(xmlRequest);
+							return;
+						}
+						
+						if (hasManager){ //demote the current dept head to reg emp
+							query = "update user set role_id = aes_encrypt('"+Constants.REGEMP_ROLE_ID+"','"
+								+handle.getDBpwd()+"') where aes_decrypt(user_id,'"+handle.getDBpwd()+"')='"+manager_uid+"';";
+							insertCount = db.DoUpdateQuery(query);
+							if (insertCount>1){
+								System.err.println("registration failed: cannot update into user table to demote existing department head");
+								xmlRequest.setRequestDetail(Constants.INVALID);
+								handle.callBackResult(xmlRequest);
+								return;
+							}
+						}
+					}
+					xmlRequest.setRequestDetail(Constants.REGISTRATION_SUCCESS);
+					handle.callBackResult(xmlRequest);
+					return;
+				}
+			}//end of registration update
 			else if (this.xmlRequest.getRequestID().equals(Constants.DELETE_FRIEND_ID)){
 				//first, check that the invoker is indeed the user
 				if (handle.getUserID().equals(xmlRequest.getUserID())==false){

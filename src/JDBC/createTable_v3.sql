@@ -39,7 +39,7 @@ CREATE TABLE `currloc` (
 
 LOCK TABLES `currloc` WRITE;
 /*!40000 ALTER TABLE `currloc` DISABLE KEYS */;
-INSERT INTO `currloc` VALUES ('¦ „¦ÜåsàÀ·…yéŠ',' \0—µJ©’»öL.^·'),('¦ „¦ÜåsàÀ·…yéŠ','“Uh	v@ð5 T'),('Í5ÉÊÝ—\04Êvfû)','p=\0®µGœkÛ¦?V'),('×»äÐa³š¬ŽH¢/Ö2×\r','b(ªžá¬½´cVçÀ\'ÙÌ');
+INSERT INTO `currloc` VALUES ('¦ „¦ÜåsàÀ·…yéŠ',' \0—µJ©’»öL.^·'),('Í5ÉÊÝ—\04Êvfû)','p=\0®µGœkÛ¦?V'),('Í5ÉÊÝ—\04Êvfû)','“Uh	v@ð5 T'),('×»äÐa³š¬ŽH¢/Ö2×\r','b(ªžá¬½´cVçÀ\'ÙÌ');
 /*!40000 ALTER TABLE `currloc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +66,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','Üx^R\\d·„vŸê¯ ','“Uh	v@ð5 T'),('Í5ÉÊÝ—\04Êvfû)','úZÙ0V§$BB?K','b(ªžá¬½´cVçÀ\'ÙÌ'),('×»äÐa³š¬ŽH¢/Ö2×\r','æùÖHøGoQw.Á	\"Ã[f',' \0—µJ©’»öL.^·');
+INSERT INTO `department` VALUES ('`G$ÍmêÑðÊJc\0','xc?nÍY™GÛv£ØÁ','“Uh	v@ð5 T'),('¦ „¦ÜåsàÀ·…yéŠ','Üx^R\\d·„vŸê¯ ','“Uh	v@ð5 T'),('Í5ÉÊÝ—\04Êvfû)','úZÙ0V§$BB?K','b(ªžá¬½´cVçÀ\'ÙÌ'),('×»äÐa³š¬ŽH¢/Ö2×\r','æùÖHøGoQw.Á	\"Ã[f',' \0—µJ©’»öL.^·');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `friend` (
 
 LOCK TABLES `friend` WRITE;
 /*!40000 ALTER TABLE `friend` DISABLE KEYS */;
-INSERT INTO `friend` VALUES (' \0—µJ©’»öL.^·','“Uh	v@ð5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('b(ªžá¬½´cVçÀ\'ÙÌ','“Uh	v@ð5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('p=\0®µGœkÛ¦?V','“Uh	v@ð5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('“Uh	v@ð5 T',' \0—µJ©’»öL.^·','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('“Uh	v@ð5 T','b(ªžá¬½´cVçÀ\'ÙÌ','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('“Uh	v@ð5 T','p=\0®µGœkÛ¦?V','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0');
+INSERT INTO `friend` VALUES (' \0—µJ©’»öL.^·','“Uh	v@ð5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('b(ªžá¬½´cVçÀ\'ÙÌ','“Uh	v@ð5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('p=\0®µGœkÛ¦?V','“Uh	v@ð5 T','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('“Uh	v@ð5 T',' \0—µJ©’»öL.^·','Q~3,ª.þÃ9\Zø_ñ','¦ „¦ÜåsàÀ·…yéŠ'),('“Uh	v@ð5 T',' \0—µJ©’»öL.^·','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('“Uh	v@ð5 T','b(ªžá¬½´cVçÀ\'ÙÌ','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0'),('“Uh	v@ð5 T','p=\0®µGœkÛ¦?V','‚êLé+PÀ^:ÊVøò!|','`G$ÍmêÑðÊJc\0');
 /*!40000 ALTER TABLE `friend` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +175,7 @@ CREATE TABLE `postworkmessage` (
 
 LOCK TABLES `postworkmessage` WRITE;
 /*!40000 ALTER TABLE `postworkmessage` DISABLE KEYS */;
-INSERT INTO `postworkmessage` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','¦ „¦ÜåsàÀ·…yéŠ','%ÂG˜ÝÅþøÝñÓÁÃÝÈ.<‚QÖ©\"QÀžk`…dÑ');
+INSERT INTO `postworkmessage` VALUES ('¦ „¦ÜåsàÀ·…yéŠ','`G$ÍmêÑðÊJc\0','®ñþœ¨=@ôƒ·î#I'),('¦ „¦ÜåsàÀ·…yéŠ','`G$ÍmêÑðÊJc\0','°;<Ìû\rúáu’¤š5f‰'),('¦ „¦ÜåsàÀ·…yéŠ','`G$ÍmêÑðÊJc\0','ä¦Fö½Pùà¼Ÿaê¹Ñ'),('¦ „¦ÜåsàÀ·…yéŠ','×»äÐa³š¬ŽH¢/Ö2×\r','KNB\'‘ÓçWe\rSêóT©G¢™_;d«ÈaD5á'),('¦ „¦ÜåsàÀ·…yéŠ','×»äÐa³š¬ŽH¢/Ö2×\r','{ìg)2\0¸åZ3Óªe¢™_;d«ÈaD5á');
 /*!40000 ALTER TABLE `postworkmessage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,7 +225,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('c–\Z¥~b–óÙßˆ9V','ÕŒ›íÛSóN÷¥m<Ô]','ùäƒÄ]|+-|+\n\r\"]','Í5ÉÊÝ—\04Êvfû)'),(' \0—µJ©’»öL.^·','ÕŒ›íÛSóN÷¥m<Ô]','C°_[halêJÁÝû\Zí\0','×»äÐa³š¬ŽH¢/Ö2×\r'),('ZV=Á¢YâµFN‡«.¬ô','ÕŒ›íÛSóN÷¥m<Ô]',' žuì£|ý„\Z.ˆ`DÞ¿','Í5ÉÊÝ—\04Êvfû)'),('b(ªžá¬½´cVçÀ\'ÙÌ','ÕŒ›íÛSóN÷¥m<Ô]','D;áz0xäÑ•¦åƒU','Í5ÉÊÝ—\04Êvfû)'),('p=\0®µGœkÛ¦?V','ÕŒ›íÛSóN÷¥m<Ô]','|]–pÜ¬è°µôæ°±e0','Í5ÉÊÝ—\04Êvfû)'),('“Uh	v@ð5 T','ÕŒ›íÛSóN÷¥m<Ô]','aÂø†ôï†vjnyy','¦ „¦ÜåsàÀ·…yéŠ'),('ÕKå£–!¨98ÌÖ=ã·ñ^','ÕŒ›íÛSóN÷¥m<Ô]','d@ÐŽS)j«È J(','Í5ÉÊÝ—\04Êvfû)'),('õ¸joe<¶®÷!;Šýs','ÕŒ›íÛSóN÷¥m<Ô]','áŸ:1Y<Ûä×nHm?U','Í5ÉÊÝ—\04Êvfû)');
+INSERT INTO `user` VALUES ('c–\Z¥~b–óÙßˆ9V','ÕŒ›íÛSóN÷¥m<Ô]','ùäƒÄ]|+-|+\n\r\"]','Í5ÉÊÝ—\04Êvfû)'),(' \0—µJ©’»öL.^·','ÕŒ›íÛSóN÷¥m<Ô]','C°_[halêJÁÝû\Zí\0','×»äÐa³š¬ŽH¢/Ö2×\r'),('ZV=Á¢YâµFN‡«.¬ô','ÕŒ›íÛSóN÷¥m<Ô]',' žuì£|ý„\Z.ˆ`DÞ¿','Í5ÉÊÝ—\04Êvfû)'),('b(ªžá¬½´cVçÀ\'ÙÌ','ÕŒ›íÛSóN÷¥m<Ô]','D;áz0xäÑ•¦åƒU','Í5ÉÊÝ—\04Êvfû)'),('p=\0®µGœkÛ¦?V','ÕŒ›íÛSóN÷¥m<Ô]','|]–pÜ¬è°µôæ°±e0','Í5ÉÊÝ—\04Êvfû)'),('“Uh	v@ð5 T','ÕŒ›íÛSóN÷¥m<Ô]','Á»¡WHÜMŠ6ŽÒ`K¬ï','¦ „¦ÜåsàÀ·…yéŠ'),('ÕKå£–!¨98ÌÖ=ã·ñ^','ÕŒ›íÛSóN÷¥m<Ô]','d@ÐŽS)j«È J(','Í5ÉÊÝ—\04Êvfû)'),('õ¸joe<¶®÷!;Šýs','ÕŒ›íÛSóN÷¥m<Ô]','áŸ:1Y<Ûä×nHm?U','Í5ÉÊÝ—\04Êvfû)');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +281,7 @@ CREATE TABLE `workon` (
 
 LOCK TABLES `workon` WRITE;
 /*!40000 ALTER TABLE `workon` DISABLE KEYS */;
-INSERT INTO `workon` VALUES ('p=\0®µGœkÛ¦?V','¦ „¦ÜåsàÀ·…yéŠ'),('“Uh	v@ð5 T','¦ „¦ÜåsàÀ·…yéŠ'),('b(ªžá¬½´cVçÀ\'ÙÌ','Í5ÉÊÝ—\04Êvfû)'),(' \0—µJ©’»öL.^·','×»äÐa³š¬ŽH¢/Ö2×\r');
+INSERT INTO `workon` VALUES ('p=\0®µGœkÛ¦?V','¦ „¦ÜåsàÀ·…yéŠ'),('b(ªžá¬½´cVçÀ\'ÙÌ','Í5ÉÊÝ—\04Êvfû)'),('“Uh	v@ð5 T','Í5ÉÊÝ—\04Êvfû)'),(' \0—µJ©’»öL.^·','×»äÐa³š¬ŽH¢/Ö2×\r');
 /*!40000 ALTER TABLE `workon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -294,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-21 11:49:17
+-- Dump completed on 2012-04-21 20:42:53
