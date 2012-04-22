@@ -459,14 +459,15 @@
                               <Component id="jButtonSwitch" min="-2" max="-2" attributes="0"/>
                               <Component id="jComboBoxDep" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jTextFieldDep" pref="159" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                           <Component id="jButtonDep" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -660,9 +661,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Refresh"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRefreshActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>
