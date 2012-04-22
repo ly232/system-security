@@ -124,23 +124,12 @@ public class XMLRequest implements Serializable{
 			this.sessionID = sessionID;//for the later use
 			this.requestDetail = requestDetail;
 			this.actionID = ActionID;
-			//TODO: generate a sessionKey
-			//generateSessionKey();
-			//encrypt();
-			
-			//4/12/12
 			this.requestData = new HashMap<String, byte[]>();
 		}
 		
-		
 		public void encrypt(){
-				if (requestID == Constants.SESSION_KEY_EST) {
-					//encrypt requestDetail with server's public key
-					
-					
-					
+				if (requestID == Constants.SESSION_KEY_EST) 
 					return;
-				}
 				SharedKey sk  = SharedKey.getInstance();
 				this.userID = new String(sk.encrypt(userID, sessionKey));
 				this.regionID = new String(sk.encrypt(regionID, sessionKey));

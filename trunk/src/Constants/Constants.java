@@ -30,6 +30,9 @@ public abstract class Constants {
     public static final String POST_COMPANY_MESSAGE = "POST_COMPANY_MESSAGE";
     public static final String POST_DEPT_MESSAGE = "POST_DEPT_MESSAGE";
     public static final String SWITCH_DEPT = "SWITCH_DEPT";
+    public static final String INTEGRITY_VIOLATION = "INTEGRITY_VIOLATION";
+    public static final String INVALID_PASSWORD_SETUP = "INVALID_PASSWORD_SETUP";
+    public static final String INVALID_VCODE = "INVALID_VCODE";
     
     public static final String BOSS_ROLE_ID = "1";
     public static final String DEPTHEAD_ROLE_ID = "2";

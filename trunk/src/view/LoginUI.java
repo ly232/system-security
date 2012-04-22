@@ -377,7 +377,7 @@ public class LoginUI extends javax.swing.JFrame {
 		else {
 			controller.clientRegist(jTextFieldRegid.getText(),
 					jTextFieldRegpwd.getText(), jTextFieldRegcontact.getText(),
-					jTextFieldRegrole.getText());
+					jTextFieldRegrole.getText(), jTextFieldVcode.getText());
 		}
 
 	}
@@ -400,9 +400,10 @@ public class LoginUI extends javax.swing.JFrame {
 		// TODO add your handling code here:
 	}
 
-	public static void checkRegist(Boolean b) {
-		if (b == false)
-			JOptionPane.showMessageDialog(null, "Registration failed!");
+	public static void checkRegist(Boolean b, String errMsg) {
+		if (b == false){
+			JOptionPane.showMessageDialog(null, "Registration failed! REASON: "+errMsg);
+		}
 		else
 			JOptionPane.showMessageDialog(null,
 					"Registration succeed, please login!");

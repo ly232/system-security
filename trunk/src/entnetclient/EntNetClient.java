@@ -115,7 +115,7 @@ public class EntNetClient {
         
         
         
-        public void clientRegist(String uname, String pwd, String contactinfo, String roleID) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        public void clientRegist(String uname, String pwd, String contactinfo, String roleID, String vcode) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
         	XMLRequest xmlr = new XMLRequest(
         			Constants.REGIST_REQUEST_ID,
         			this.thisUserID,
@@ -128,6 +128,7 @@ public class EntNetClient {
         	xmlr.requestData.put("password", sk.sessionKeyEncrypt(this.k_session, pwd));
         	xmlr.requestData.put("contact_info", sk.sessionKeyEncrypt(this.k_session, contactinfo));
         	xmlr.requestData.put("role_id", sk.sessionKeyEncrypt(this.k_session, roleID));
+        	xmlr.requestData.put("vcode", sk.sessionKeyEncrypt(this.k_session, vcode));
         	invokeRequestThread(xmlr);
         }
         
@@ -309,7 +310,7 @@ public class EntNetClient {
         			  Constants.UPDATE_REGION_ID, 
         			  thisUserID,
         			  Constants.REGION6, 
-        			  Constants.INVALID, 
+        			  SharedKey.getHash(messageString), 
         			  Constants.POST_FRIEND_MESSAGE, 
         			  Constants.UPDATE);
         	  SharedKey sk = SharedKey.getInstance();
@@ -325,14 +326,15 @@ public class EntNetClient {
         //the ui will have a post company message button enabled for boss only.
         //so access control is realized by ui
         public void postCompanyMessage(String messageString) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        	
         	XMLRequest xmlRequest = new XMLRequest(
       			  Constants.UPDATE_REGION_ID, 
       			  thisUserID,
       			  Constants.REGION4, 
-      			  Constants.INVALID, 
+      			  SharedKey.getHash(messageString),//this field was intended to use for session ID. now we store hash
       			  Constants.POST_COMPANY_MESSAGE, 
       			  Constants.UPDATE);
-      	  SharedKey sk = SharedKey.getInstance();
+        	SharedKey sk = SharedKey.getInstance();
       	  xmlRequest.requestData.put("postedCompnayMessage", 
         			  sk.sessionKeyEncrypt(this.k_session, messageString));
       	  invokeRequestThread(xmlRequest);
@@ -342,7 +344,7 @@ public class EntNetClient {
       			  Constants.UPDATE_REGION_ID, 
       			  thisUserID,
       			  Constants.REGION5, 
-      			  Constants.INVALID, 
+      			  SharedKey.getHash(messageString),
       			  Constants.POST_DEPT_MESSAGE, 
       			  Constants.UPDATE);
       	  SharedKey sk = SharedKey.getInstance();
@@ -541,18 +543,6 @@ public class EntNetClient {
         } //end of login request threadCallBack
                 
         
-        /*
-        else if (xmlreq.getRequestID().equals(Constants.SESSION_KEY_EST)){
-            String SessionKeyEstStat = xmlreq.getRequestDetail();
-            if (SessionKeyEstStat==Constants.TRUE){
-                XMLRequest.sessionKey = EntNetClient.sessionKey;
-                System.out.println("in requestThreadCallback, session key successfully established");
-            }
-            else{
-            	System.err.println("in requestThreadCallback, failed to establish session key");
-                return;
-            }
-        }*/
         
         else if (xmlreq.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
             //check if the login is successful
@@ -561,7 +551,7 @@ public class EntNetClient {
                 //successful registration
                 //goto user's home page by asking server to send xml of user homeboard
                 try{
-                	view.LoginUI.checkRegist(true);
+                	view.LoginUI.checkRegist(true, "");
                 	return; 
                 }
                 catch(Exception e){
@@ -569,7 +559,17 @@ public class EntNetClient {
             }
             else{
                 //failed registration
-            	view.LoginUI.checkRegist(false);
+            	String errMsg = "";
+            	
+            	if (xmlreq.getRequestDetail().equals(Constants.INVALID_PASSWORD_SETUP))
+            		errMsg = "Incorrect password format--must contain at least a letter and a number.";
+            	else if (xmlreq.getRequestDetail().equals(Constants.INVALID_VCODE))
+            		errMsg = "Incorrect verification code.";
+            	else
+            		errMsg = "Unknown.";
+            	
+            	view.LoginUI.checkRegist(false, errMsg);
+            	
                 return;
             }
         } //end of regist request threadCallBack
@@ -577,8 +577,15 @@ public class EntNetClient {
             ArrayList<String> resultSetArrayList = new ArrayList<String>();
             String regionID = xmlreq.getRegionID();
             MyResultSet myRS;
-            if (xmlreq.getRequestDetail().equals(Constants.RETURN_RESULTSET))
+            if (xmlreq.getRequestDetail().equals(Constants.RETURN_RESULTSET)){
                 myRS = xmlreq.getMyResultSet();
+                //integrity checking for myRS:
+                Boolean integrity = SharedKey.checkHash(xmlreq.getActionID(), xmlreq.getSessionID());
+                if (!integrity){
+                	System.err.println("my result set integrity violation at EntNetClient:requestThreadCallBack");
+                	return;
+                }
+            }
             else{
                 System.err.println("ERROR: entnetclient callback readregion did not return myresultset");
                 return;
@@ -806,8 +813,6 @@ public class EntNetClient {
 			}else{
 				System.out.println("delete friend fail");
 			}
-            //int rows  = Integer.parseInt(rowAffected);
-			//	System.out.println("Delete friend success");
 		}
         else if (xmlreq.getRequestID().equals(Constants.UPDATE_REGION_ID)){
             String rowAffected = xmlreq.getRequestDetail();

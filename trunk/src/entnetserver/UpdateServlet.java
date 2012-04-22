@@ -43,7 +43,13 @@ public class UpdateServlet extends Servelet implements Runnable{
 			//this means the sys admin provides k_db at the client side
 			//server will generate sql with k_db provided by sys admin.
 			if (this.xmlRequest.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
-				//System.out.println("updateServelet: get a regist reqest");
+				String vcode = new String(sk.sessionKeyDecrypt(handle.k_session, 
+						xmlRequest.requestData.get("vcode")));
+				if (vcode.equals(ThreadedHandler.db_pwd)==false){
+					xmlRequest.setRequestDetail(Constants.INVALID_VCODE);
+					handle.callBackResult(xmlRequest);
+					return;
+				}
 				
 				String regist_uname = 
 					new String(sk.sessionKeyDecrypt(handle.k_session, 
@@ -51,6 +57,14 @@ public class UpdateServlet extends Servelet implements Runnable{
 				String regist_pwd = 
 					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("password")));
+				if(CheckPassword.checkPassword(regist_pwd)==false){
+					System.out.println("UpdateServlet: invalid password for registration");
+					xmlRequest.setRequestDetail(Constants.INVALID_PASSWORD_SETUP);
+					handle.callBackResult(xmlRequest);
+					return;
+				}
+				
+				
 				String regist_contact_info = 
 					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("contact_info")));
@@ -58,6 +72,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 					new String(sk.sessionKeyDecrypt(handle.k_session, 
 							xmlRequest.requestData.get("role_id")));
 				
+
 				query = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
 	                + "AES_ENCRYPT('"+regist_uname+"','"+handle.getDBpwd()+"'), "
 	                + "AES_ENCRYPT('"+regist_pwd+"','"+handle.getDBpwd()+"'), "
@@ -127,6 +142,15 @@ public class UpdateServlet extends Servelet implements Runnable{
 					String messageString = 
 						new String(sk.sessionKeyDecrypt(handle.k_session,
 								this.xmlRequest.requestData.get("postedFriendMessage")));
+					//check msg integrity:
+					Boolean integrity = SharedKey.checkHash(messageString, xmlRequest.getSessionID());
+					if (!integrity){
+						System.err.println("UpdateServlet: integrity checking failed for post friend msg");
+						xmlRequest.setRequestDetail(Constants.INTEGRITY_VIOLATION);
+						handle.callBackResult(xmlRequest);
+						return;
+					}
+					
 					query = 
 						"insert into friend values(aes_encrypt('" + friend_id 
 						+ "', '"+ThreadedHandler.db_pwd+"'),aes_encrypt('" 
@@ -202,6 +226,14 @@ public class UpdateServlet extends Servelet implements Runnable{
 						String postedMsg = 
 							new String(sk.sessionKeyDecrypt(handle.k_session,
 									this.xmlRequest.requestData.get("postedCompnayMessage")));
+						Boolean integrity = SharedKey.checkHash(postedMsg, xmlRequest.getSessionID()); //we stored hash value in session id field...if time allows we will rename this field.
+						if (!integrity){
+							System.err.println("UpdateServlet: integrity violation for post company msg");
+							xmlRequest.setRequestDetail(Constants.INTEGRITY_VIOLATION);
+				 			handle.callBackResult(xmlRequest);
+							return;
+						}
+							
 						//System.out.println("postedMsg="+postedMsg);
 						query = 
 							"insert into postworkmessage (msg_id,did,msg_content) values " +
@@ -233,6 +265,16 @@ public class UpdateServlet extends Servelet implements Runnable{
 						String postedMsg = 
 							new String(sk.sessionKeyDecrypt(handle.k_session,
 									this.xmlRequest.requestData.get("postedDeptMessage")));
+		
+						Boolean integrity = SharedKey.checkHash(postedMsg, xmlRequest.getSessionID()); //we stored hash value in session id field...if time allows we will rename this field.
+						if (!integrity){
+							System.err.println("UpdateServlet: integrity violation for post department msg");
+							xmlRequest.setRequestDetail(Constants.INTEGRITY_VIOLATION);
+				 			handle.callBackResult(xmlRequest);
+							return;
+						}
+						
+						
 						String deptID_query = "select aes_decrypt(deptID_workat,'"
 							+ThreadedHandler.db_pwd+"') as deptID_workat from workat where aes_decrypt(userID_workat,'"
 							+ThreadedHandler.db_pwd+"')='"+xmlRequest.getUserID()+"';";
