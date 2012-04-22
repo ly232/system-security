@@ -96,9 +96,6 @@ public class EntNetClient {
         	SecureRandom r = new SecureRandom();
         	Integer s = r.nextInt();
         	k_session = s.toString();
-        	System.out.println("client: k_session = "+k_session);
-        	//SharedKey sk = SharedKey.getInstance();
-        	//k_session = sk.generateSessionKeyWithPassword(sessionKeyGenStr);
         	//now send encrypted sessionKeyGenStr and cipher to server
         	MyPKI mypki = MyPKI.getInstance();
         	byte[] cipher_sessionKeyGenStr = mypki.rsaEncrypt(K_server, k_session.getBytes());
@@ -153,7 +150,6 @@ public class EntNetClient {
         			Constants.INVALID, //request detail
         			"SELECT");
         	SharedKey sk = SharedKey.getInstance();
-        	System.out.println("k_session="+k_session);
         	xmlr.requestData.put("user_id", sk.sessionKeyEncrypt(this.k_session, tmp_uid));
         	xmlr.requestData.put("password", sk.sessionKeyEncrypt(this.k_session, tmp_pwd));
         	invokeRequestThread(xmlr);
@@ -552,14 +548,19 @@ public class EntNetClient {
                     
                 }catch(Exception e){};
             }
-            else{
-            	//login failed
-            	if (commandline) {
-					test.LoginCallBack(xmlreq);
-				} else {
-					System.out.println("requestThreadCallBack: login failed");
-					LoginUI.loginPopUp();
-				}
+            else{ //login failed
+            	if (LoginStat.equals(Constants.TOO_MANY_LOGIN_TRAILS)){
+            		LoginUI.loginPopUp("Too many login failures. Client program shut down.");
+            		System.exit(0);
+            	}
+            	else{
+	            	if (commandline) {
+						test.LoginCallBack(xmlreq);
+					} else {
+						//System.out.println("requestThreadCallBack: login failed");
+						LoginUI.loginPopUp("Login failed!");
+					}
+	            }
                 return;           
             }
         } //end of login request threadCallBack
@@ -826,6 +827,7 @@ public class EntNetClient {
             String rowAffected = xmlreq.getRequestDetail();
             if (rowAffected.equals("1")) {
 				System.out.println("Add friend success");
+				this.refreshHomeBoard();
 			}else{
 				System.out.println("Add friend fail");
 			}
@@ -834,6 +836,7 @@ public class EntNetClient {
             String rowAffected = xmlreq.getRequestDetail();
             if (rowAffected.equals("2")) {//2 becuase friends relation is bidirectional
 				System.out.println("delete friend success");
+				this.refreshHomeBoard();
 			}else{
 				System.out.println("delete friend fail");
 			}

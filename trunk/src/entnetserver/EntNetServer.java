@@ -22,8 +22,6 @@ import Security.*;
  * @author Lin
  */
 public class EntNetServer {
-
-	public static String pwd;
     /**
      * @param args the command line arguments
      */
@@ -33,33 +31,27 @@ public class EntNetServer {
     static private PublicKey serverPublicKey;
     static private PrivateKey serverPrivateKey;
     
+    
+    
     public static void main(String[] args) {
 
         
         //static SharedKey k_db 
         try{
             db_pwd = args[0];
-            
-            System.out.println("db_pwd="+db_pwd);
 
             DataBase sysDB = new DataBase("jdbc:mysql://localhost:3306/entnetdb_v3",
                                             "root",
                                             "mysql");
             sysDB.initialize();
             
-
-            
-            
             MyPKI mypki = MyPKI.getInstance();
         	MyKey mk = mypki.InitAsymmKeyPair();
         	serverPublicKey = mk.pubKey;
         	serverPrivateKey = mk.privKey;
         	
-            
   		  InputStreamReader stdin = new  InputStreamReader(System.in);
-		   BufferedReader bReader = new BufferedReader(stdin);
-
-		   pwd = "cs5300cornell";//bReader.readLine();
+		  // BufferedReader bReader = new BufferedReader(stdin);
                    
             
             System.out.println("SERVER STARTED. SERVER'S LOCALHOST IP = " + InetAddress.getLocalHost());

@@ -39,7 +39,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 			String query = null;
 			SharedKey sk = SharedKey.getInstance();
 			
-			//TODO: registration can only be done by the sys admin
+			//registration can only be done by the sys admin
 			//this means the sys admin provides k_db at the client side
 			//server will generate sql with k_db provided by sys admin.
 			if (this.xmlRequest.getRequestID().equals(Constants.REGIST_REQUEST_ID)){

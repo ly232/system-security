@@ -12,6 +12,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -443,14 +444,25 @@ public class LoginUI extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null,
 					"Please fill in all registration fields!");
 		else {
+			char[] pwd = jLabelRegPwd.getPassword();
+			String pwdStr = new String(pwd);
+			char[] vcode = this.jPasswordFieldVCode.getPassword();
+			String vcodeStr = new String(vcode);
+			
 			controller
-					.clientRegist(jTextFieldRegid.getText(), new String(
-							jLabelRegPwd.getPassword()), jTextFieldRegcontact
+					.clientRegist(jTextFieldRegid.getText(), 
+							pwdStr,
+							jTextFieldRegcontact
 							.getText(), jTextFieldRegrole.getText(),
 							this.jTextFieldDeptName.getText(),
 							this.jTextFieldLocation.getText(),
 							this.jTextFieldProject.getText(),
-							new String(this.jPasswordFieldVCode.getPassword()));
+							vcodeStr);
+			Arrays.fill(pwd, '0');
+			Arrays.fill(vcode, '0');
+			pwdStr = null;
+			vcodeStr = null;
+			
 		}
 
 	}
@@ -458,9 +470,11 @@ public class LoginUI extends javax.swing.JFrame {
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
 
 		try {
-			controller.clientLogin(jTextFieldId.getText(), new String(
-					jLabelLoginPwd.getPassword()));
-
+			char[] pwd = jLabelLoginPwd.getPassword();
+			String strPwd = new String(pwd);
+			controller.clientLogin(jTextFieldId.getText(), strPwd);
+			Arrays.fill(pwd,'0');
+			strPwd = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -481,8 +495,8 @@ public class LoginUI extends javax.swing.JFrame {
 					"Registration succeed, please login!");
 	}
 
-	public static void loginPopUp() {
-		JOptionPane.showMessageDialog(null, "Login failed!");
+	public static void loginPopUp(String errMsg) {
+		JOptionPane.showMessageDialog(null, errMsg);
 	}
 
 	/**

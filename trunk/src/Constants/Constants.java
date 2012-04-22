@@ -35,6 +35,7 @@ public abstract class Constants {
     public static final String INVALID_VCODE = "INVALID_VCODE";
     public static final String REGISTRATION_SUCCESS = "REGISTRATION_SUCCESS";
     public static final String CANNOT_REGIST_AS_BOSS = "CANNOT_REGIST_AS_BOSS";
+    public static final String TOO_MANY_LOGIN_TRAILS = "TOO_MANY_LOGIN_TRAILS";
     
     public static final String BOSS_ROLE_ID = "1";
     public static final String DEPTHEAD_ROLE_ID = "2";
@@ -82,6 +83,7 @@ public abstract class Constants {
     //GUI board identifiers:
     public static final String UserHomeBoard = "UserHomeBoard";
     public static final String PersonHomeBoard = "PersonHomeBoard";
+	
 	
 	
 }

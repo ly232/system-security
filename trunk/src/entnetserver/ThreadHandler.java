@@ -49,7 +49,7 @@ class ThreadedHandler implements Runnable {
 	//private Scanner read = null;
 
 	private final int MAX_LOGIN_TRAIL = 5;
-	private Scanner read = null;
+	private int num_login_trail;
 
 	private InputStream inStream = null;
 	private OutputStream outStream = null;
@@ -78,10 +78,9 @@ class ThreadedHandler implements Runnable {
 		incoming = i;
 		sysDB = db;
         db_pwd = dbpwd;
-        //symmKeyCryptoAPI = SharedKey.getInstance();
         this.k_server = k_server;
         this.K_server = K_server;
-        
+        this.num_login_trail = 0;                
 	}
 	public void setUserID(String uid){
 		this.user_id = uid;
@@ -104,8 +103,6 @@ class ThreadedHandler implements Runnable {
 	public void setSysDB(DataBase sysDB) {
 		this.sysDB = sysDB;
 	}
-
-	
 
 	/**
 	 * @param no
@@ -150,7 +147,7 @@ class ThreadedHandler implements Runnable {
 	public void run() {
 		try {
 			initializeServer(); //sets up input/out streams
-			System.out.println("ThreadHandler: ready to serve client "+this.user_id);
+			System.out.println("ThreadHandler: ready to serve client.");
 
 		} catch (IOException e) {
 			System.err.println("initial server fail");
@@ -175,9 +172,7 @@ class ThreadedHandler implements Runnable {
 				 //decrypt cipher_sessionKey with private key:
 				 MyPKI mypki = MyPKI.getInstance();
 				 byte[] k_session_byteArr = mypki.rsaDecrypt(k_server, request.cipher_sessionKey);
-				 k_session = new String(k_session_byteArr);
-				 System.out.println("server: k_session = "+k_session);
-				 
+				 k_session = new String(k_session_byteArr);				 
 				 continue;
 			 }
 
@@ -188,6 +183,17 @@ class ThreadedHandler implements Runnable {
 			}
                               
 				if (request.getRequestID().equals(Constants.LOGIN_REQUEST_ID)) {           
+					if (this.num_login_trail>=this.MAX_LOGIN_TRAIL){
+						System.err.println("too many login attempts!");
+						request.setRequestDetail(Constants.TOO_MANY_LOGIN_TRAILS);
+						this.callBackResult(request);
+						break;
+					}
+					
+					this.num_login_trail++;
+					
+					System.out.println("num login trail = " + this.num_login_trail);
+					
 					loginServlet lServlet = new loginServlet(request, this);
 					Thread t = new Thread(lServlet);
 					t.start();

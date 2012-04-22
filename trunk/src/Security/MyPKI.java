@@ -118,26 +118,6 @@ public class MyPKI implements SecurityObject{
 		
 		return mk;
 		
-		//saveToFile("private.key", priv.getModulus(),priv.getPrivateExponent());
-		//for private key, store to database.
-		//byte[] privModByteArr = priv.getModulus().toByteArray();
-		//byte[] privExpByteArr = priv.getPrivateExponent().toByteArray();
-		//p.s. to get back to big int, use constructor BigInteger(byte[] val).
-		//first, delete existing entry in server private key table.
-		//String deleteQuery = "delete from serverprivkey";
-		//System.out.println("deleteQuery: "+deleteQuery);
-		//db.DoUpdateQuery(deleteQuery);
-		//then, encrypte private key using db_pwd...i.e. password based encryption:
-		
-		
-		/*
-		String insertQuery = "insert into serverprivkey (privMod, privExp, primKey) values " +
-				"(aes_encrypt('"+privModByteArr+"','"+db_pwd+"'), " +
-						"aes_encrypt('"+privExpByteArr+"','"+db_pwd+"'), 1)";
-		System.out.println("insertQuery: "+insertQuery);
-		db.DoUpdateQuery(insertQuery);
-		*/
-		
 		
 	}
 	public PublicKey readPublicKeyFromFile(String keyFileName) throws IOException {
@@ -188,9 +168,6 @@ public class MyPKI implements SecurityObject{
 	}
 	
 	
-			
-			
-			
 			
 	
 	
