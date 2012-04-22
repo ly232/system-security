@@ -115,7 +115,16 @@ public class EntNetClient {
         
         
         
-        public void clientRegist(String uname, String pwd, String contactinfo, String roleID, String vcode) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        public void clientRegist(
+        		String uname, 
+        		String pwd, 
+        		String contactinfo, 
+        		String roleID, 
+        		String deptID,
+        		String locID,
+        		String projID,
+        		String vcode
+        ) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
         	XMLRequest xmlr = new XMLRequest(
         			Constants.REGIST_REQUEST_ID,
         			this.thisUserID,
@@ -128,6 +137,9 @@ public class EntNetClient {
         	xmlr.requestData.put("password", sk.sessionKeyEncrypt(this.k_session, pwd));
         	xmlr.requestData.put("contact_info", sk.sessionKeyEncrypt(this.k_session, contactinfo));
         	xmlr.requestData.put("role_id", sk.sessionKeyEncrypt(this.k_session, roleID));
+        	xmlr.requestData.put("dept_id", sk.sessionKeyEncrypt(this.k_session, deptID));
+        	xmlr.requestData.put("loc_id", sk.sessionKeyEncrypt(this.k_session, locID));
+        	xmlr.requestData.put("proj_id", sk.sessionKeyEncrypt(this.k_session, projID));
         	xmlr.requestData.put("vcode", sk.sessionKeyEncrypt(this.k_session, vcode));
         	invokeRequestThread(xmlr);
         }
@@ -546,8 +558,8 @@ public class EntNetClient {
         
         else if (xmlreq.getRequestID().equals(Constants.REGIST_REQUEST_ID)){
             //check if the login is successful
-            String rowAffected = xmlreq.getRequestDetail();
-            if (rowAffected.equals("1")){
+            String reg_stat = xmlreq.getRequestDetail();
+            if (reg_stat.equals(Constants.REGISTRATION_SUCCESS)){
                 //successful registration
                 //goto user's home page by asking server to send xml of user homeboard
                 try{
@@ -565,6 +577,8 @@ public class EntNetClient {
             		errMsg = "Incorrect password format--must contain at least a letter and a number.";
             	else if (xmlreq.getRequestDetail().equals(Constants.INVALID_VCODE))
             		errMsg = "Incorrect verification code.";
+            	else if (xmlreq.getRequestDetail().equals(Constants.CANNOT_REGIST_AS_BOSS))
+            		errMsg = "Cannot register as boss. See system admin for boss-role registration.";
             	else
             		errMsg = "Unknown.";
             	

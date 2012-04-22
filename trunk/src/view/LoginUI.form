@@ -22,15 +22,9 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
-                      <Component id="jButtonLogin" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="280" max="32767" attributes="0"/>
-                      <Component id="jButtonReg" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
@@ -42,38 +36,58 @@
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jTextFieldPwd" alignment="0" max="32767" attributes="1"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLabelLoginPwd" min="0" pref="0" max="32767" attributes="1"/>
                           <Component id="jTextFieldId" alignment="0" pref="86" max="32767" attributes="1"/>
+                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabelRegid" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelRegpwd" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelRegcontact" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelRegcontact" alignment="0" max="32767" attributes="1"/>
                           <Component id="jLabelRegrole" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelVcode" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTextFieldVcode" pref="94" max="32767" attributes="1"/>
-                          <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jTextFieldRegrole" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jTextFieldRegcontact" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jTextFieldRegpwd" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jTextFieldRegid" alignment="0" pref="94" max="32767" attributes="1"/>
-                          </Group>
+                          <Component id="jLabelProject" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelLocation" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelDeptName" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+                      <Component id="jButtonLogin" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPasswordFieldVCode" pref="94" max="32767" attributes="0"/>
+                  <Component id="jTextFieldProject" alignment="0" pref="94" max="32767" attributes="0"/>
+                  <Component id="jTextFieldLocation" alignment="0" pref="94" max="32767" attributes="0"/>
+                  <Component id="jTextFieldDeptName" alignment="0" pref="94" max="32767" attributes="0"/>
+                  <Component id="jButtonReg" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldRegrole" alignment="0" pref="94" max="32767" attributes="1"/>
+                  <Component id="jTextFieldRegcontact" alignment="0" pref="94" max="32767" attributes="1"/>
+                  <Component id="jTextFieldRegid" alignment="0" pref="94" max="32767" attributes="1"/>
+                  <Component id="jLabelRegPwd" alignment="1" pref="94" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" pref="370" max="-2" attributes="0"/>
+              <Component id="jLabel1" pref="120" max="32767" attributes="1"/>
+              <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="57" pref="57" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel1" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -82,8 +96,8 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextFieldPwd" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelPwd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelLoginPwd" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -94,7 +108,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabelRegpwd" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldRegpwd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelRegPwd" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -105,23 +119,36 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" attributes="1">
                       <Component id="jTextFieldRegrole" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextFieldVcode" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="103" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelDeptName" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldDeptName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelLocation" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldLocation" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelProject" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldProject" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelVcode" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPasswordFieldVCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="22" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonLogin" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonReg" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabelRegrole" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jLabelVcode" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jLabelRegrole" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -156,17 +183,17 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelRegid">
       <Properties>
-        <Property name="text" type="java.lang.String" value="RegID"/>
+        <Property name="text" type="java.lang.String" value="User ID"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelRegpwd">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Regpassword"/>
+        <Property name="text" type="java.lang.String" value="Password"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelRegcontact">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Regcontact"/>
+        <Property name="text" type="java.lang.String" value="Contact Information"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldId">
@@ -174,30 +201,58 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldIdActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldPwd">
-    </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldRegid">
-    </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldRegpwd">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldRegpwdActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldRegcontact">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelRegrole">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Regrole"/>
+        <Property name="text" type="java.lang.String" value="Role ID"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldRegrole">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVcode">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Vcode"/>
+        <Property name="text" type="java.lang.String" value="Verification Code"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldVcode">
+    <Component class="javax.swing.JTextField" name="jTextFieldDeptName">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelDeptName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Department ID"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="jLabelRegPwd">
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="jLabelLoginPwd">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelLocation">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Location ID"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelProject">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Project ID"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldLocation">
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldProject">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="REGISTRATION"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="LOGIN"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="jPasswordFieldVCode">
     </Component>
   </SubComponents>
 </Form>
