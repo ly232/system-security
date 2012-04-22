@@ -45,11 +45,9 @@ public class ClientMain {
         public void giveArrayListToUI(ArrayList<String> al, String RegionID){
             if (currUI.equals("UserHomeBoard")){
                 uui.dataRefresh(al, RegionID);
-                System.out.println("called data refresh to region "+RegionID);
             }
             else if (currUI.equals("PersonHomeBoard")){
                 pui.dataRefresh(al, RegionID);
-                System.out.println("called data refresh");
             }
             else{
                 System.err.println("ERROR: encountered invalid board id in ClientMain::giveHashMapToUI");
@@ -58,17 +56,10 @@ public class ClientMain {
         }
         
         
-        /*
-        public void changeCurrUIid(String UIid){
-            currUI = UIid;
-        }*/
-        
-        
         public void LoginToHome(){
             lui.setVisible(false);
             uui = new UserHomeBoard(controller);
             uui.setVisible(true);
-            //uui.populateInitScreen();
             currUI = Constants.UserHomeBoard;
         }
         
@@ -85,7 +76,6 @@ public class ClientMain {
         
         public void PersonToHome(){
             pui.setVisible(false);
-            //uui = new UserHomeBoard(controller);
             uui.setVisible(true);
             currUI = Constants.UserHomeBoard;
         }

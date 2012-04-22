@@ -41,13 +41,13 @@ public class UserHomeBoard extends javax.swing.JFrame {
 
 		controller = ec;
 		String roleID = controller.roleID;
-		System.out.println("roleID from ui: " + roleID);
 		if (roleID.equals(Constants.BOSS_ROLE_ID))
 			this.showUpdateCompanyBoardButton = true;
 		if (roleID.equals(Constants.DEPTHEAD_ROLE_ID))
 			this.showUpdateDeptBoardButton = true;
 
 		initComponents();
+		this.jButtonRefresh.setVisible(false);
 	}
 
 	//GEN-BEGIN:initComponents
@@ -799,11 +799,7 @@ pack();
 	public void dataRefresh(ArrayList<?> a, String s) {
 		if (s.equals(Constants.FRIENDLISTREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
-
 			for (int i = 0; i < a.size(); i++) {
-				//model.add(i, a.get(i));
-				//System.out.println("friend: "+a.get(i));
-				//jScrollPane1.repaint();
 				jList1.setListData(x);
 			}
 
@@ -813,9 +809,6 @@ pack();
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 			String k = "";
 			for (int i = 0; i < a.size(); i++) {
-				System.out
-						.println("================testing====================");
-				System.out.println(x[i]);
 				k += "-" + x[i] + "\r\n";
 			}
 
