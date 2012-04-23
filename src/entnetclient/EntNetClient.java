@@ -53,9 +53,6 @@ public class EntNetClient {
         private CommandLineClientTest test;
         private boolean commandline = false;
         public String roleID;
-        //public static MyKey sessionKey;
-     
-        //Lin-4/11/12
         public PublicKey K_server;
         public String k_session;
         
@@ -641,17 +638,12 @@ public class EntNetClient {
                     	new String(sk.sessionKeyDecrypt(this.k_session, 
                     			myRS.getCipherValue(i, "user1")));
                     resultSetArrayList.add(friendUID);
-                	
-                	//String friRequest = myRS.getStringValue(i, "user1");
-                    //resultSetArrayList.add(friRequest);
-                    //System.out.println("testing");
-                    //System.out.println(friRequest);
+
                 }
                 if (commandline) {
 					//test.personPanelCallback(Constants.FRIENDLISTREGION, resultSetArrayList);
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
-	                //System.out.println("=======FRIENDNOTIFY TESTING======="+resultSetArrayList);
 				}
             }
             
@@ -664,8 +656,7 @@ public class EntNetClient {
                 	new String(sk.sessionKeyDecrypt(this.k_session, 
                 			myRS.getCipherValue(0, "user_id")));
             	
-                //String contact_info = myRS.getStringValue(0, "contact_info");
-                //String uid = myRS.getStringValue(0,"user_id");
+
                 resultSetArrayList.add(uid);
                 resultSetArrayList.add(contact_info);
                 if (commandline) {
@@ -673,7 +664,6 @@ public class EntNetClient {
 				} else {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 				}
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION2)){
             	SharedKey sk = SharedKey.getInstance();
@@ -689,7 +679,6 @@ public class EntNetClient {
 	                this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
 
 				}
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
             }
             else if (regionID.equals(Constants.REGION3)){
             	SharedKey sk = SharedKey.getInstance();
@@ -697,10 +686,7 @@ public class EntNetClient {
                 	new String(sk.sessionKeyDecrypt(this.k_session, 
                 			myRS.getCipherValue(0, "proj_name")));
             	
-                //String currProj = myRS.getStringValue(0, "proj_name");
                 resultSetArrayList.add(currProj);
-                //resultSetHashMap.put("proj_name", currProj);
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
 					test.personPanelCallback(Constants.REGION3, resultSetArrayList);
 				} else {
@@ -714,12 +700,8 @@ public class EntNetClient {
                     String msg_content = 
                     	new String(sk.sessionKeyDecrypt(this.k_session, 
                     			myRS.getCipherValue(i, "msg_content")));
-                    //String msg_content = myRS.getStringValue(i, "msg_content");
                     resultSetArrayList.add(msg_content);
-                    //System.out.println("company msg = "+msg_content);
-                    //resultSetHashMap.put(msg_id, msg_content);
                 }
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
 					test.personPanelCallback(Constants.REGION4, resultSetArrayList);
 				} else {
@@ -732,10 +714,8 @@ public class EntNetClient {
                     String msg_content = 
                     	new String(sk.sessionKeyDecrypt(this.k_session, 
                     			myRS.getCipherValue(i, "msg_content")));
-                    //String msg_content = myRS.getStringValue(i, "msg_content");
                     resultSetArrayList.add(msg_content);
                 }
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
 					test.personPanelCallback(Constants.REGION5, resultSetArrayList);
 				} else {
@@ -753,11 +733,8 @@ public class EntNetClient {
                     	new String(sk.sessionKeyDecrypt(this.k_session, 
                     			myRS.getCipherValue(i, "user2")));
                     
-                    //String msg_content = myRS.getStringValue(i, "message");
                     resultSetArrayList.add(msg_content+" (FROM: "+msg_sender+")");
-                    //resultSetHashMap.put(msg_id, msg_content);
                 }
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
 					test.personPanelCallback(Constants.REGION6, resultSetArrayList);
 				} else {
@@ -772,10 +749,8 @@ public class EntNetClient {
                     			myRS.getCipherValue(i, "loc_name")));
                     resultSetArrayList.add(loc_name);
                 }
-            	//System.out.println("valid locations: " + resultSetArrayList);
             	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
             	
-            	//TODO: pass resultSetArrayList to UI to populate droplist
             }
             else if (regionID.equals(Constants.VALID_PROJECT)){
             	for (int i=0;i<myRS.getTable().size();i++){
@@ -785,10 +760,8 @@ public class EntNetClient {
                     			myRS.getCipherValue(i, "proj_name")));
                     resultSetArrayList.add(proj_name);
                 }
-            	//System.out.println("valid projects: " + resultSetArrayList);
             	
             	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
-            	//TODO: pass resultSetArrayList to UI to populate droplist
             }
             else if (regionID.equals(Constants.VALID_DEPT)){
             	for (int i=0;i<myRS.getTable().size();i++){
@@ -798,7 +771,6 @@ public class EntNetClient {
                     			myRS.getCipherValue(i, "dname")));
                     resultSetArrayList.add(dname);
                 }
-            	//System.out.println("valid projects: " + resultSetArrayList);
             	
             	this.clientMain.giveArrayListToUI(resultSetArrayList, regionID);
             }
@@ -808,10 +780,8 @@ public class EntNetClient {
                     String msg_content = 
                     	new String(sk.sessionKeyDecrypt(this.k_session, 
                     			myRS.getCipherValue(i, "msg_content")));
-                    //String msg_content = myRS.getStringValue(i, "msg_content");
                     resultSetArrayList.add(msg_content);
                 }
-                //TODO: send resultSetHashMap to GUI--waiting for shuai's api
                 if (commandline) {
 					test.personPanelCallback(Constants.REGION5, resultSetArrayList);
 				} else {
@@ -846,9 +816,9 @@ public class EntNetClient {
             if (rowAffected.equals("1")){ 
                 System.out.println("update region successful");
                 
-                this.refreshHomeBoard();
-                
-                
+                if (xmlreq.getActionID().equals(Constants.POST_FRIEND_MESSAGE)==false)
+                	this.refreshHomeBoard();
+
             }
             else{
                 System.err.println("ERROR: requestThreadCallBack cannot update region");
