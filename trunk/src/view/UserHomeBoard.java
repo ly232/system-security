@@ -804,14 +804,12 @@ pack();
 			}
 
 		}
-
 		if (s.equals(Constants.NOTIFYREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 			String k = "";
 			for (int i = 0; i < a.size(); i++) {
 				k += "-" + x[i] + "\r\n";
 			}
-
 			jTextAreaFR.setText(k);
 
 			//jTextAreaCA.setText("");
@@ -822,16 +820,10 @@ pack();
 			jLabelID.setText(a.get(0).toString());
 			jLabelContactInfo.setText(a.get(1).toString());
 			jPanel1.repaint();
-
-			//System.out.println(a);
-
 		}
 		if (s.equals(Constants.REGION2)) {
-
-			//jComboBoxLocation.addItem(a);
 			this.jLabellocation.setText(a.get(0).toString());
 			jPanel2.repaint();
-
 		}
 		if (s.equals(Constants.VALID_LOCATION)) {
 			for (int i = 0; i < a.size(); i++) {
@@ -846,7 +838,6 @@ pack();
 			jComboBoxLocation.repaint();
 		}
 		if (s.equals(Constants.REGION3)) {
-			//jComboBoxProject.addItem(a);
 			this.jLabelproject.setText(a.get(0).toString());
 			jPanel3.repaint();
 		}
@@ -857,23 +848,15 @@ pack();
 			jComboBoxProject.repaint();
 		}
 		if (s.equals(Constants.REGION4)) {
-
-			//System.out.println("company msg="+a.get(0));
-
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 			String k = "";
 			for (int i = 0; i < a.size(); i++) {
 				k += "-" + x[i] + "\r\n";
 			}
-
 			jTextAreaCA.setText(k);
-
-			//jTextAreaCA.setText("");
 			jPanel4.repaint();
 		}
 		if (s.equals(Constants.REGION5)) {
-			//jTextAreaDA.setText("");
-
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 			String k = "";
 			for (int i = 0; i < a.size(); i++) {

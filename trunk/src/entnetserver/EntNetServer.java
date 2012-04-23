@@ -25,13 +25,10 @@ public class EntNetServer {
     /**
      * @param args the command line arguments
      */
-    static private SharedKey symmKeyCryptoAPI;
     static private String db_pwd;
     
     static private PublicKey serverPublicKey;
     static private PrivateKey serverPrivateKey;
-    
-    
     
     public static void main(String[] args) {
 
@@ -50,22 +47,18 @@ public class EntNetServer {
         	serverPublicKey = mk.pubKey;
         	serverPrivateKey = mk.privKey;
         	
-  		  InputStreamReader stdin = new  InputStreamReader(System.in);
-		  // BufferedReader bReader = new BufferedReader(stdin);
-                   
             
             System.out.println("SERVER STARTED. SERVER'S LOCALHOST IP = " + InetAddress.getLocalHost());
             
-            int i=1;
+            int thread_cnt=1;
             ServerSocket s = new ServerSocket(8189);
-            //ServerSocket sessionSocket = new ServerSocket(12345);
             while(true){
                 Socket incoming = s.accept();
-                System.out.println("Spawning thread "+i);
+                System.out.println("Spawning thread "+thread_cnt);
                 Runnable r = new ThreadedHandler(incoming, sysDB, db_pwd, serverPrivateKey, serverPublicKey);
                 Thread t = new Thread(r);
                 t.start();
-                i++;
+                thread_cnt++;
             }  
         }catch(Exception e){}
     }

@@ -136,20 +136,6 @@ public class SharedKey implements SecurityObject{
 				return ciphertext;
 			}
 	
-			/*
-		    //Lin-4/12/12
-			public SecretKey generateSessionKeyWithPassword(String sessionKeyGenStr) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException{
-				String salt = "saltings";
-	        	PBEParameterSpec paramspec = new PBEParameterSpec (salt.getBytes(),20);
-	        	Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
-	        	PBEKeySpec keyspec = new PBEKeySpec(sessionKeyGenStr.toCharArray());
-	        	SecretKeyFactory factory= SecretKeyFactory.getInstance ("PBEWithMD5AndDES");
-	        	SecretKey k_session = factory.generateSecret(keyspec);
-	        	cipher.init (Cipher.ENCRYPT_MODE, k_session, paramspec);
-	        	return k_session;
-			}*/
-			//Lin-4/12/12
-			
 			public byte[] sessionKeyEncrypt(String k_session, String data) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
 				//System.out.println("sessionKeyEncrypt: inside...k_session = " + k_session);
 				String salt = "saltings";
@@ -160,9 +146,6 @@ public class SharedKey implements SecurityObject{
 	        	SecretKey key = factory.generateSecret(keyspec);
 	        	cipher.init (Cipher.ENCRYPT_MODE, key, paramspec);
 	        	byte[] ciphertext = cipher.doFinal(data.getBytes());
-	        	
-	        	//System.out.println("sessionKeyEncrypt: ciphertext = "+ciphertext);
-	        	
 	        	return ciphertext;
 			}
 			public String sessionKeyDecrypt(String k_session, byte[] cipherText) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{

@@ -175,8 +175,6 @@ class ThreadedHandler implements Runnable {
 				 k_session = new String(k_session_byteArr);				 
 				 continue;
 			 }
-
-			 	//request.decrypt(); //commented out by Lin-4/12/12
     
 			if (request.getRequestID().equals(Constants.QUIT_ID)) {
 				break;

@@ -109,9 +109,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 				query = "select aes_decrypt(user_id,'"+handle.getDBpwd()+"') as user_id from user where aes_decrypt(user_id,'"
 					+handle.getDBpwd()+"')='"+regist_uname+"';";
 				
-				//System.out.println(query);
 				rs = db.DoQuery(query);
-				//System.out.println(rs.first());
 				
 				if (rs.first()==false){ //regist_uname does not appear in user table
 					query = "INSERT INTO user (user_id, user_pwd, contact_info, role_id) VALUES ("
@@ -119,9 +117,7 @@ public class UpdateServlet extends Servelet implements Runnable{
 		                + "AES_ENCRYPT('"+regist_pwd+"','"+handle.getDBpwd()+"'), "
 		                + "AES_ENCRYPT('"+regist_contact_info+"','"+handle.getDBpwd()+"'), "
 		                + "AES_ENCRYPT('"+regist_role_id+"','"+handle.getDBpwd()+"'));";
-					
-					//System.out.println(query);
-					
+										
 					int insertCount = db.DoUpdateQuery(query);
 					if (insertCount!=1){
 						System.err.println("registration failed: cannot insert into user table");
@@ -312,7 +308,6 @@ public class UpdateServlet extends Servelet implements Runnable{
 	      	  		+"') , aes_encrypt('"+Constants.FRIEND_REQUEST+"','"
 	      	  		+ThreadedHandler.db_pwd+"'),  " +
 	      	  				"aes_encrypt('0','"+ThreadedHandler.db_pwd+"'));";
-				//System.out.println("addfriendquery = "+query);
 				
 			}
 			else if (this.xmlRequest.getRequestID().equals(Constants.UPDATE_REGION_ID)){
@@ -347,6 +342,8 @@ public class UpdateServlet extends Servelet implements Runnable{
 						"','"+ThreadedHandler.db_pwd+"'),aes_encrypt('" 
 						+ messageString + "','"+ThreadedHandler.db_pwd
 						+"'),aes_encrypt('1','"+ThreadedHandler.db_pwd+"'));";
+					
+					xmlRequest.setActionID(Constants.POST_FRIEND_MESSAGE);
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.REGION1)){
 					String newContent = 
@@ -385,7 +382,6 @@ public class UpdateServlet extends Servelet implements Runnable{
 					String newProjID_query = "select aes_decrypt(proj_id,'"
 						+ThreadedHandler.db_pwd+"') as proj_id from project where aes_decrypt(proj_name,'"
 						+ThreadedHandler.db_pwd+"')='"+newContent+"';";
-					//System.out.println("newProjID_query: "+newProjID_query);
 					
 					ResultSet rs = db.DoQuery(newProjID_query);
 					rs.first();
@@ -397,12 +393,10 @@ public class UpdateServlet extends Servelet implements Runnable{
 	                    +ThreadedHandler.db_pwd+"') = '" 
 	                    + xmlRequest.getUserID() + "';";
 					
-					//System.out.println("query = " + query);
 					
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.POST_COMPANY_MESSAGE)){ //post company message
 
-					//TODO: add authorization check here...only boss (roleID=1) can update region 4 (company message)
 					//ACCESS CONTROL: check with database that the roleID indicates that the xmlRequest is from the boss:
 					String roleCheckQuery = "select aes_decrypt(role_id,'"
 						+ThreadedHandler.db_pwd+"') as role_id from user where aes_decrypt(user_id,'"+ThreadedHandler.db_pwd
@@ -411,7 +405,6 @@ public class UpdateServlet extends Servelet implements Runnable{
 					rs.first();
 					String this_user_role_id = rs.getString("role_id");
 					if (this_user_role_id.equals("1")){ //role id is the boss. continue to post the company message.
-						//System.out.println("hello boss");
 						String postedMsg = 
 							new String(sk.sessionKeyDecrypt(handle.k_session,
 									this.xmlRequest.requestData.get("postedCompnayMessage")));
@@ -423,13 +416,11 @@ public class UpdateServlet extends Servelet implements Runnable{
 							return;
 						}
 							
-						//System.out.println("postedMsg="+postedMsg);
 						query = 
 							"insert into postworkmessage (msg_id,did,msg_content) values " +
 									"(aes_encrypt('1','"+ThreadedHandler.db_pwd+"')," +
 									"aes_encrypt('"+Constants.COMPANY_DID+"','"+ThreadedHandler.db_pwd
 									+"'),aes_encrypt('"+postedMsg+"','"+ThreadedHandler.db_pwd+"'));";
-						//System.out.println("company board update query = "+query);
 					}
 					else{ //the role id does not match a boss. access denied.
 						System.err.println("ACCESS DENIED: in UpdateServlet::update_region, invoker tries to update company board but role id is not boss!");
@@ -441,7 +432,6 @@ public class UpdateServlet extends Servelet implements Runnable{
 				}
 				else if (this.xmlRequest.getRequestDetail().equals(Constants.POST_DEPT_MESSAGE)){ //post department message
 
-					//TODO: add authorization check here...only dept_head (roleID=2) can update region 5 (dept message)
 					//ACCESS CONTROL: check with database that the roleID indicates that the xmlRequest is from the boss:
 					
 					String roleCheckQuery = "select aes_decrypt(role_id,'"

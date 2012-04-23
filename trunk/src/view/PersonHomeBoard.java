@@ -449,14 +449,14 @@ pack();
 	
 	
 	
-	public void dataRefresh(ArrayList a, String s) {
+	public void dataRefresh(ArrayList<?> a, String s) {
 		if (s.equals(Constants.FRIENDLISTREGION)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 			for (int i = 0; i < a.size(); i++) {
 				jList1.setListData(x);
 			}
+
 		}
-	
 		if (s.equals(Constants.REGION1)) {
 			jLabelID.setText(a.get(0).toString());
 			jLabelContactInfo.setText(a.get(1).toString());
@@ -470,16 +470,14 @@ pack();
 			jLabelProject.setText(a.get(0).toString());
 			jPanel3.repaint();
 		}
+		
 		if (s.equals(Constants.REGION4)) {
 			String[] x = (String[]) a.toArray(new String[a.size()]);
 			String k = "";
 			for (int i = 0; i < a.size(); i++) {
-				k = "-" + x[i] + "\r\n";
+				k = k + "-" + x[i] + "\r\n";
 			}
-
 			jTextAreaCA.setText(k);
-
-			//jTextAreaCA.setText("");
 			jPanel4.repaint();
 		}
 		if (s.equals(Constants.REGION5)) {
@@ -487,7 +485,6 @@ pack();
 			jPanel5.repaint();
 		}
 		if (s.equals(Constants.REGION6)) {
-			//jTextAreaFM.setText("");
 			jPanel6.repaint();
 		}
 	}
